@@ -14,16 +14,21 @@ module.exports = (app) => {
     return context.octokit.issues.createComment(issueComment);
   });
 
-  app.on("pull_request.opened", async (context) => { //just a skeleton waiting for tests, not sure it works
+  app.on("pull_request.opened", async (context) => {
     app.log.info("A pull request was opened !");
-    const prComment = context.pullRequest({
+    const prComment = context.issue({
       body: "Thanks for opening this pull request!",
     });
-    return context.octokit.pullRequest.createComment(prComment);
+    return context.octokit.issues.createComment(prComment);
   });
 
   app.on("pull_request.assigned", async (context) => {
     app.log.info("Someone was assigned !");
+    //app.log.info(context.payload);
+    const prComment = context.issue({
+      body: "Welcome, " + context.payload.pull_request.assignee.login + " !",
+    });
+    return context.octokit.issues.createComment(prComment);
   })
 
   // For more information on building apps:
