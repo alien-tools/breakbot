@@ -3,8 +3,10 @@ const nock = require("nock");
 const myProbotApp = require("..");
 const { Probot, ProbotOctokit } = require("probot");
 // Requiring our fixtures
-const payload = require("./fixtures/issues.opened");
+const payloadissues = require("./fixtures/issues.opened");
+const payloadpr = require("./fixtures/pull_request.opened");
 const issueCreatedBody = { body: "Thanks for opening this issue!" };
+const prCreatedBody = { body: "Thanks for opening this pull request!",};
 const fs = require("fs");
 const path = require("path");
 
@@ -48,12 +50,37 @@ describe("My Probot app", () => {
         return true;
       })
       .reply(200);
-
+    
     // Receive a webhook event
+    payload = payloadissues;
     await probot.receive({ name: "issues", payload });
 
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
+
+  test("creates a comment when a pull request is opened", async () => {
+    const mock = nock("https://api.github.com")
+      // Test that we correctly return a test token
+      .post("/app/installations/2/access_tokens")
+      .reply(200, {
+        token: "test",
+        permissions: {
+          pull_request: "write", //or pulls maybe
+        },
+      })
+      // Test that a comment is posted
+      .post("/repos/hiimbex/testing-things/issues/2/comments", (body) => {
+        expect(body).toMatchObject(prCreatedBody);
+        return true;
+      })
+      .reply(200);
+
+    // Receive a webhook event
+    payload = payloadpr;
+    await probot.receive({ name: "pull_request", payload });
+
+    expect(mock.pendingMocks()).toStrictEqual([]);
+  })
 
   afterEach(() => {
     nock.cleanAll();

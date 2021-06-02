@@ -2,7 +2,7 @@
     "action": "opened",
     "number": 2,
     "pull_request": {
-        "number": 1,
+        "number": 2,
         "user": {
             "login": "hiimbex"
         }
