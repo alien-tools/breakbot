@@ -2,7 +2,21 @@
  * This is the main entrypoint to your Probot app
  * @param {import('probot').Probot} app
  */
+
+const fetch = require('node-fetch');
+
+async function getWeather() {
+  const url = "https://www.prevision-meteo.ch/services/json/" + "Bordeaux";
+  const test = fetch(url)
+    .then(response => response.json())
+    .then(json => {
+      return (json.current_condition.tmp);
+    })
+  return test;
+}
+
 module.exports = (app) => {
+
   // Your code here
   app.log.info("Yay, the app was loaded!");
 
@@ -24,9 +38,9 @@ module.exports = (app) => {
 
   app.on("pull_request.assigned", async (context) => {
     app.log.info("Someone was assigned !");
-    //app.log.info(context.payload);
+    temperature = await getWeather();
     const prComment = context.issue({
-      body: "Welcome, " + context.payload.pull_request.assignee.login + " !",
+      body: "<h2>Welcome " + context.payload.pull_request.assignee.login + " !</h2><p>It is "+ temperature +"°C now</p>",
     });
     return context.octokit.issues.createComment(prComment);
   })
