@@ -40,7 +40,7 @@ module.exports = (app) => {
     app.log.info("Someone was assigned !");
     temperature = await getWeather();
     const prComment = context.issue({
-      body: "<h2>Welcome " + context.payload.pull_request.assignee.login + " !</h2><p>It is "+ temperature +"°C now</p>",
+      body: "## Welcome " + context.payload.pull_request.assignee.login + " !\n" + "It is "+ temperature +"°C now",
     });
     return context.octokit.issues.createComment(prComment);
   })
