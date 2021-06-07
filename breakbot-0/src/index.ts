@@ -17,7 +17,8 @@ export = (app: Probot) => {
     //const config: AppConfig = await context.config<AppConfig>(ConfigFilename, DefaultConfig)
 
     //appel de la fct au dessus
-    const myBody = await formattingMessage(context.payload.pull_request.base.ref);
+    const temp = context.payload.pull_request;
+    const myBody = await formattingMessage(temp.base.ref, temp.user.login, temp.head.repo.name, context.payload.number);
 
     const prComment = context.issue({
       body: myBody,
