@@ -1,0 +1,28 @@
+{
+    "action": "assigned",
+    "number": 2,
+    "pull_request": {
+        "number": 2,
+        "user": {
+            "login": "hiimbex"
+        },
+        "assignee": {
+            "login": "Bbot"
+        },
+        "assignees": [
+            {
+                "login": "Bbot"
+            }
+        ]
+        
+    },
+    "repository": {
+        "name": "testing-things",
+        "owner": {
+            "login": "hiimbex"
+        }
+    },
+    "installation": {
+        "id": 2
+    }
+}
