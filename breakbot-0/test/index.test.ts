@@ -9,7 +9,7 @@ import { Probot, ProbotOctokit } from "probot";
 
 // Requiring our fixtures
 import payload from "./fixtures/pull_request.opened.json";
-//const issueCreatedBody = { body: "Thanks for opening this issue!" };
+const prCreatedBody = { body: "" };
 const fs = require("fs");
 const path = require("path");
 
@@ -18,7 +18,7 @@ const privateKey = fs.readFileSync(
   "utf-8"
 );
 
-describe("My Probot app", () => {
+describe("Basic tests", () => {
   let probot: any;
 
   beforeEach(() => {
@@ -36,7 +36,7 @@ describe("My Probot app", () => {
     probot.load(myProbotApp);
   });
 
-  test("creates a comment when a pull request is opened", async () => {
+  test("creates a comment when a pull request is opened", async (done) => {
     const mock = nock("https://api.github.com")
       // Test that we correctly return a test token
       .post("/app/installations/2/access_tokens")
@@ -49,14 +49,13 @@ describe("My Probot app", () => {
 
       // Test that a comment is posted
       .post("/repos/hiimbex/testing-things/issues/2/comments", (body: any) => {
-        expect(body).not.toMatch("");
-        console.log("The body is here: " + body)
+        done(expect(body).not.toMatchObject(prCreatedBody));
         return true;
       })
       .reply(200);
 
     // Receive a webhook event
-    await probot.receive({ name: "pull request", payload });
+    await probot.receive({ name: "pull_request", payload });
 
     expect(mock.pendingMocks()).toStrictEqual([]);
   });

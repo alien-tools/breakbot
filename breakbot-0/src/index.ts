@@ -12,13 +12,7 @@ import { formattingMessage } from "./message_api";
 //const DefaultConfig: AppConfig = { polite: false };
 
 export = (app: Probot) => {
-  app.log.info("The bot is up !")
-  console.log("The app is up !")
-
   app.on("pull_request.opened", async (context) => {
-    app.log.info("New pull request !")
-    console.log("Pull request !")
-
     //recuperation de la config
     //const config: AppConfig = await context.config<AppConfig>(ConfigFilename, DefaultConfig)
 
