@@ -18,12 +18,7 @@ export = (app: Probot) => {
 
     //appel de la fct au dessus
     const temp = context.payload.pull_request;
-    /*const myBody =*/ await formattingMessage(temp.base.ref, temp.user.login, temp.head.repo.name, context.payload.number, context);
-
-    //const prComment = context.issue({
-    //  body: myBody,
-    //});
-    //await context.octokit.issues.createComment(prComment);
+    await formattingMessage(temp.base.ref, temp.user.login, temp.head.repo.name, context.payload.number, context);
   });
   
   // For more information on building apps:

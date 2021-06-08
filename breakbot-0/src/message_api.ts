@@ -11,24 +11,38 @@ async function formattingMessage(baseBranch: string, user: string, repo: string,
 
     var intervalID: any;
 
-    const createComment = (resJson: any) => {
-        if (DatasReceived) {
+    const createComment = (resJson: any) =>
+    {
+        if (DatasReceived)
+        {
             n = resJson.delta.breakingChanges.length
+            const nMax = 10
 
             //Greetings (optional)
             messageReturned += "### Hello, my name is BreakBot !\n"
 
             //Base declaration
-            messageReturned += "This PR introduce " + n + " breaking changes in the branch " + baseBranch //+ "\nThe request was computed in " + time + " seconds";
+            messageReturned += "This PR introduces **" + n + "** breaking changes in the branch **" + baseBranch + "**, here is a few of them:\n" //+ "\nThe request was computed in " + time + " seconds";
 
             //Detail on the BC
+            for (let i = 0; i < n; i++)
+            {
+                if (i < nMax)
+                {
+                    messageReturned += "\n-  The declaration [" + resJson.delta.breakingChanges[i].declaration + "]"
+                    messageReturned += "(" + resJson.delta.breakingChanges[i].url + ")"
+                    messageReturned += " is impacted by **" + resJson.delta.breakingChanges[i].type + "**"                   
+                }
+            }
         }
         else
             messageReturned = "An error occured"
         
-        const prComment = contextPr.issue({
-            body: messageReturned,
-        });
+        const prComment = contextPr.issue(
+            {
+                body: messageReturned,
+            }
+        );
         contextPr.octokit.issues.createComment(prComment);
     }
 
