@@ -7,7 +7,7 @@ async function formattingMessage(baseBranch: string, user: string, repo: string,
     var messageReturned = "";
     var PostSent: boolean = false;
     var DatasReceived: boolean = false;
-    var time = 0;
+    //var time = 0;
 
     var intervalID: any;
 
