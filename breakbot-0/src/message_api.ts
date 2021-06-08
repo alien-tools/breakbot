@@ -1,42 +1,72 @@
-//const fetch = require('node-fetch');
-const http = require('http')
+const fetch = require('node-fetch');
+//const http = require('http')
 
 
-async function formattingMessage(baseBranch: string, user: string, repo: string, pullId: number) {
+async function formattingMessage(baseBranch: string, user: string, repo: string, prId: number, contextPr: any) {
     var n = 0; //will be updated with the api request
     var messageReturned = "";
+    var PostSent: boolean = false;
+    var DatasReceived: boolean = false;
+    var time = 0;
 
-    //shaping the request  /!\ not clean at all /!\
-    const options = {
-        hostname: "anatman.ddns.net",
-        port: 8080,
-        path: "/github/pr/" + user + "/" + repo + "/" + pullId,
-        method: 'GET'
+    var intervalID: any;
+
+    const createComment = (resJson: any) => {
+        if (DatasReceived) {
+            n = resJson.delta.breakingChanges.length
+
+            //Greetings (optional)
+            messageReturned += "### Hello, my name is BreakBot !\n"
+
+            //Base declaration
+            messageReturned += "This PR introduce " + n + " breaking changes in the branch " + baseBranch //+ "\nThe request was computed in " + time + " seconds";
+
+            //Detail on the BC
+        }
+        else
+            messageReturned = "An error occured"
+        
+        const prComment = contextPr.issue({
+            body: messageReturned,
+        });
+        contextPr.octokit.issues.createComment(prComment);
     }
 
-    const req = http.request(options, (res: any) => {
+    //shaping the request  /!\ not clean at all /!\
+    const destUrl = 'http://anatman.ddns.net:8080/github/pr/' + user + "/" + repo + "/" + prId
 
-        // Check the status code (if different from 200: do nothing)
-        console.log(`statusCode: ${res.statusCode}`)
+    // polling fct
+    const poll = async () => {
+        fetch(destUrl, { method: 'GET' })
+            .then((res: any) => {
+                console.log("Status get: " + res.status)
+                if (res.status == 200) {
+                    clearInterval(intervalID)
+                    DatasReceived = true
+                }
+                return res.json()
+            })
+            .then((json: any) => createComment(json))
+            .catch((err: any) => {
+                console.error(err)
+                clearInterval(intervalID)
+            })
+    }
 
-        res.on('data', (d: any) => {
-            console.log("received" + d)
+    // first contact with Maracas
+    await fetch(destUrl, { method: 'POST' })
+        .then((res: any) => {
+            console.log("Status post: " + res.status)
+            if (res.status == 202) {
+                PostSent = true
+            }
         })
-    })
-
-    req.on('error', (error: any) => {
-        console.error(error)
-    })
-
-    req.end()
-
-    //Greetings (optional)
-    messageReturned += "### Hello, my name is BreakBot !\n"
-
-    //Base declaration
-    messageReturned += "This PR introduce " + n + " breaking changes in the branch " + baseBranch;
-
-    //Detail on the BC
+        .catch((err: any) => {
+            console.error(err)
+        })
+    
+    if (PostSent)
+        intervalID = setInterval(poll,2*1000)
 
     return messageReturned;
 }
