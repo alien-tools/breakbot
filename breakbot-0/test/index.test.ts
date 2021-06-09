@@ -6,6 +6,8 @@ import nock from "nock";
 // Requiring our app implementation
 import myProbotApp from "../src/index";
 import { Probot, ProbotOctokit } from "probot";
+import { State, default_state } from "../src/globalState"
+var global = require("../src/globalState")
 
 // Requiring our fixtures
 import payload from "./fixtures/pull_request.opened.json";
@@ -36,10 +38,12 @@ describe("Bot tests", () => {
     probot.load(myProbotApp);
   });
 
-  test("creates a comment when a pull request is opened: poll, no errors", async (done) => {
+  test("creates a comment when a pull request is opened: no maracas API", async (done) => {
+    global.current_state = State.test
+
     const mock = nock("https://api.github.com")
       // Test that we correctly return a test token
-      .post("/app/installations/2/access_tokens")
+      .post("/app/installations/17384350/access_tokens")
       .reply(200, {
         token: "test",
         permissions: {
@@ -63,6 +67,7 @@ describe("Bot tests", () => {
   afterEach(() => {
     nock.cleanAll();
     nock.enableNetConnect();
+    global.current_state = default_state
   });
 });
 
@@ -80,7 +85,7 @@ describe("API tests", () => {
     nock.disableNetConnect();
   });
 
-  test("Poll Maracas API, no errors, no delay", async (done) => {
+  test("Poll Maracas API, no errors, no delay", async () => {
     const mock2 = nock("https://anatman.ddns.net:8080/github/pr")
       // Test the post
       .post("/hiimbex/testing-things/2")

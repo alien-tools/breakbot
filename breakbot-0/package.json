@@ -1,6 +1,6 @@
 {
   "name": "breakbot-0",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "A bot that detect breaking changes in a pull request and displays them",
   "author": "RIZZO Leonard <leonard.rizzo@gmx.com>",
@@ -13,7 +13,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "start": "probot run ./lib/index.js",
+    "start": "probot run ./lib/src/index.js",
     "test": "jest"
   },
   "dependencies": {

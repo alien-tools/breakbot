@@ -4,10 +4,12 @@ async function postComment(bcJson: any, context: any, baseBranch: string) {
     //---Format the Json---
     
     // Greetings (optional)
-    messageReturned += "### Hello, my name is BreakBot !\n"
+    messageReturned += "### Hello, my name is BreakBot-0 !\n"
 
     if (bcJson != undefined)
     {
+        console.log(bcJson)
+
         // Base declaration
         const nMax = 10
         const n = bcJson.delta.breakingChanges.length
@@ -34,7 +36,7 @@ async function postComment(bcJson: any, context: any, baseBranch: string) {
             body: messageReturned,
         }
     );
-    context.octokit.issues.createComment(prComment);
+    await context.octokit.issues.createComment(prComment);
 
     //---Post the details as reviews---
 

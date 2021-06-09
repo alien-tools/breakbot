@@ -1,9 +1,19 @@
 const fetch = require('node-fetch');
 import { postComment } from './post_comment'
-//const http = require('http')
+
+import payload from "../test/fixtures/maracas.v1.json";
 
 
-async function formattingMessage(baseBranch: string, user: string, repo: string, prId: number, contextPr: any) {
+async function testInteraction(contextPr:any, baseBranch: string) {
+    //get the json from file
+    const json = payload
+
+    //post comment
+    await postComment(json, contextPr, baseBranch)
+
+}
+
+async function pollInteraction(baseBranch: string, user: string, repo: string, prId: number, contextPr: any) {
     var PostSent: boolean = false;
 
     var intervalID: any;
@@ -15,7 +25,7 @@ async function formattingMessage(baseBranch: string, user: string, repo: string,
     const poll = async () => {
         fetch(destUrl, { method: 'GET' })
             .then((res: any) => {
-                console.log("Status get: " + res.status)
+                console.log("Status get you: " + res.status)
                 if (res.status == 200) {
                     clearInterval(intervalID)
                 }
@@ -44,4 +54,4 @@ async function formattingMessage(baseBranch: string, user: string, repo: string,
         intervalID = setInterval(poll,2*1000)
 }
 
-export { formattingMessage };
+export { pollInteraction, testInteraction };
