@@ -1,50 +1,12 @@
 const fetch = require('node-fetch');
+import { postComment } from './post_comment'
 //const http = require('http')
 
 
 async function formattingMessage(baseBranch: string, user: string, repo: string, prId: number, contextPr: any) {
-    var n = 0; //will be updated with the api request
-    var messageReturned = "";
     var PostSent: boolean = false;
-    var DatasReceived: boolean = false;
-    //var time = 0;
 
     var intervalID: any;
-
-    const createComment = (resJson: any) =>
-    {
-        if (DatasReceived)
-        {
-            n = resJson.delta.breakingChanges.length
-            const nMax = 10
-
-            //Greetings (optional)
-            messageReturned += "### Hello, my name is BreakBot !\n"
-
-            //Base declaration
-            messageReturned += "This PR introduces **" + n + "** breaking changes in the branch **" + baseBranch + "**, here is a few of them:\n" //+ "\nThe request was computed in " + time + " seconds";
-
-            //Detail on the BC
-            for (let i = 0; i < n; i++)
-            {
-                if (i < nMax)
-                {
-                    messageReturned += "\n-  The declaration [" + resJson.delta.breakingChanges[i].declaration + "]"
-                    messageReturned += "(" + resJson.delta.breakingChanges[i].url + ")"
-                    messageReturned += " is impacted by **" + resJson.delta.breakingChanges[i].type + "**"                   
-                }
-            }
-        }
-        else
-            messageReturned = "An error occured"
-        
-        const prComment = contextPr.issue(
-            {
-                body: messageReturned,
-            }
-        );
-        contextPr.octokit.issues.createComment(prComment);
-    }
 
     //shaping the request  /!\ not clean at all /!\
     const destUrl = 'http://anatman.ddns.net:8080/github/pr/' + user + "/" + repo + "/" + prId
@@ -56,11 +18,10 @@ async function formattingMessage(baseBranch: string, user: string, repo: string,
                 console.log("Status get: " + res.status)
                 if (res.status == 200) {
                     clearInterval(intervalID)
-                    DatasReceived = true
                 }
                 return res.json()
             })
-            .then((json: any) => createComment(json))
+            .then((json: any) => postComment(json, contextPr, baseBranch))
             .catch((err: any) => {
                 console.error(err)
                 clearInterval(intervalID)
@@ -81,8 +42,6 @@ async function formattingMessage(baseBranch: string, user: string, repo: string,
     
     if (PostSent)
         intervalID = setInterval(poll,2*1000)
-
-    return messageReturned;
 }
 
 export { formattingMessage };
