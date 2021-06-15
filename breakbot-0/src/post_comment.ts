@@ -1,6 +1,6 @@
 
 
-async function postComment(bcJson: any, context: any, baseBranch: string) {
+async function postComment(bcJson: any, myOctokit: any, baseBranch: string, owner: string, repo: string, issueNumber: number) {
     var messageReturned = ""
 
     //---Format the Json---
@@ -10,7 +10,7 @@ async function postComment(bcJson: any, context: any, baseBranch: string) {
 
     if (bcJson != undefined)
     {
-        console.log(bcJson)
+        //console.log(bcJson)
 
         // Base declaration
         const nMax = 10
@@ -33,12 +33,14 @@ async function postComment(bcJson: any, context: any, baseBranch: string) {
     }
 
     //---Post the main report---
-    const prComment = context.issue(
-        {
-            body: messageReturned,
-        }
-    );
-    await context.octokit.issues.createComment(prComment);
+    const prComment =
+    {
+        owner: owner,
+        repo: repo,
+        issue_number: issueNumber,
+        body: messageReturned,
+    };
+    await myOctokit.issues.createComment(prComment);
 
     //---Post the details as reviews---
 

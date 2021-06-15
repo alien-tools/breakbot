@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 //const Octokit = require('@octokit/rest');
 
-import { postCheck, postComment } from './post_comment'
+import { postComment } from './post_comment'
 
 import payload from "../test/fixtures/maracas.v1.json";
 
@@ -9,15 +9,17 @@ import payload from "../test/fixtures/maracas.v1.json";
 async function testInteraction(contextPr:any, baseBranch: string) {
     //get the json from file
     const json = payload
+    const temp = contextPr.payload.pull_request;
 
     //post comment
-    await postComment(json, contextPr, baseBranch)
+    await postComment(json, contextPr.octokit, baseBranch, temp.user.login, temp.head.repo.name, temp.number)
 
 }
 
 async function pollInteraction(baseBranch: string, user: string, repo: string, prId: number, contextPr: any) {
     var PostSent: boolean = false;
-1
+    const temp = contextPr.payload.pull_request;
+    
     var intervalID: any;
 
     //shaping the request  /!\ not clean at all /!\
@@ -27,13 +29,13 @@ async function pollInteraction(baseBranch: string, user: string, repo: string, p
     const poll = async () => {
         fetch(destUrl, { method: 'GET' })
             .then((res: any) => {
-                console.log("Status get from " + baseBranch +": " + res.status)
+                //console.log("Status get" + res.status)
                 if (res.status == 200) {
                     clearInterval(intervalID)
                 }
                 return res.json()
             })
-            .then((json: any) => postCheck(json, contextPr))//postComment(json, contextPr, baseBranch))
+            .then((json: any) => postComment(json, contextPr.octokit, baseBranch, temp.user.login, temp.head.repo.name, temp.number))
             .catch((err: any) => {
                 console.error(err)
                 clearInterval(intervalID)
@@ -43,7 +45,7 @@ async function pollInteraction(baseBranch: string, user: string, repo: string, p
     // first contact with Maracas
     await fetch(destUrl, { method: 'POST' })
         .then((res: any) => {
-            console.log("Status post: " + res.status)
+            //console.log("Status post: " + res.status)
             if (res.status == 202) {
                 PostSent = true
             }

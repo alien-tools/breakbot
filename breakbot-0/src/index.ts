@@ -5,10 +5,11 @@ import { pollInteraction, pushInteraction, testInteraction} from "./message_api"
 import { State } from "./globalState";
 import { Octokit } from "@octokit/rest";
 import { createAppAuth } from "@octokit/auth-app"
+import { postComment } from "./post_comment";
 
 var global = require("../src/globalState")
 
-const connectAndComment = async function (owner: string, repo: string, issueNumber: number, installationId: number) {
+const connectAndComment = async function (myJson: any) {
   const appOctokit = new Octokit({
     authStrategy: createAppAuth,
     auth: {
@@ -16,22 +17,11 @@ const connectAndComment = async function (owner: string, repo: string, issueNumb
       privateKey: process.env.PRIVATE_KEY,
       clientId: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      installationId: installationId
+      installationId: myJson.installationId
     },
   });
 
-  // Send requests as GitHub App
-  //const slug = await appOctokit.request("GET /users");
-  //console.log("authenticated as %s", slug);
-
-  const prComment = {
-    owner: owner,
-    repo: repo,
-    issue_number: issueNumber,
-    body: "Spontaneous comment"
-  }
-
-  await appOctokit.issues.createComment(prComment)
+  postComment(myJson, appOctokit, myJson.baseBranch, myJson.owner, myJson.repo, myJson.issueNumber)
 }
 
 export = (app: Probot, option: any) => {//({ Probot, getRouter: any }) {
@@ -46,12 +36,9 @@ export = (app: Probot, option: any) => {//({ Probot, getRouter: any }) {
 
     router.use(bodyParser.json())
 
-    //received an answer from maracas, id is an url ?
     router.get("/publish", (req: any, res:any ) => {
-      //how to connect again to the repo ?
-      console.log("Get these infos: " + req.body.owner)
-      connectAndComment(req.body.owner, req.body.repo, req.body.issueNumber, req.body.installationId)
-      //foo()//app)
+      //console.log("Get these infos: " + req.body.owner)
+      connectAndComment(req.body)
       res.send("Received")
     })
   }
