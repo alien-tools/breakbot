@@ -1,0 +1,17 @@
+{
+    "message": "ok",
+    "delta": {
+        "breakingChanges": [
+            {
+                "type": "methodNoLongerStatic",
+                "declaration": "main.methodNoLongerStatic.IMethodNoLongerStatic.methodNoLongerStatic()",
+                "path": "/src/main/methodNoLongerStatic/IMethodNoLongerStatic.java",
+                "url": "https://github.com/tdegueul/comp-changes/blob/main//src/main/methodNoLongerStatic/IMethodNoLongerStatic.java#L5-L7",
+                "startLine": 5,
+                "endLine": 7,
+                "sourceCompatible": false,
+                "binaryCompatible": false
+            }
+        ]
+    }
+}

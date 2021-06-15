@@ -5,6 +5,8 @@ const { Probot, ProbotOctokit } = require("probot");
 // Requiring our fixtures
 const payloadissues = require("./fixtures/issues.opened");
 const payloadpr = require("./fixtures/pull_request.opened");
+const payloadassigned = require("./fixtures/pull_request.assigned");
+const payloadmeteo = require("./fixtures/meteo.api");
 const issueCreatedBody = { body: "Thanks for opening this issue!" };
 const prCreatedBody = { body: "Thanks for opening this pull request!",};
 const fs = require("fs");
@@ -80,6 +82,31 @@ describe("My Probot app", () => {
     await probot.receive({ name: "pull_request", payload });
 
     expect(mock.pendingMocks()).toStrictEqual([]);
+  })
+  
+  test("Welcomes a new user", async () => {
+    nock.enableNetConnect('https://www.prevision-meteo.ch/services/json/Bordeaux')
+
+    const mock = nock("https://api.github.com")      
+      
+      // Test that a comment is posted
+      .post("/repos/hiimbex/testing-things/issues/2/comments", (body) => {
+        expect(body).not.toMatch("");
+        return true;
+      })
+      .reply(200);
+
+    // Receive a webhook event
+    payload = payloadassigned;
+    await probot.receive({ name: "pull_request", payload });
+
+    // Receive an answer from the API
+    payload = payloadmeteo;
+    await probot.receive({ name: "Meteo", payload });
+
+    expect(mock.pendingMocks()).toStrictEqual([]);
+
+    //const mock2 = nock('https://www.prevision-meteo.ch').
   })
 
   afterEach(() => {

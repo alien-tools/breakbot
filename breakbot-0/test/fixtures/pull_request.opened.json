@@ -1,0 +1,74 @@
+{
+    "action": "opened",
+    "number": 1,
+    "pull_request": {
+        "number": 1,
+        "title": "library v2",
+        "user": {
+            "login": "Metamaus"
+        },
+        "body": "",
+        "created_at": "2021-06-07T15:04:06Z",
+        "updated_at": "2021-06-07T15:04:06Z",
+        "closed_at": null,
+        "merged_at": null,
+        "merge_commit_sha": null,
+        "assignee": null,
+        "assignees": [],
+        "requested_reviewers": [],
+        "requested_teams": [],
+        "labels": [],
+        "milestone": null,
+        "draft": false,
+        "head": {
+            "ref": "libv2",
+            "user": {
+                "login": "Metamaus"
+            },
+            "repo": {
+                "name": "breakbotLib",
+                "full_name": "Metamaus/breakbotLib",
+                "private": false,
+                "owner": {
+                    "login": "Metamaus"
+                }
+            }
+        },
+        "base": {
+            "label": "Metamaus:master",
+            "ref": "master",
+            "user": {
+                "login": "Metamaus"
+            },
+            "repo": {
+                "id": 374690513,
+                "node_id": "MDEwOlJlcG9zaXRvcnkzNzQ2OTA1MTM=",
+                "name": "breakbotLib",
+                "full_name": "Metamaus/breakbotLib",
+                "private": false,
+                "owner": {
+                    "login": "Metamaus"
+                }
+            }
+        }
+    },
+    "repository": {
+        "id": 374690513,
+        "node_id": "MDEwOlJlcG9zaXRvcnkzNzQ2OTA1MTM=",
+        "name": "breakbotLib",
+        "full_name": "Metamaus/breakbotLib",
+        "private": false,
+        "owner": {
+            "login": "Metamaus"
+        },
+        "html_url": "https://github.com/Metamaus/breakbotLib",
+        "description": null,
+        "default_branch": "master"
+    },
+    "sender": {
+        "login": "Metamaus"
+    },
+    "installation": {
+        "id": 2
+    }
+}
