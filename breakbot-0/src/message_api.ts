@@ -1,5 +1,7 @@
 const fetch = require('node-fetch');
-import { postComment } from './post_comment'
+//const Octokit = require('@octokit/rest');
+
+import { postCheck, postComment } from './post_comment'
 
 import payload from "../test/fixtures/maracas.v1.json";
 
@@ -15,7 +17,7 @@ async function testInteraction(contextPr:any, baseBranch: string) {
 
 async function pollInteraction(baseBranch: string, user: string, repo: string, prId: number, contextPr: any) {
     var PostSent: boolean = false;
-
+1
     var intervalID: any;
 
     //shaping the request  /!\ not clean at all /!\
@@ -25,13 +27,13 @@ async function pollInteraction(baseBranch: string, user: string, repo: string, p
     const poll = async () => {
         fetch(destUrl, { method: 'GET' })
             .then((res: any) => {
-                console.log("Status get you: " + res.status)
+                console.log("Status get from " + baseBranch +": " + res.status)
                 if (res.status == 200) {
                     clearInterval(intervalID)
                 }
                 return res.json()
             })
-            .then((json: any) => postComment(json, contextPr, baseBranch))
+            .then((json: any) => postCheck(json, contextPr))//postComment(json, contextPr, baseBranch))
             .catch((err: any) => {
                 console.error(err)
                 clearInterval(intervalID)
@@ -54,4 +56,20 @@ async function pollInteraction(baseBranch: string, user: string, repo: string, p
         intervalID = setInterval(poll,2*1000)
 }
 
-export { pollInteraction, testInteraction };
+async function pushInteraction(user: string, repo: string, prId: number) {
+    //shaping the request  /!\ not clean at all /!\
+    const destUrl = 'http://anatman.ddns.net:8080/github/pr/' + user + "/" + repo + "/" + prId
+    const myUrl = { url: process.env.WEBHOOK_PROXY_URL }
+
+    await fetch(destUrl, {
+        method: 'POST',
+        body: JSON.stringify(myUrl)
+    }).then((res: any) => {
+        console.log("Status post: " + res.status)
+    })
+    .catch((err: any) => {
+        console.error(err)
+    })
+ }
+
+export { pollInteraction, testInteraction, pushInteraction };

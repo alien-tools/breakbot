@@ -1,3 +1,5 @@
+
+
 async function postComment(bcJson: any, context: any, baseBranch: string) {
     var messageReturned = ""
 
@@ -40,7 +42,17 @@ async function postComment(bcJson: any, context: any, baseBranch: string) {
 
     //---Post the details as reviews---
 
-
 }
 
-export {postComment}
+async function postCheck(bcJson: any, context: any) { //return a 404 error, how to add a body ?
+    const owner = context.payload.pull_request.head.repo.owner.login
+    const repo = context.payload.pull_request.head.repo.full_name
+    console.log(owner + repo)
+    await context.octokit.checks.create({
+        owner,
+        repo
+    })
+    console.log(bcJson)
+}
+
+export {postComment, postCheck}

@@ -17,7 +17,11 @@
     "test": "jest"
   },
   "dependencies": {
+    "@octokit/rest": "^18.5.6",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "openssl-nodejs": "^1.0.5",
     "probot": "^11.0.1"
   },
   "devDependencies": {
