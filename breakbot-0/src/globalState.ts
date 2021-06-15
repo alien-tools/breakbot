@@ -4,7 +4,7 @@ enum State {
     push
 }
 
-const default_state = State.test
+const default_state = State.push
 var current_state = default_state
 exports.current_state = current_state
 
