@@ -6,22 +6,22 @@ import { State } from "./globalState";
 import { Octokit } from "@octokit/rest";
 import { createAppAuth } from "@octokit/auth-app"
 import { postComment } from "./post_comment";
-const fs = require("fs");
+//const fs = require("fs");
 
 var global = require("../src/globalState")
 
 const connectAndComment = async function (myJson: any) {
 
-  var myKey = fs.readFileSync(__dirname + "/../../breakbot-original-key.private-key.pem", "utf8")
+  //var myKey = fs.readFileSync(__dirname + "/../../breakbot-original-key.private-key.pem", "utf8")
 
-  console.log("My key is: ", myKey);
+  //console.log("My key is: ", myKey);
 
 
   const appOctokit = new Octokit({
     authStrategy: createAppAuth,
     auth: {
       appId: process.env.APP_ID,
-      privateKey: myKey,//process.env.PRIVATE_KEY,
+      privateKey: process.env.PRIVATE_KEY,//myKey,
       //clientId: process.env.GITHUB_CLIENT_ID,
       //clientSecret: process.env.GITHUB_CLIENT_SECRET,
       installationId: myJson.installationId
