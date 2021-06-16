@@ -36,7 +36,7 @@ const connectAndComment = async function (myJson: any) {
 }
 
 export = (app: Probot, option: any) => {//({ Probot, getRouter: any }) {
-  app.log.info("The app is up !")
+  app.log.info("The app is up, in state: " + global.current_state + " !")
 
   //to access .env variables, not necessary ?
   //require('dotenv').config()
@@ -68,7 +68,7 @@ export = (app: Probot, option: any) => {//({ Probot, getRouter: any }) {
 
     if (global.current_state == State.poll)
     {
-      await pollInteraction(temp.base.ref, temp.user.login, temp.head.repo.name, context.payload.number, context);      
+      await pollInteraction(temp.base.ref, temp.head.repo.owner.login, temp.head.repo.name, context.payload.number, context);
     }
     else if (global.current_state == State.test)
     {
@@ -76,7 +76,13 @@ export = (app: Probot, option: any) => {//({ Probot, getRouter: any }) {
     }
     else if (global.current_state == State.push)
     {
-      await pushInteraction(temp.user.login, temp.head.repo.name, context.payload.number)
+      const instal = context.payload.installation
+      var installationId = 0
+      if (instal != undefined)
+      {
+        installationId = instal.id
+      }
+      await pushInteraction(temp.head.repo.owner.login, temp.head.repo.name, context.payload.number, installationId, temp.base.ref)
     }
   });
   
