@@ -6,20 +6,31 @@ import { State } from "./globalState";
 import { Octokit } from "@octokit/rest";
 import { createAppAuth } from "@octokit/auth-app"
 import { postComment } from "./post_comment";
+const fs = require("fs");
 
 var global = require("../src/globalState")
 
 const connectAndComment = async function (myJson: any) {
+
+  var myKey = fs.readFileSync(__dirname + "/../../breakbot-original-key.private-key.pem", "utf8")
+
+  console.log("My key is: ", myKey);
+
+
   const appOctokit = new Octokit({
     authStrategy: createAppAuth,
     auth: {
       appId: process.env.APP_ID,
-      privateKey: process.env.PRIVATE_KEY,
-      clientId: process.env.GITHUB_CLIENT_ID,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+      privateKey: myKey,//process.env.PRIVATE_KEY,
+      //clientId: process.env.GITHUB_CLIENT_ID,
+      //clientSecret: process.env.GITHUB_CLIENT_SECRET,
       installationId: myJson.installationId
     },
   });
+
+  //console.log("Current dir: " +  __dirname + "\nCreated an octokit with key of " + process.env.PRIVATE_KEY)
+
+  //console.log("It's a " + typeof process.env.PRIVATE_KEY)
 
   postComment(myJson, appOctokit, myJson.baseBranch, myJson.owner, myJson.repo, myJson.issueNumber)
 }
@@ -27,8 +38,8 @@ const connectAndComment = async function (myJson: any) {
 export = (app: Probot, option: any) => {//({ Probot, getRouter: any }) {
   app.log.info("The app is up !")
 
-  //to access .env variables
-  require('dotenv').config()
+  //to access .env variables, not necessary ?
+  //require('dotenv').config()
 
   //if push state, configure express
   if (global.current_state == State.push) {
@@ -41,6 +52,13 @@ export = (app: Probot, option: any) => {//({ Probot, getRouter: any }) {
       connectAndComment(req.body)
       res.send("Received")
     })
+
+    /*let port = process.env.PORT;
+    if (port == null || port == "") {
+      port = "8000";
+    }
+    router.listen(parseInt(port));
+    */
   }
 
   app.on("pull_request.opened", async (context) => {
