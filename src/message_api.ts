@@ -23,7 +23,7 @@ async function pollInteraction(baseBranch: string, user: string, repo: string, p
     var intervalID: any;
 
     //shaping the request  /!\ not clean at all /!\
-    const destUrl = 'http://anatman.ddns.net:8080/github/pr/' + user + "/" + repo + "/" + prId
+    const destUrl = process.env.MARACAS_URL + "/" + user + "/" + repo + "/" + prId
 
     // polling fct
     const poll = async () => {
@@ -58,16 +58,20 @@ async function pollInteraction(baseBranch: string, user: string, repo: string, p
         intervalID = setInterval(poll,2*1000)
 }
 
-async function pushInteraction(user: string, repo: string, prId: number) {
+async function pushInteraction(user: string, repo: string, prId: number, installationId: number, baseBranch: string) {
     //shaping the request  /!\ not clean at all /!\
-    const destUrl = 'http://anatman.ddns.net:8080/github/pr/' + user + "/" + repo + "/" + prId
-    const myUrl = { url: process.env.WEBHOOK_PROXY_URL }
+    const destUrl = process.env.MARACAS_URL + "/" + user + "/" + repo + "/" + prId + "?callback=" + process.env.WEBHOOK_PROXY_URL + "/probot/publish"
+    const datas = {
+        //url: process.env.WEBHOOK_PROXY_URL
+        installationId: installationId,
+        baseBranch: baseBranch
+    }
 
     await fetch(destUrl, {
         method: 'POST',
-        body: JSON.stringify(myUrl)
+        body: JSON.stringify(datas)
     }).then((res: any) => {
-        console.log("Status post: " + res.status)
+        console.log("Status post (push mode): " + res.status)
     })
     .catch((err: any) => {
         console.error(err)
