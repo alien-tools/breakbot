@@ -28,12 +28,12 @@ const connectAndComment = async function (myJson: any, baseBranch: string, owner
 export = (app: Probot, option: any) => {
 
   //If the bot is in push state, the endpoint for maracas is set up
-  if (global.current_state == State.push) {
+  if (global.currentState == State.push) {
     const router = option.getRouter("/breakbot");
 
     router.use(bodyParser.json())
 
-    router.post("/pr/:user/:repository/:prId/:baseBranch", (req: any, res: any) => {
+    router.post("/pr/:owner/:repo/:prId/:baseBranch", (req: any, res: any) => {
       connectAndComment(req.body, req.params.baseBranch, req.params.owner, req.params.repo, req.params.prId)
       res.status(200)
       res.send("Received")
