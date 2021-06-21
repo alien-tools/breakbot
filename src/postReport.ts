@@ -1,5 +1,3 @@
-
-
 async function postComment(bcJson: any, myOctokit: any, baseBranch: string, owner: string, repo: string, issueNumber: number) {
     var messageReturned = ""
 
@@ -10,9 +8,7 @@ async function postComment(bcJson: any, myOctokit: any, baseBranch: string, owne
 
     if (bcJson != undefined)
     {
-        //console.log(bcJson)
-
-        // Base declaration
+        // Generic declaration
         const nMax = 10
         const n = bcJson.delta.breakingChanges.length
     
@@ -46,7 +42,8 @@ async function postComment(bcJson: any, myOctokit: any, baseBranch: string, owne
 
 }
 
-async function postCheck(bcJson: any, context: any) { //return a 404 error, how to add a body ?
+async function postCheck(bcJson: any, context: any) {
+    // generates reports as checks instead of comments, not tested
     const owner = context.payload.pull_request.head.repo.owner.login
     const repo = context.payload.pull_request.head.repo.full_name
     console.log(owner + repo)

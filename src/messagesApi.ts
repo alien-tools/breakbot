@@ -1,31 +1,20 @@
 const fetch = require('node-fetch');
-//const Octokit = require('@octokit/rest');
 
-import { postComment } from './post_comment'
-
-import payload from "../test/fixtures/maracas.v1.json";
+import { postComment } from './postReport'
+import payload from "../test/fixtures/maracas.v1.json"; //for test purpose
 
 
-async function testInteraction(contextPr:any, baseBranch: string) {
-    //get the json from file
-    const json = payload
+async function testInteraction(contextPr: any, baseBranch: string) {
     const temp = contextPr.payload.pull_request;
-
-    //post comment
-    await postComment(json, contextPr.octokit, baseBranch, temp.user.login, temp.head.repo.name, temp.number)
-
+    await postComment(payload, contextPr.octokit, baseBranch, temp.user.login, temp.head.repo.name, temp.number)
 }
 
 async function pollInteraction(baseBranch: string, user: string, repo: string, prId: number, contextPr: any) {
-    var PostSent: boolean = false;
+    var postSent: boolean = false;
     const temp = contextPr.payload.pull_request;
-    
     var intervalID: any;
-
-    //shaping the request  /!\ not clean at all /!\
     const destUrl = process.env.MARACAS_URL + "/" + user + "/" + repo + "/" + prId
 
-    // polling fct
     const poll = async () => {
         fetch(destUrl, { method: 'GET' })
             .then((res: any) => {
@@ -42,27 +31,26 @@ async function pollInteraction(baseBranch: string, user: string, repo: string, p
             })
     }
 
-    // first contact with Maracas
+    // sending the request to Maracas
     await fetch(destUrl, { method: 'POST' })
         .then((res: any) => {
             //console.log("Status post: " + res.status)
             if (res.status == 202) {
-                PostSent = true
+                postSent = true
             }
         })
         .catch((err: any) => {
             console.error(err)
         })
     
-    if (PostSent)
+    if (postSent)
         intervalID = setInterval(poll,2*1000)
 }
 
 async function pushInteraction(user: string, repo: string, prId: number, installationId: number, baseBranch: string) {
-    //shaping the request  /!\ not clean at all /!\
+
     const destUrl = process.env.MARACAS_URL + "/" + user + "/" + repo + "/" + prId + "?callback=" + process.env.WEBHOOK_PROXY_URL + "/probot/publish"
     const datas = {
-        //url: process.env.WEBHOOK_PROXY_URL
         installationId: installationId,
         baseBranch: baseBranch
     }

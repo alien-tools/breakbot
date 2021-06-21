@@ -4,8 +4,8 @@ enum State {
     push
 }
 
-const default_state = process.env.STATE
-var current_state = default_state
-exports.current_state = current_state
+const defaultState = process.env.STATE
+var currentState = defaultState
+exports.currentState = currentState
 
-export { State, default_state }
+export { State, defaultState }
