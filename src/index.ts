@@ -61,7 +61,7 @@ export = (app: Probot, option: any) => {
       if (instal != undefined)
       {
         installationId = instal.id
-        await pushInteraction(temp.head.repo.owner.login, temp.head.repo.name, context.payload.number, installationId, temp.base.ref)
+        await pushInteraction(temp.head.repo.owner.login, temp.head.repo.name, context.payload.number, installationId)
       }
       else
       {

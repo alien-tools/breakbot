@@ -47,12 +47,11 @@ async function pollInteraction(user: string, repo: string, prId: number, context
         intervalID = setInterval(poll,2*1000)
 }
 
-async function pushInteraction(user: string, repo: string, prId: number, installationId: number, baseBranch: string) {
+async function pushInteraction(user: string, repo: string, prId: number, installationId: number) {
 
     const destUrl = process.env.MARACAS_URL + "/" + user + "/" + repo + "/" + prId + "?callback=" + process.env.WEBHOOK_PROXY_URL + "/probot/publish"
     const datas = {
-        installationId: installationId,
-        baseBranch: baseBranch
+        installationId: installationId
     }
 
     await fetch(destUrl, {
