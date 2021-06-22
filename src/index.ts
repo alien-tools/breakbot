@@ -34,7 +34,7 @@ export = (app: Probot, option: any) => {
     router.use(bodyParser.json())
 
     router.post("/pr/:owner/:repo/:prId", (req: any, res: any) => {
-      connectAndComment(req.body, req.params.owner, req.params.repo, req.params.prId)
+      connectAndComment(req.body, req.params.owner, req.params.repo, req.header('identificationId'))
       res.status(200)
       res.send("Received")
     })
