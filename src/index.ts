@@ -9,7 +9,7 @@ const global = require("../src/globalState")
 const bodyParser = require("body-parser")
 
 
-const connectAndComment = async function (myJson: any, baseBranch: string, owner: string, repo: string, prId: number) {
+const connectAndComment = async function (myJson: any, owner: string, repo: string, prId: number) {
   // "Traduction" function for postComment
 
   const appOctokit = new Octokit({
@@ -21,7 +21,7 @@ const connectAndComment = async function (myJson: any, baseBranch: string, owner
     },
   });
 
-  postComment(myJson, appOctokit, baseBranch, owner, repo, prId)
+  postComment(myJson, appOctokit, owner, repo, prId)
 }
 
 //---Declaration of the app---
@@ -33,8 +33,8 @@ export = (app: Probot, option: any) => {
 
     router.use(bodyParser.json())
 
-    router.post("/pr/:owner/:repo/:prId/:baseBranch", (req: any, res: any) => {
-      connectAndComment(req.body, req.params.baseBranch, req.params.owner, req.params.repo, req.params.prId)
+    router.post("/pr/:owner/:repo/:prId", (req: any, res: any) => {
+      connectAndComment(req.body, req.params.owner, req.params.repo, req.params.prId)
       res.status(200)
       res.send("Received")
     })
@@ -45,12 +45,12 @@ export = (app: Probot, option: any) => {
 
     if (global.currentState == State.poll)
     {
-      await pollInteraction(temp.base.ref, temp.head.repo.owner.login, temp.head.repo.name, context.payload.number, context);
+      await pollInteraction(temp.head.repo.owner.login, temp.head.repo.name, context.payload.number, context);
     }
 
     else if (global.currentState == State.test)
     {
-      testInteraction(context, temp.base.ref)
+      testInteraction(context)
     }
       
     else if (global.currentState == State.push)
@@ -61,7 +61,7 @@ export = (app: Probot, option: any) => {
       if (instal != undefined)
       {
         installationId = instal.id
-        await pushInteraction(temp.head.repo.owner.login, temp.head.repo.name, context.payload.number, installationId, temp.base.ref)
+        await pushInteraction(temp.head.repo.owner.login, temp.head.repo.name, context.payload.number, installationId)
       }
       else
       {

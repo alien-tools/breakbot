@@ -1,4 +1,4 @@
-async function postComment(bcJson: any, myOctokit: any, baseBranch: string, owner: string, repo: string, issueNumber: number) {
+async function postComment(bcJson: any, myOctokit: any, owner: string, repo: string, issueNumber: number) {
     var messageReturned = ""
 
     //---Format the Json---
@@ -12,7 +12,7 @@ async function postComment(bcJson: any, myOctokit: any, baseBranch: string, owne
         const nMax = 10
         const n = bcJson.delta.breakingChanges.length
     
-        messageReturned += "This PR introduces **" + n + "** breaking changes in the branch **" + baseBranch + "**, here are a few of them:\n" //+ "\nThe request was computed in " + time + " seconds";
+        messageReturned += "This PR introduces **" + n + "** breaking changes in the base branch, here are a few of them:\n" //+ "\nThe request was computed in " + time + " seconds";
     
         // Detail on the BC
         for (let i = 0; i < n; i++) {
