@@ -48,7 +48,7 @@ async function pollInteraction(user: string, repo: string, prId: number, context
 }
 
 async function pushInteraction(user: string, repo: string, prId: number, installationId: number) {
-    const callbackUrl = process.env.WEBHOOK_PROXY_URL + "/pr/" + user + "/" + repo + "/" + prId
+    const callbackUrl = process.env.WEBHOOK_PROXY_URL + "/breakbot/pr/" + user + "/" + repo + "/" + prId
     const destUrl = process.env.MARACAS_URL + "/github/pr/" + user + "/" + repo + "/" + prId + "?callback=" + callbackUrl
     const datas = {
         installationId: installationId
