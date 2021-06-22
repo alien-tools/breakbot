@@ -4,12 +4,12 @@ import { postComment } from './postReport'
 import payload from "../test/fixtures/maracas.v1.json"; //for test purpose
 
 
-async function testInteraction(contextPr: any, baseBranch: string) {
+async function testInteraction(contextPr: any) {
     const temp = contextPr.payload.pull_request;
-    await postComment(payload, contextPr.octokit, baseBranch, temp.user.login, temp.head.repo.name, temp.number)
+    await postComment(payload, contextPr.octokit, temp.user.login, temp.head.repo.name, temp.number)
 }
 
-async function pollInteraction(baseBranch: string, user: string, repo: string, prId: number, contextPr: any) {
+async function pollInteraction(user: string, repo: string, prId: number, contextPr: any) {
     var postSent: boolean = false;
     const temp = contextPr.payload.pull_request;
     var intervalID: any;
@@ -24,7 +24,7 @@ async function pollInteraction(baseBranch: string, user: string, repo: string, p
                 }
                 return res.json()
             })
-            .then((json: any) => postComment(json, contextPr.octokit, baseBranch, temp.user.login, temp.head.repo.name, temp.number))
+            .then((json: any) => postComment(json, contextPr.octokit, temp.user.login, temp.head.repo.name, temp.number))
             .catch((err: any) => {
                 console.error(err)
                 clearInterval(intervalID)
