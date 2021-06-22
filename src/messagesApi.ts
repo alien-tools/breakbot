@@ -56,6 +56,9 @@ async function pushInteraction(user: string, repo: string, prId: number, install
 
     await fetch(destUrl, {
         method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
         body: JSON.stringify(datas)
     }).then((res: any) => {
         console.log("Status post (push mode): " + res.status)
