@@ -56,8 +56,7 @@ async function pushInteraction(user: string, repo: string, prId: number, install
         headers: {
             'Content-Type': 'application/json',
             'installationId': installationId
-        },
-        body: JSON.stringify(datas)
+        }
     }).then((res: any) => {
         console.log("Status post (push mode): " + res.status)
     })
