@@ -30,8 +30,8 @@ export = (app: Probot, option: any) => {
   if (global.currentState == State.push) {
     const router = option.getRouter("/breakbot");
 
-    router.use(bodyParser.json())
-    router.use(bodyParser({ limit: '5mb' }));
+    router.use(bodyParser.json({ limit: '5mb' }))
+    //router.use(bodyParser({ limit: '5mb' }));
 
     router.post("/pr/:owner/:repo/:prId", (req: any, res: any) => {
       connectAndComment(req.body, req.params.owner, req.params.repo, req.params.prId, req.headers.installationid)
