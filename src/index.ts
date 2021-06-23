@@ -9,7 +9,7 @@ const global = require("../src/globalState")
 const bodyParser = require("body-parser")
 
 
-const connectAndComment = async function (myJson: any, owner: string, repo: string, prId: number) {
+const connectAndComment = async function (myJson: any, owner: string, repo: string, prId: number, installationId: number) {
   // "Traduction" function for postComment
 
   const appOctokit = new Octokit({
@@ -17,7 +17,7 @@ const connectAndComment = async function (myJson: any, owner: string, repo: stri
     auth: {
       appId: process.env.APP_ID,
       privateKey: process.env.PRIVATE_KEY,
-      installationId: myJson.installationId
+      installationId: installationId
     },
   });
 
@@ -26,7 +26,6 @@ const connectAndComment = async function (myJson: any, owner: string, repo: stri
 
 //---Declaration of the app---
 export = (app: Probot, option: any) => {
-
   //If the bot is in push state, the endpoint for maracas is set up
   if (global.currentState == State.push) {
     const router = option.getRouter("/breakbot");
@@ -35,7 +34,7 @@ export = (app: Probot, option: any) => {
     router.use(bodyParser({ limit: '2mb' }));
 
     router.post("/pr/:owner/:repo/:prId", (req: any, res: any) => {
-      connectAndComment(req.body, req.params.owner, req.params.repo, req.params.prId)
+      connectAndComment(req.body, req.params.owner, req.params.repo, req.params.prId, req.headers.installationid)
       res.status(200)
       res.send("Received")
     })
