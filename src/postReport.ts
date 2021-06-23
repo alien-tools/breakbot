@@ -4,22 +4,25 @@ async function postComment(bcJson: any, myOctokit: any, owner: string, repo: str
     //---Format the Json---
     
     // Greetings (optional)
-    messageReturned += "### Hello, my name is BreakBot-0 !\n"
+    messageReturned += "### Hello, my name is BreakBot !\n"
 
     if (bcJson != undefined)
     {
+        // Log result message
+        console.log("Received message: " + bcJson.message)
+
         // Generic declaration
         const nMax = 10
-        const n = bcJson.breakingChanges.length
+        const n = bcJson.delta.breakingChanges.length
     
-        messageReturned += "This PR introduces **" + n + "** breaking changes in the base branch, here are a few of them:\n" //+ "\nThe request was computed in " + time + " seconds";
+        messageReturned += "This PR introduces **" + n + "** breaking changes in the base branch:\n" //+ "\nThe request was computed in " + time + " seconds";
     
         // Detail on the BC
         for (let i = 0; i < n; i++) {
             if (i < nMax) {
-                messageReturned += "\n-  The declaration [" + bcJson.breakingChanges[i].declaration + "]"
-                messageReturned += "(" + bcJson.breakingChanges[i].url + ")"
-                messageReturned += " is impacted by **" + bcJson.breakingChanges[i].type + "**"
+                messageReturned += "\n-  The declaration [" + bcJson.delta.breakingChanges[i].declaration + "]"
+                messageReturned += "(" + bcJson.delta.breakingChanges[i].url + ")"
+                messageReturned += " is impacted by **" + bcJson.delta.breakingChanges[i].type + "**"
             }
         }        
     }
