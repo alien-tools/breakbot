@@ -53,8 +53,7 @@ async function createCheck(myOctokit: any, owner: string, repo: string, head_sha
     const output =
     {
         title: "Sending request to the api...",
-        summary: "",
-        //text: "### Text \nThis is where we give **lots of** details."
+        summary: ""
     }
 
     const check =
@@ -74,7 +73,6 @@ async function createCheck(myOctokit: any, owner: string, repo: string, head_sha
 }
 
 const getCheck = async (finished: boolean, owner: string, repo: string, installationId: number, branchName: string, myJson: any, prId: number) => {
-    console.log("getCheck starting")
     const appOctokit = new Octokit({
         authStrategy: createAppAuth,
         auth:
@@ -94,16 +92,15 @@ const getCheck = async (finished: boolean, owner: string, repo: string, installa
         branchName = branchInfos.data.head.ref
     }
 
-    var resTest = await appOctokit.request("/repos/" + owner + "/" + repo + "/commits/" + branchName + "/check-runs") // branch name is the chosen ref
+    var resTest = await appOctokit.request("/repos/" + owner + "/" + repo + "/commits/" + branchName + "/check-runs")
 
     var n = resTest.data.total_count
     const checks = resTest.data.check_runs
 
-    console.log("Response status: " + resTest.status + "\nurl of response: " + resTest.url + "\ntotal_count: " + n)
+    //console.log("Response status: " + resTest.status + "\nurl of response: " + resTest.url + "\ntotal_count: " + n)
 
     for (let i = 0; i < n; i++) {
         if (checks[i].app.id == process.env.APP_ID) {
-            console.log("The check " + checks[i].name + " with id " + checks[i].id + " is mine !")
             if (finished) {
                 updateCheck(appOctokit, owner, repo, checks[i].id, myJson)
             }

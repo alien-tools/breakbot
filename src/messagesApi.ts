@@ -83,8 +83,8 @@ async function pushInteractionCheck(owner: string, repo: string, prId: number, i
             'installationId': installationId
         }
     }).then((res: any) => {
-        console.log("Status post (push mode): " + res.status)
-        if (res.status == 200)
+        console.log("Answer from Maracas (push mode): " + res.status)
+        if (res.status == 202)
         {
             getCheck(false, owner, repo, installationId, branchName, null, prId)
         }

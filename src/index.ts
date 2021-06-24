@@ -34,6 +34,7 @@ export = (app: Probot, option: any) => {
 
     router.post("/pr/:owner/:repo/:prId", (req: any, res: any) => {
       //connectAndComment(req.body, req.params.owner, req.params.repo, req.params.prId, req.headers.installationid)
+      console.log("Final report received from Maracas")
       getCheck(true, req.params.owner, req.params.repo, req.headers.installationid, "", req.body, req.params.prId)
       res.status(200)
       res.send("Received")
@@ -65,7 +66,7 @@ export = (app: Probot, option: any) => {
       {
         installationId = instal.id
         //await pushInteractionComment(temp.head.repo.owner.login, temp.head.repo.name, context.payload.number, installationId)
-        await pushInteractionCheck(temp.head.repo.owner.login, temp.head.repo.name, context.payload.number, installationId, temp.head.ref)
+        await pushInteractionCheck(temp.head.repo.owner.login, temp.head.repo.name, temp.number, installationId, temp.head.ref)
       }
       else
       {
