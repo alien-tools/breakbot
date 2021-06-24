@@ -40,7 +40,7 @@ export = (app: Probot, option: any) => {
     })
   }
 
-  app.on("pull_request.opened", async (context) => {
+  app.on(["pull_request.opened", "pull_request.synchronize"], async (context) => {
     const temp = context.payload.pull_request;
 
     if (global.currentState == State.poll)
