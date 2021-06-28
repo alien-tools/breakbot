@@ -1,21 +1,21 @@
 const fetch = require('node-fetch');
 
-import { postComment } from './postReport'
+import { postComment, getCheck } from './postReport'
 import payload from "../test/fixtures/maracas.v1.json"; //for test purpose
 
 
 async function testInteraction(contextPr: any)
 {
     const temp = contextPr.payload.pull_request;
-    await postComment(payload, contextPr.octokit, temp.user.login, temp.head.repo.name, temp.number)
+    await postComment(payload, contextPr.octokit, temp.owner.login, temp.head.repo.name, temp.number)
 }
 
-async function pollInteraction(user: string, repo: string, prId: number, contextPr: any)
+async function pollInteraction(owner: string, repo: string, prId: number, contextPr: any)
 {
     var postSent: boolean = false;
     const temp = contextPr.payload.pull_request;
     var intervalID: any;
-    const destUrl = process.env.MARACAS_URL + "/" + user + "/" + repo + "/" + prId
+    const destUrl = process.env.MARACAS_URL + "/" + owner + "/" + repo + "/" + prId
 
     const poll = async () =>
     {
@@ -27,7 +27,7 @@ async function pollInteraction(user: string, repo: string, prId: number, context
                 }
                 return res.json()
             })
-            .then((json: any) => postComment(json, contextPr.octokit, temp.user.login, temp.head.repo.name, temp.number))
+            .then((json: any) => postComment(json, contextPr.octokit, temp.owner.login, temp.head.repo.name, temp.number))
             .catch((err: any) => {
                 console.error(err)
                 clearInterval(intervalID)
@@ -52,10 +52,10 @@ async function pollInteraction(user: string, repo: string, prId: number, context
         intervalID = setInterval(poll,2*1000)
 }
 
-async function pushInteraction(user: string, repo: string, prId: number, installationId: number)
+async function pushInteractionComment(owner: string, repo: string, prId: number, installationId: number)
 {
-    const callbackUrl = process.env.WEBHOOK_PROXY_URL + "/breakbot/pr/" + user + "/" + repo + "/" + prId
-    const destUrl = process.env.MARACAS_URL + "/github/pr/" + user + "/" + repo + "/" + prId + "?callback=" + callbackUrl
+    const callbackUrl = process.env.WEBHOOK_PROXY_URL + "/breakbot/pr/" + owner + "/" + repo + "/" + prId
+    const destUrl = process.env.MARACAS_URL + "/github/pr/" + owner + "/" + repo + "/" + prId + "?callback=" + callbackUrl
 
     await fetch(destUrl, {
         method: 'POST',
@@ -72,4 +72,27 @@ async function pushInteraction(user: string, repo: string, prId: number, install
     })
 }
 
-export { pollInteraction, testInteraction, pushInteraction };
+async function pushInteractionCheck(owner: string, repo: string, prId: number, installationId: number, branchName: string) {
+    const callbackUrl = process.env.WEBHOOK_PROXY_URL + "/breakbot/pr/" + owner + "/" + repo + "/" + prId
+    const destUrl = process.env.MARACAS_URL + "/github/pr/" + owner + "/" + repo + "/" + prId + "?callback=" + callbackUrl
+
+    await fetch(destUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'installationId': installationId
+        }
+    }).then((res: any) => {
+        console.log("Answer from Maracas (push mode): " + res.status)
+        if (res.status == 202)
+        {
+            getCheck(false, owner, repo, installationId, branchName, null, prId)
+        }
+    })
+    .catch((err: any) => 
+    {
+        console.error(err)
+    })
+}
+
+export { pollInteraction, testInteraction, pushInteractionComment, pushInteractionCheck };

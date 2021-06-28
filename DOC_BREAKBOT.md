@@ -67,7 +67,7 @@ Composed of three blocs:
 
 ### Reception
 [Script](./src/index.ts)
-The main script: creates the probot app and the endpoints.
+The main script: creates the probot app and the endpoints. Create a check on the last commit added to the PR.
 
 #### Webhooks
 Nothing fancy, using the regular expressions from [here](https://probot.github.io/docs/webhooks/) to receive notifications form github.
@@ -80,7 +80,7 @@ Using express and the [default router in probot](https://probot.github.io/docs/h
 Instead of connecting with Probot.auth (seen [here](https://probot.github.io/api/latest/classes/probot.html))
 We use [octokit identification](https://octokit.github.io/rest.js/v18#authentication)
 As described [here](https://github.com/octokit/auth-app.js/)
-To connect again to github once Maracas has answered (**push** mode).
+To connect again to the repositry whenever necessary (**push** mode, gathering informations for checks).
 For general informations on authentification for github apps, click [here](https://docs.github.com/en/rest/overview/resources-in-the-rest-api#authentication)
 
 ### Interractions with MaracasApi
@@ -90,7 +90,8 @@ Rq: For the moment, if there is an error with the initial request, break-bot jus
 
 ### Layout and publish
 [Script](./src/postReport.ts)
-Layout correctly the datas gathered and post them, for the moment as a comment and later as a check run.
+[Checks management](./src/checksUpdate)
+Layout correctly the datas gathered and post them, by finding (in the main script) the check run previously created, and updating it (in check management). 
 
 ## Hosting: Heroku
 Tutorials:

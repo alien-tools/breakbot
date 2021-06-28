@@ -1,14 +1,14 @@
 import { Probot } from "probot";
-import { pollInteraction, pushInteraction, testInteraction} from "./messagesApi";
+import { pollInteraction, pushInteractionCheck, testInteraction} from "./messagesApi";
 import { State } from "./globalState";
-import { Octokit } from "@octokit/rest";
-import { createAppAuth } from "@octokit/auth-app"
-import { postComment } from "./postReport";
+//import { Octokit } from "@octokit/rest";
+//import { createAppAuth } from "@octokit/auth-app"
+import { createCheck, getCheck } from "./postReport";
 
 const global = require("../src/globalState")
 const bodyParser = require("body-parser")
 
-
+/*
 const connectAndComment = async function (myJson: any, owner: string, repo: string, prId: number, installationId: number) {
   // "Traduction" function for postComment
 
@@ -22,7 +22,7 @@ const connectAndComment = async function (myJson: any, owner: string, repo: stri
   });
 
   postComment(myJson, appOctokit, owner, repo, prId)
-}
+}*/
 
 //---Declaration of the app---
 export = (app: Probot, option: any) => {
@@ -31,10 +31,11 @@ export = (app: Probot, option: any) => {
     const router = option.getRouter("/breakbot");
 
     router.use(bodyParser.json({ limit: '5mb' }))
-    //router.use(bodyParser({ limit: '5mb' }));
 
     router.post("/pr/:owner/:repo/:prId", (req: any, res: any) => {
-      connectAndComment(req.body, req.params.owner, req.params.repo, req.params.prId, req.headers.installationid)
+      //connectAndComment(req.body, req.params.owner, req.params.repo, req.params.prId, req.headers.installationid)
+      console.log("Final report received from Maracas")
+      getCheck(true, req.params.owner, req.params.repo, req.headers.installationid, "", req.body, req.params.prId)
       res.status(200)
       res.send("Received")
     })
@@ -55,13 +56,17 @@ export = (app: Probot, option: any) => {
       
     else if (global.currentState == State.push)
     {
+      // create the test (add a condition here to have optional checks)
+      createCheck(context.octokit, temp.head.repo.owner.login, temp.head.repo.name, temp.head.sha)
+
       // avoid the case where installation is undefined
       const instal = context.payload.installation
       var installationId = 0
       if (instal != undefined)
       {
         installationId = instal.id
-        await pushInteraction(temp.head.repo.owner.login, temp.head.repo.name, context.payload.number, installationId)
+        //await pushInteractionComment(temp.head.repo.owner.login, temp.head.repo.name, context.payload.number, installationId)
+        await pushInteractionCheck(temp.head.repo.owner.login, temp.head.repo.name, temp.number, installationId, temp.head.ref)
       }
       else
       {
