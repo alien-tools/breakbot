@@ -8,22 +8,6 @@ import { createCheck, getCheck } from "./postReport";
 const global = require("../src/globalState")
 const bodyParser = require("body-parser")
 
-/*
-const connectAndComment = async function (myJson: any, owner: string, repo: string, prId: number, installationId: number) {
-  // "Traduction" function for postComment
-
-  const appOctokit = new Octokit({
-    authStrategy: createAppAuth,
-    auth: {
-      appId: process.env.APP_ID,
-      privateKey: process.env.PRIVATE_KEY,
-      installationId: installationId
-    },
-  });
-
-  postComment(myJson, appOctokit, owner, repo, prId)
-}*/
-
 //---Declaration of the app---
 export = (app: Probot, option: any) => {
   //If the bot is in push state, the endpoint for maracas is set up
@@ -33,7 +17,7 @@ export = (app: Probot, option: any) => {
     router.use(bodyParser.json({ limit: '5mb' }))
 
     router.post("/pr/:owner/:repo/:prId", (req: any, res: any) => {
-      //connectAndComment(req.body, req.params.owner, req.params.repo, req.params.prId, req.headers.installationid)
+      //postComment(req.body, req.headers.installationid, req.params.owner, req.params.repo, req.params.prId)
       console.log("Final report received from Maracas")
       getCheck(true, req.params.owner, req.params.repo, req.headers.installationid, "", req.body, req.params.prId)
       res.status(200)

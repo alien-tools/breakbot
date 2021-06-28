@@ -2,7 +2,26 @@ import { Octokit } from "@octokit/rest";
 import { createAppAuth } from "@octokit/auth-app"
 import { progressCheck, updateCheck} from "./checksUpdates"
 
-async function postComment(bcJson: any, myOctokit: any, owner: string, repo: string, issueNumber: number) {
+
+const connectAsApp = async function (installationId: number) {
+  // "Traduction" function for postComment
+
+  const appOctokit = new Octokit({
+    authStrategy: createAppAuth,
+    auth: {
+      appId: process.env.APP_ID,
+      privateKey: process.env.PRIVATE_KEY,
+      installationId: installationId
+    },
+  });
+
+  return appOctokit
+}
+
+
+async function postComment(bcJson: any, installationId: number, owner: string, repo: string, issueNumber: number) {
+    const myOctokit = await connectAsApp(installationId)
+
     var messageReturned = ""
 
     //---Format the Json---
@@ -73,15 +92,7 @@ async function createCheck(myOctokit: any, owner: string, repo: string, head_sha
 }
 
 const getCheck = async (finished: boolean, owner: string, repo: string, installationId: number, branchName: string, myJson: any, prId: number) => {
-    const appOctokit = new Octokit({
-        authStrategy: createAppAuth,
-        auth:
-        {
-            appId: process.env.APP_ID,
-            privateKey: process.env.PRIVATE_KEY,
-            installationId: installationId
-        },
-    });
+    const appOctokit = await connectAsApp(installationId)
 
     if (finished) {
         var branchInfos = await appOctokit.request('GET /repos/{owner}/{repo}/pulls/{pull_number}', {
@@ -112,4 +123,4 @@ const getCheck = async (finished: boolean, owner: string, repo: string, installa
     }
 }
 
-export {postComment, createCheck, getCheck}
+export {postComment, createCheck, getCheck, connectAsApp}
