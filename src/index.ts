@@ -3,7 +3,9 @@ import { pollInteraction, pushInteractionCheck, testInteraction} from "./message
 import { State } from "./globalState";
 //import { Octokit } from "@octokit/rest";
 //import { createAppAuth } from "@octokit/auth-app"
-import { createCheck, getCheck } from "./postReport";
+import { createCheck } from "./postReport";
+import { authDatas } from "./authClass";
+import { updateCheck } from "./checksUpdates";
 
 const global = require("../src/globalState")
 const bodyParser = require("body-parser")
@@ -19,7 +21,19 @@ export = (app: Probot, option: any) => {
     router.post("/pr/:owner/:repo/:prId", (req: any, res: any) => {
       //postComment(req.body, req.headers.installationid, req.params.owner, req.params.repo, req.params.prId)
       console.log("Final report received from Maracas")
-      getCheck(true, req.params.owner, req.params.repo, req.headers.installationid, "", req.body, req.params.prId)
+
+      var myDatas = new authDatas()
+
+      // intialized, could be one function
+      myDatas.baseRepo = req.params.owner + "/" + req.params.repo
+      myDatas.installationId = req.headers.installationid
+
+      myDatas.connectToGit(req.params.prId)
+      myDatas.getCheck(req.headers.installationId)
+
+      //getCheck(true, req.params.owner, req.params.repo, req.headers.installationid, "", req.body, req.params.prId)
+      updateCheck(myDatas, req.body)
+      
       res.status(200)
       res.send("Received")
     })
@@ -40,22 +54,17 @@ export = (app: Probot, option: any) => {
       
     else if (global.currentState == State.push)
     {
-      // create the test (add a condition here to have optional checks)
-      createCheck(context.octokit, temp.head.repo.owner.login, temp.head.repo.name, temp.head.sha)
+      var myDatas = new authDatas()
+      myDatas.updateCheck(context)
 
-      // avoid the case where installation is undefined
-      const instal = context.payload.installation
-      var installationId = 0
-      if (instal != undefined)
-      {
-        installationId = instal.id
-        //await pushInteractionComment(temp.head.repo.owner.login, temp.head.repo.name, context.payload.number, installationId)
-        await pushInteractionCheck(temp.head.repo.owner.login, temp.head.repo.name, temp.number, installationId, temp.head.ref)
-      }
-      else
-      {
-        app.log.error("Installation id not defined")
-      }
+      app.log.info("Auth datas initialized with pr context:\n" + myDatas)
+
+      // create the test (add a condition here to have optional checks)
+      myDatas = await createCheck(myDatas)
+
+      app.log.info("Auth datas once the test is created: " + myDatas)
+
+      await pushInteractionCheck(myDatas)
     }
   });
 };

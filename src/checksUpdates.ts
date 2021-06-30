@@ -1,4 +1,6 @@
-const progressCheck = async (myOctokit: any, owner: string, repo: string, check_id: number) => {
+import { authDatas } from "./authClass";
+
+const progressCheck = async (myDatas: authDatas) => {
     const newCheck =
     {
         status: "in_progress",
@@ -8,14 +10,15 @@ const progressCheck = async (myOctokit: any, owner: string, repo: string, check_
         }
     }
     try {
-        myOctokit.request("PATCH /repos/" + owner + "/" + repo + "/check-runs/" + check_id, newCheck);
+        myDatas.myOctokit.request("PATCH /repos/" + myDatas.baseRepo + "/check-runs/" + myDatas.checkId, newCheck);
     }
     catch (err) {
         console.error(err)
     }
 }
 
-const updateCheck = async (myOctokit: any, owner: string, repo: string, check_id: number, myJson: any) => {
+const updateCheck = async (myDatas: authDatas, myJson: any) => {
+
     console.log("Message received from Maracas: " + myJson.message)
 
     var newOutput =
@@ -60,7 +63,7 @@ const updateCheck = async (myOctokit: any, owner: string, repo: string, check_id
     }
 
     try {
-        myOctokit.request("PATCH /repos/" + owner + "/" + repo + "/check-runs/" + check_id, newCheck);
+        myDatas.myOctokit.request("PATCH /repos/" + myDatas.baseRepo + "/check-runs/" + myDatas.checkId, newCheck);
     }
     catch (err) {
         console.error(err)

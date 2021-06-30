@@ -1,10 +1,9 @@
 import { Octokit } from "@octokit/rest";
 import { createAppAuth } from "@octokit/auth-app"
-import { progressCheck, updateCheck} from "./checksUpdates"
+import { authDatas } from "./authClass"
 
 
 const connectAsApp = async function (installationId: number) {
-  // "Traduction" function for postComment
 
   const appOctokit = new Octokit({
     authStrategy: createAppAuth,
@@ -68,7 +67,7 @@ async function postComment(bcJson: any, installationId: number, owner: string, r
 
 }
 
-async function createCheck(myOctokit: any, owner: string, repo: string, head_sha: string) {
+async function createCheck(myDatas: authDatas) {
     const output =
     {
         title: "Sending request to the api...",
@@ -78,49 +77,22 @@ async function createCheck(myOctokit: any, owner: string, repo: string, head_sha
     const check =
     {
         name: "Breakbot report",
-        head_sha: head_sha,
+        head_sha: myDatas.headSHA,
         status: "queued",
         output: output
     }
 
     try {
-        myOctokit.request("POST /repos/" + owner + "/" + repo + "/check-runs", check);
+        const resNewCheck = await myDatas.myOctokit.request("POST /repos/" + myDatas.baseRepo + "/check-runs", check);
+        myDatas.checkId = resNewCheck.data.id
     }
     catch (err) {
         console.error(err)
     }
+
+    return myDatas
 }
 
-const getCheck = async (finished: boolean, owner: string, repo: string, installationId: number, branchName: string, myJson: any, prId: number) => {
-    const appOctokit = await connectAsApp(installationId)
 
-    if (finished) {
-        var branchInfos = await appOctokit.request('GET /repos/{owner}/{repo}/pulls/{pull_number}', {
-            owner: owner,
-            repo: repo,
-            pull_number: prId
-        })
-        branchName = branchInfos.data.head.ref
-    }
 
-    var resTest = await appOctokit.request("/repos/" + owner + "/" + repo + "/commits/" + branchName + "/check-runs")
-
-    var n = resTest.data.total_count
-    const checks = resTest.data.check_runs
-
-    //console.log("Response status: " + resTest.status + "\nurl of response: " + resTest.url + "\ntotal_count: " + n)
-
-    for (let i = 0; i < n; i++) {
-        if (checks[i].app.id == process.env.APP_ID) {
-            if (finished) {
-                updateCheck(appOctokit, owner, repo, checks[i].id, myJson)
-            }
-            else {
-                progressCheck(appOctokit, owner, repo, checks[i].id)
-            }
-            return
-        }
-    }
-}
-
-export {postComment, createCheck, getCheck, connectAsApp}
+export {postComment, createCheck, connectAsApp}
