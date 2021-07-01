@@ -74,10 +74,11 @@ async function pushInteractionComment(owner: string, repo: string, prId: number,
     })
 }
 
-async function pushInteractionCheck(myDatas: authDatas) {
-    // !!! urls not definitive !!!
-    const callbackUrl = process.env.WEBHOOK_PROXY_URL + "/breakbot/pr/" + myDatas.baseRepo + "/" + myDatas.prId 
-    const destUrl = process.env.MARACAS_URL + "/github/pr/" + myDatas.baseRepo + "/" + myDatas.prId + "?callback=" + callbackUrl // we should send myDatas.headRepo too
+async function pushCheck(myDatas: authDatas) {
+    const callbackUrl = process.env.WEBHOOK_PROXY_URL + "/breakbot/pr/" + myDatas.baseRepo + "/" + myDatas.prNb
+    const destUrl = process.env.MARACAS_URL + "/github/pr/" + myDatas.baseRepo + "/" + myDatas.prNb + "?callback=" + callbackUrl
+
+    console.log("[pushCheck] Dest url is: " + destUrl)
 
     await fetch(destUrl, {
         method: 'POST',
@@ -86,7 +87,7 @@ async function pushInteractionCheck(myDatas: authDatas) {
             'installationId': myDatas.installationId
         }
     }).then((res: any) => {
-        console.log("Answer from Maracas (push mode): " + res.status)
+        console.log("[pushCheck] Answer from Maracas (push mode): " + res.status + "\n[pushCheck] message: " + res.message)
         if (res.status == 202)
         {
             progressCheck(myDatas)
@@ -101,4 +102,4 @@ async function pushInteractionCheck(myDatas: authDatas) {
     })
 }
 
-export { pollInteraction, testInteraction, pushInteractionComment, pushInteractionCheck };
+export { pollInteraction, testInteraction, pushInteractionComment, pushCheck };
