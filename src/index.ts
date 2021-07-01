@@ -1,9 +1,9 @@
 import { Probot } from "probot";
-import { pollInteraction, pushInteractionCheck, testInteraction} from "./messagesApi";
+import { pollInteraction, pushCheck, testInteraction} from "./messagesApi";
 import { State } from "./globalState";
-//import { Octokit } from "@octokit/rest";
-//import { createAppAuth } from "@octokit/auth-app"
-import { createCheck, getCheck } from "./postReport";
+import { createCheck } from "./postReport";
+import { authDatas } from "./authClass";
+import { updateCheck } from "./checksUpdates";
 
 const global = require("../src/globalState")
 const bodyParser = require("body-parser")
@@ -16,10 +16,18 @@ export = (app: Probot, option: any) => {
 
     router.use(bodyParser.json({ limit: '5mb' }))
 
-    router.post("/pr/:owner/:repo/:prId", (req: any, res: any) => {
-      //postComment(req.body, req.headers.installationid, req.params.owner, req.params.repo, req.params.prId)
-      console.log("Final report received from Maracas")
-      getCheck(true, req.params.owner, req.params.repo, req.headers.installationid, "", req.body, req.params.prId)
+    router.post("/pr/:owner/:repo/:prNb", (req: any, res: any) => {
+      console.log("[router] Final report received from Maracas")
+
+      var myDatas = new authDatas()
+
+      // intialized, could be one function
+      myDatas.baseRepo = req.params.owner + "/" + req.params.repo
+      myDatas.prNb = req.params.prNb
+      myDatas.installationId = req.headers.installationid
+
+      updateCheck(myDatas, req.body)
+      
       res.status(200)
       res.send("Received")
     })
@@ -40,22 +48,13 @@ export = (app: Probot, option: any) => {
       
     else if (global.currentState == State.push)
     {
-      // create the test (add a condition here to have optional checks)
-      createCheck(context.octokit, temp.head.repo.owner.login, temp.head.repo.name, temp.head.sha)
+      var myDatas = new authDatas()
+      myDatas.updatePr(context)
 
-      // avoid the case where installation is undefined
-      const instal = context.payload.installation
-      var installationId = 0
-      if (instal != undefined)
-      {
-        installationId = instal.id
-        //await pushInteractionComment(temp.head.repo.owner.login, temp.head.repo.name, context.payload.number, installationId)
-        await pushInteractionCheck(temp.head.repo.owner.login, temp.head.repo.name, temp.number, installationId, temp.head.ref)
-      }
-      else
-      {
-        app.log.error("Installation id not defined")
-      }
+      // create the test (add a condition here to have optional checks)
+      myDatas = await createCheck(myDatas) // can't createCheck act on our datas ?
+
+      await pushCheck(myDatas)
     }
   });
 };

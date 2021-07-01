@@ -1,7 +1,9 @@
 const fetch = require('node-fetch');
 
-import { postComment, getCheck } from './postReport'
+import { postComment } from './postReport'
 import payload from "../test/fixtures/maracas.v1.json"; //for test purpose
+import { authDatas } from './authClass';
+import { progressCheck } from './checksUpdates';
 
 
 async function testInteraction(contextPr: any)
@@ -72,21 +74,26 @@ async function pushInteractionComment(owner: string, repo: string, prId: number,
     })
 }
 
-async function pushInteractionCheck(owner: string, repo: string, prId: number, installationId: number, branchName: string) {
-    const callbackUrl = process.env.WEBHOOK_PROXY_URL + "/breakbot/pr/" + owner + "/" + repo + "/" + prId
-    const destUrl = process.env.MARACAS_URL + "/github/pr/" + owner + "/" + repo + "/" + prId + "?callback=" + callbackUrl
+async function pushCheck(myDatas: authDatas) {
+    const callbackUrl = process.env.WEBHOOK_PROXY_URL + "/breakbot/pr/" + myDatas.baseRepo + "/" + myDatas.prNb
+    const destUrl = process.env.MARACAS_URL + "/github/pr/" + myDatas.baseRepo + "/" + myDatas.prNb + "?callback=" + callbackUrl
+
+    console.log("[pushCheck] Dest url is: " + destUrl)
 
     await fetch(destUrl, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'installationId': installationId
+            'installationId': myDatas.installationId
         }
     }).then((res: any) => {
-        console.log("Answer from Maracas (push mode): " + res.status)
+        console.log("[pushCheck] Answer from Maracas (push mode): " + res.status + "\n[pushCheck] message: " + res.message)
         if (res.status == 202)
         {
-            getCheck(false, owner, repo, installationId, branchName, null, prId)
+            progressCheck(myDatas)
+        }
+        else {
+            // update the check with the message received from maracas
         }
     })
     .catch((err: any) => 
@@ -95,4 +102,4 @@ async function pushInteractionCheck(owner: string, repo: string, prId: number, i
     })
 }
 
-export { pollInteraction, testInteraction, pushInteractionComment, pushInteractionCheck };
+export { pollInteraction, testInteraction, pushInteractionComment, pushCheck };
