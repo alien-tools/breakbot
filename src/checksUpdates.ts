@@ -23,6 +23,12 @@ const updateCheck = async (myDatas: authDatas, myJson: any) => {
 
     await myDatas.getCheck()
 
+    var myActions = [{
+        label: "Rerun test",
+        description: "",
+        identifier: "rerun"
+    }]
+
     var newOutput =
     {
         title: "",
@@ -61,7 +67,8 @@ const updateCheck = async (myDatas: authDatas, myJson: any) => {
     {
         status: "completed",
         conclusion: "neutral",
-        output: newOutput
+        output: newOutput,
+        actions: myActions
     }
 
     try {
