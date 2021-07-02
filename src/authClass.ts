@@ -1,4 +1,5 @@
-import { Octokit } from "@octokit/rest";
+import { Octokit } from "@octokit/core";
+import { config } from "@probot/octokit-plugin-config"
 import { createAppAuth } from "@octokit/auth-app"
 
 export class authDatas {
@@ -37,16 +38,6 @@ export class authDatas {
         this.installationId = context.payload.installation.id
 
         this.myOctokit = context.octokit
-
-        // ---In progress---
-        context.config('.breakbot.yml').then((config: any) => {
-            if (config) {
-                this.comment = config.comment // if undefined or false: we uses checks
-            }
-            else {
-                console.log(`[updatePr] No config file`)
-            }
-        })
     }
 
     updateCheck(context: any) {
@@ -97,12 +88,19 @@ export class authDatas {
         var n = resTest.data.total_count
         const checks = resTest.data.check_runs
 
-        console.log(`[getCheck] Datas received from git about the checks :\n[getCheck] total_count: ${n}\n[getCheck] checks: ${checks}` )
+        console.log(`[getCheck] Datas received from git about the checks :\ntotal_count: ${n}\nchecks:`)
+        console.log(checks)
 
-        const check = checks.find((check: any) => { check.app.id == process.env.APP_ID })
-        this.checkId = check.id
-        
-        console.log("[getCheck] Done.")
+        const myCheck = checks.find((check: any) => check.app.id == process.env.APP_ID)
+
+        if (myCheck) {
+            this.checkId = myCheck.id
+            
+            console.log("[getCheck] Done.")
+        }
+        else {
+            console.log("[getCheck] No check found.")
+        }
     }
 
     async getConfig(installationId?: number) {
@@ -112,9 +110,20 @@ export class authDatas {
             this.connectToGit(installationId)
         }
 
-        const pathToConfig = '.breakbot.yml'
-        var configFile = await this.myOctokit.request(`GET /repos/${this.baseRepo}/contents/${pathToConfig}`)
+        var addressSplit = this.baseRepo.split("/") 
 
-        console.log(`Here is my config file:\n ${configFile}`)
+        const configFile = await config(this.myOctokit).config.get({
+            owner: addressSplit[0],
+            repo: addressSplit[1],
+            path: ".breakbot.yml"
+        })
+
+        console.log(`[getConfig] Here is my config file:`)
+        console.log(configFile)
+
+        // set config var(s)
+        if (configFile.config.comment) { // because ts is not happy :(
+            this.comment = true
+        }
     }
 }

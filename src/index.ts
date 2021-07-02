@@ -12,7 +12,7 @@ export = (app: Probot, option: any) => {
 
   router.use(bodyParser.json({ limit: '5mb' }))
 
-  router.post("/pr/:owner/:repo/:prNb", (req: any, res: any) => {
+  router.post("/pr/:owner/:repo/:prNb", async (req: any, res: any) => {
     console.log("[router] Final report received from Maracas")
 
     var myDatas = new authDatas()
@@ -20,8 +20,9 @@ export = (app: Probot, option: any) => {
     // intialized, could be one function
     myDatas.baseRepo = `${req.params.owner}/${req.params.repo}`
     myDatas.prNb = req.params.prNb
-    myDatas.installationId = req.headers.installationid
     
+    await myDatas.getConfig(req.headers.installationid)
+
     if (myDatas.comment) {
       postComment(myDatas, req.body)
     }
@@ -37,6 +38,7 @@ export = (app: Probot, option: any) => {
 
     var myDatas = new authDatas()
     myDatas.updatePr(context)
+    await myDatas.getConfig()
 
     if (myDatas.comment) {
       pushComment(myDatas)
