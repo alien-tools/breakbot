@@ -62,8 +62,8 @@ async function pollInteraction(owner: string, repo: string, prId: number, contex
 
 async function pushComment(myDatas: authDatas)
 {
-    const callbackUrl = process.env.WEBHOOK_PROXY_URL + "/breakbot/pr/" + myDatas.baseRepo + "/" + myDatas.prNb
-    const destUrl = process.env.MARACAS_URL + "/github/pr/" + myDatas.baseRepo + "/" + myDatas.prNb + "?callback=" + callbackUrl
+    const callbackUrl = `${process.env.WEBHOOK_PROXY_URL}/breakbot/pr/${myDatas.baseRepo}/${myDatas.prNb}`
+    const destUrl = `${process.env.MARACAS_URL}/github/pr/${myDatas.baseRepo}/${myDatas.prNb}?callback=${callbackUrl}`
 
     await fetch(destUrl, {
         method: 'POST',
@@ -72,7 +72,7 @@ async function pushComment(myDatas: authDatas)
             'installationId': myDatas.installationId
         }
     }).then((res: any) => {
-        console.log("Status post (push mode): " + res.status)
+        console.log(`[pushComment] Request status: ${res.status}`)
     })
     .catch((err: any) => 
     {
@@ -81,10 +81,10 @@ async function pushComment(myDatas: authDatas)
 }
 
 async function pushCheck(myDatas: authDatas) {
-    const callbackUrl = process.env.WEBHOOK_PROXY_URL + "/breakbot/pr/" + myDatas.baseRepo + "/" + myDatas.prNb
-    const destUrl = process.env.MARACAS_URL + "/github/pr/" + myDatas.baseRepo + "/" + myDatas.prNb + "?callback=" + callbackUrl
+    const callbackUrl = `${process.env.WEBHOOK_PROXY_URL}/breakbot/pr/${myDatas.baseRepo}/${myDatas.prNb}`
+    const destUrl = `${process.env.MARACAS_URL}/github/pr/${myDatas.baseRepo}/${myDatas.prNb}?callback=${callbackUrl}`
 
-    console.log("[pushCheck] Dest url is: " + destUrl)
+    console.log(`[pushCheck] Dest url is: ${destUrl}`)
 
     await fetch(destUrl, {
         method: 'POST',
@@ -93,7 +93,7 @@ async function pushCheck(myDatas: authDatas) {
             'installationId': myDatas.installationId
         }
     }).then((res: any) => {
-        console.log("[pushCheck] Answer from Maracas (push mode): " + res.status + "\n[pushCheck] message: " + res.message)
+        console.log(`[pushCheck] Answer from Maracas (push mode): ${res.status}\n[pushCheck] message: ${res.message}`)
         if (res.status == 202)
         {
             progressCheck(myDatas)

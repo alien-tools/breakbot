@@ -73,26 +73,23 @@ export class authDatas {
             this.connectToGit(installationId)
         }
         else {
-            console.log("I don't need an octokit")
+            console.log(`[getCheck] I have an octokit: ${this.myOctokit}`)
         }
-
-        var branchInfos = await this.myOctokit.request("GET /repos/" + this.baseRepo + "/pulls/" + this.prNb)
+        
+        var branchInfos = await this.myOctokit.request(`GET /repos/${ this.baseRepo }/pulls/${ this.prNb }`)
         
         var branchSHA = branchInfos.data.head.sha
 
-        var resTest = await this.myOctokit.request("/repos/" + this.baseRepo + "/commits/" + branchSHA + "/check-runs")
+        var resTest = await this.myOctokit.request(`/repos/${this.baseRepo}/commits/${branchSHA}/check-runs`)
 
         var n = resTest.data.total_count
         const checks = resTest.data.check_runs
 
-        console.log("[getCheck] Datas received from git about the checks :\n[getCheck] total_count: " + n + "\n[getCheck] checks: " + checks )
+        console.log(`[getCheck] Datas received from git about the checks :\n[getCheck] total_count: ${n}\n[getCheck] checks: ${checks}` )
 
-        for (let i = 0; i < n; i++) {
-            if (checks[i].app.id == process.env.APP_ID) {
-                this.checkId = checks[i].id
-                console.log("[getCheck] My checkId is:" + this.checkId)
-            }
-        }
+        const check = checks.find((check: any) => { check.app.id == process.env.APP_ID })
+        this.checkId = check.id
+        
         console.log("[getCheck] Done.")
     }
 }

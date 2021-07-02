@@ -1,20 +1,22 @@
-import { Octokit } from "@octokit/rest";
-import { createAppAuth } from "@octokit/auth-app"
 import { authDatas } from "./authClass"
 
+function formatJsonMain(myJson: any, nMax: number){
+    var messageReturned = ""
 
-const connectAsApp = async function (installationId: number) {
+    // To complete with a summary
 
-  const appOctokit = new Octokit({
-    authStrategy: createAppAuth,
-    auth: {
-      appId: process.env.APP_ID,
-      privateKey: process.env.PRIVATE_KEY,
-      installationId: installationId
-    },
-  });
+    // Detail on the BC
+    myJson.delta.breakingChanges.slice(0, nMax).forEach((breakingChange: any) => {
+        
+        messageReturned += `\n### The declaration [${breakingChange.declaration}](${breakingChange.url}) is impacted by _${breakingChange.type}_`
+        
+        breakingChange.detections.slice(0, nMax).forEach((detection: any) => {
+            messageReturned += `\n- Declaration [${detection.elem}](${detection.url}) in [this client](${detection.clientUrl})`
+        });
 
-  return appOctokit
+    });
+
+    return messageReturned
 }
 
 
@@ -25,29 +27,20 @@ async function postComment(myDatas: authDatas,bcJson: any) {
     var messageReturned = ""
 
     //---Format the Json---
-    
-    // Greetings (optional)
-    messageReturned += "### Hello, my name is BreakBot !\n"
 
     if (bcJson != undefined)
     {
         // Log result message
-        console.log("Received message: " + bcJson.message)
+        console.log(`[postComment] Message from Maracas: ${bcJson.message}`)
 
         // Generic declaration
         const nMax = 10
         const n = bcJson.delta.breakingChanges.length
     
-        messageReturned += "This PR introduces **" + n + "** breaking changes in the base branch:\n" //+ "\nThe request was computed in " + time + " seconds";
+        messageReturned += `## This PR introduces **${n}** breaking changes in the base branch:`
     
         // Detail on the BC
-        for (let i = 0; i < n; i++) {
-            if (i < nMax) {
-                messageReturned += "\n-  The declaration [" + bcJson.delta.breakingChanges[i].declaration + "]"
-                messageReturned += "(" + bcJson.delta.breakingChanges[i].url + ")"
-                messageReturned += " is impacted by **" + bcJson.delta.breakingChanges[i].type + "**"
-            }
-        }        
+        messageReturned += formatJsonMain(bcJson, nMax)     
     }
     else
     {
@@ -55,12 +48,7 @@ async function postComment(myDatas: authDatas,bcJson: any) {
     }
 
     //---Post the main report---
-    await myDatas.myOctokit.request("post /repos/{repo}/issues/{issue_number}/comments",
-        {
-            repo: myDatas.baseRepo,
-            issue_number: myDatas.prNb,
-            body: messageReturned,
-        });
+    await myDatas.myOctokit.request(`post /repos/${myDatas.baseRepo}/issues/${myDatas.prNb}/comments`, {body: messageReturned});
 
     //---Post the details as reviews---
 
@@ -82,7 +70,7 @@ async function createCheck(myDatas: authDatas) {
     }
 
     try {
-        const resNewCheck = await myDatas.myOctokit.request("POST /repos/" + myDatas.baseRepo + "/check-runs", check);
+        const resNewCheck = await myDatas.myOctokit.request(`POST /repos/${myDatas.baseRepo}/check-runs`, check);
         myDatas.checkId = resNewCheck.data.id
     }
     catch (err) {
@@ -94,4 +82,4 @@ async function createCheck(myDatas: authDatas) {
 
 
 
-export {postComment, createCheck, connectAsApp}
+export {postComment, createCheck, formatJsonMain}

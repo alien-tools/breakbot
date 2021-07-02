@@ -22,7 +22,7 @@ export = (app: Probot, option: any) => {
       var myDatas = new authDatas()
 
       // intialized, could be one function
-      myDatas.baseRepo = req.params.owner + "/" + req.params.repo
+      myDatas.baseRepo = `${req.params.owner}/${req.params.repo}`
       myDatas.prNb = req.params.prNb
       myDatas.installationId = req.headers.installationid
 
