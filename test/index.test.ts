@@ -3,8 +3,6 @@ import nock from "nock";
 // Requiring our app implementation
 import myProbotApp from "../src/index";
 import { Probot, ProbotOctokit } from "probot";
-import { State, defaultState } from "../src/globalState"
-var global = require("../src/globalState")
 
 // Requiring our fixtures
 import payload from "./fixtures/pull_request.opened.json";
@@ -37,8 +35,6 @@ describe("Bot tests", () => {
   });
 
   test("creates a comment when a pull request is opened: no maracas API", async (done) => {
-    global.currentState = State.test
-
     const mock = nock("https://api.github.com")
       // Test that we correctly return a test token
       .post("/app/installations/2/access_tokens")
@@ -74,6 +70,5 @@ describe("Bot tests", () => {
     nock.restore()
     nock.cleanAll();
     nock.enableNetConnect();
-    global.currentState = defaultState
   });
 });

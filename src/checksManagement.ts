@@ -23,6 +23,7 @@ const updateCheck = async (myDatas: authDatas, myJson: any) => {
     console.log(`[updateCheck] Message received from Maracas: ${myJson.message}`)
 
     await myDatas.getCheck()
+    await myDatas.getConfig()
 
     var myActions = [{
         label: "Rerun test",

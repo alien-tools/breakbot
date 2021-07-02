@@ -14,6 +14,8 @@ export class authDatas {
     myOctokit?: any;
     checkId?: number;
 
+    comment?: boolean;
+
     constructor() {
         this.baseRepo = ""
         this.baseBranch = ""
@@ -35,10 +37,20 @@ export class authDatas {
         this.installationId = context.payload.installation.id
 
         this.myOctokit = context.octokit
+
+        // ---In progress---
+        context.config('.breakbot.yml').then((config: any) => {
+            if (config) {
+                this.comment = config.comment // if undefined or false: we uses checks
+            }
+            else {
+                console.log(`[updatePr] No config file`)
+            }
+        })
     }
 
     updateCheck(context: any) {
-        // to complete with correct informations in the fork, enough for createCheck
+        // to complete ?
         this.myOctokit = context.octokit
 
         this.baseRepo = context.payload.repository.full_name
@@ -91,5 +103,18 @@ export class authDatas {
         this.checkId = check.id
         
         console.log("[getCheck] Done.")
+    }
+
+    async getConfig(installationId?: number) {
+        console.log("[getConfig] Starting...")
+
+        if (!this.myOctokit) {
+            this.connectToGit(installationId)
+        }
+
+        const pathToConfig = '.breakbot.yml'
+        var configFile = await this.myOctokit.request(`GET /repos/${this.baseRepo}/contents/${pathToConfig}`)
+
+        console.log(`Here is my config file:\n ${configFile}`)
     }
 }
