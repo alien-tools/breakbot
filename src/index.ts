@@ -1,9 +1,8 @@
 import { Probot } from "probot";
 import { pushCheck, testInteraction} from "./messagesApi";
 import { State } from "./globalState";
-import { createCheck } from "./postReport";
 import { authDatas } from "./authClass";
-import { updateCheck } from "./checksUpdates";
+import { updateCheck, createCheck } from "./checksManagement";
 
 const global = require("../src/globalState")
 const bodyParser = require("body-parser")

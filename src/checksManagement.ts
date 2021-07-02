@@ -1,5 +1,5 @@
 import { authDatas } from "./authClass";
-import { formatJsonMain } from "./postReport";
+import { parseJsonMain } from "./fromatJson";
 
 const progressCheck = async (myDatas: authDatas) => {
     const newCheck =
@@ -45,7 +45,7 @@ const updateCheck = async (myDatas: authDatas, myJson: any) => {
 
     // Detail on the BC
     newOutput.summary += "Here is a list of the breaking changes caused."
-    newOutput.summary += formatJsonMain(myJson, nMax)
+    newOutput.summary += parseJsonMain(myJson, nMax)
 
     const newCheck =
     {
@@ -63,4 +63,30 @@ const updateCheck = async (myDatas: authDatas, myJson: any) => {
     }
 }
 
-export { progressCheck, updateCheck }
+async function createCheck(myDatas: authDatas) {
+    const output =
+    {
+        title: "Sending request to the api...",
+        summary: ""
+    }
+
+    const check =
+    {
+        name: "Breakbot report",
+        head_sha: myDatas.headSHA,
+        status: "queued",
+        output: output
+    }
+
+    try {
+        const resNewCheck = await myDatas.myOctokit.request(`POST /repos/${myDatas.baseRepo}/check-runs`, check);
+        myDatas.checkId = resNewCheck.data.id
+    }
+    catch (err) {
+        console.error(err)
+    }
+
+    return myDatas
+}
+
+export { progressCheck, updateCheck, createCheck }

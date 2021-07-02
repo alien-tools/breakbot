@@ -1,12 +1,12 @@
 const fetch = require('node-fetch');
 
-import { postComment } from './postReport'
+import { postComment } from './commentsManagement'
 import payload from "../test/fixtures/maracas.v1.json"; //for test purpose
 import { authDatas } from './authClass';
-import { progressCheck } from './checksUpdates';
+import { progressCheck } from './checksManagement';
 
 
-async function testInteraction(contextPr: any)
+export async function testInteraction(contextPr: any)
 {
     const temp = contextPr.payload.pull_request;
 
@@ -60,7 +60,7 @@ async function pollInteraction(owner: string, repo: string, prId: number, contex
         intervalID = setInterval(poll,2*1000)
 }*/
 
-async function pushComment(myDatas: authDatas)
+export async function pushComment(myDatas: authDatas)
 {
     const callbackUrl = `${process.env.WEBHOOK_PROXY_URL}/breakbot/pr/${myDatas.baseRepo}/${myDatas.prNb}`
     const destUrl = `${process.env.MARACAS_URL}/github/pr/${myDatas.baseRepo}/${myDatas.prNb}?callback=${callbackUrl}`
@@ -80,7 +80,7 @@ async function pushComment(myDatas: authDatas)
     })
 }
 
-async function pushCheck(myDatas: authDatas) {
+export async function pushCheck(myDatas: authDatas) {
     const callbackUrl = `${process.env.WEBHOOK_PROXY_URL}/breakbot/pr/${myDatas.baseRepo}/${myDatas.prNb}`
     const destUrl = `${process.env.MARACAS_URL}/github/pr/${myDatas.baseRepo}/${myDatas.prNb}?callback=${callbackUrl}`
 
@@ -107,5 +107,3 @@ async function pushCheck(myDatas: authDatas) {
         console.error(err)
     })
 }
-
-export { testInteraction, pushComment, pushCheck };
