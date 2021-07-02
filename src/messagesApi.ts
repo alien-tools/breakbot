@@ -9,9 +9,15 @@ import { progressCheck } from './checksUpdates';
 async function testInteraction(contextPr: any)
 {
     const temp = contextPr.payload.pull_request;
-    await postComment(payload, contextPr.octokit, temp.owner.login, temp.head.repo.name, temp.number)
+
+    var myDatas = new authDatas()
+    myDatas.baseRepo = temp.base.repo.full_name
+    //to complete ?
+
+    await postComment(myDatas, payload)
 }
 
+/*
 async function pollInteraction(owner: string, repo: string, prId: number, contextPr: any)
 {
     var postSent: boolean = false;
@@ -52,18 +58,18 @@ async function pollInteraction(owner: string, repo: string, prId: number, contex
     
     if (postSent)
         intervalID = setInterval(poll,2*1000)
-}
+}*/
 
-async function pushInteractionComment(owner: string, repo: string, prId: number, installationId: number)
+async function pushComment(myDatas: authDatas)
 {
-    const callbackUrl = process.env.WEBHOOK_PROXY_URL + "/breakbot/pr/" + owner + "/" + repo + "/" + prId
-    const destUrl = process.env.MARACAS_URL + "/github/pr/" + owner + "/" + repo + "/" + prId + "?callback=" + callbackUrl
+    const callbackUrl = process.env.WEBHOOK_PROXY_URL + "/breakbot/pr/" + myDatas.baseRepo + "/" + myDatas.prNb
+    const destUrl = process.env.MARACAS_URL + "/github/pr/" + myDatas.baseRepo + "/" + myDatas.prNb + "?callback=" + callbackUrl
 
     await fetch(destUrl, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'installationId': installationId
+            'installationId': myDatas.installationId
         }
     }).then((res: any) => {
         console.log("Status post (push mode): " + res.status)
@@ -102,4 +108,4 @@ async function pushCheck(myDatas: authDatas) {
     })
 }
 
-export { pollInteraction, testInteraction, pushInteractionComment, pushCheck };
+export { testInteraction, pushComment, pushCheck };

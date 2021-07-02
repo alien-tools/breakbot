@@ -1,5 +1,5 @@
 import { Probot } from "probot";
-import { pollInteraction, pushCheck, testInteraction} from "./messagesApi";
+import { pushCheck, testInteraction} from "./messagesApi";
 import { State } from "./globalState";
 import { createCheck } from "./postReport";
 import { authDatas } from "./authClass";
@@ -34,11 +34,11 @@ export = (app: Probot, option: any) => {
   }
 
   app.on(["pull_request.opened", "pull_request.synchronize"], async (context) => {
-    const temp = context.payload.pull_request;
 
     if (global.currentState == State.poll)
     {
-      await pollInteraction(temp.head.repo.owner.login, temp.head.repo.name, context.payload.number, context);
+      //await pollInteraction(temp.head.repo.owner.login, temp.head.repo.name, context.payload.number, context);
+      app.log.info("Deprecated mode")
     }
 
     else if (global.currentState == State.test)
@@ -57,4 +57,19 @@ export = (app: Probot, option: any) => {
       await pushCheck(myDatas)
     }
   });
+
+  app.on("check_run.requested_action", async (context) => {
+    
+    if (context.payload.requested_action?.identifier == "rerun") {
+      app.log.info("A new check run was requested")
+      var myDatas = new authDatas()
+      myDatas.updateCheck(context)
+
+      // create the test (add a condition here to have optional checks)
+      myDatas = await createCheck(myDatas) // can't createCheck act on our datas ?
+
+      await pushCheck(myDatas)
+    }
+
+  })
 };

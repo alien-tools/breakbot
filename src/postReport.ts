@@ -18,8 +18,9 @@ const connectAsApp = async function (installationId: number) {
 }
 
 
-async function postComment(bcJson: any, installationId: number, owner: string, repo: string, issueNumber: number) {
-    const myOctokit = await connectAsApp(installationId)
+async function postComment(myDatas: authDatas,bcJson: any) {
+    //const myOctokit = await connectAsApp(myDatas.installationId)
+    await myDatas.connectToGit()
 
     var messageReturned = ""
 
@@ -54,14 +55,12 @@ async function postComment(bcJson: any, installationId: number, owner: string, r
     }
 
     //---Post the main report---
-    const prComment =
-    {
-        owner: owner,
-        repo: repo,
-        issue_number: issueNumber,
-        body: messageReturned,
-    };
-    await myOctokit.issues.createComment(prComment);
+    await myDatas.myOctokit.request("post /repos/{repo}/issues/{issue_number}/comments",
+        {
+            repo: myDatas.baseRepo,
+            issue_number: myDatas.prNb,
+            body: messageReturned,
+        });
 
     //---Post the details as reviews---
 

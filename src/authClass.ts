@@ -38,12 +38,14 @@ export class authDatas {
     }
 
     updateCheck(context: any) {
-        // to complete with correct informations in the fork
+        // to complete with correct informations in the fork, enough for createCheck
         this.myOctokit = context.octokit
 
-        this.baseRepo = context.payload.repository.full_name //is it really the base ?
+        this.baseRepo = context.payload.repository.full_name
         
         this.headSHA = context.payload.check_run.head_sha
+
+        this.installationId = context.payload.installation.id
     }
 
     connectToGit(installationId?: number) {
