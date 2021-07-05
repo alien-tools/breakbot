@@ -1,17 +1,23 @@
 const fetch = require('node-fetch');
 
-import { postComment } from './postReport'
+import { postComment } from './commentsManagement'
 import payload from "../test/fixtures/maracas.v1.json"; //for test purpose
 import { authDatas } from './authClass';
-import { progressCheck } from './checksUpdates';
+import { progressCheck } from './checksManagement';
 
 
-async function testInteraction(contextPr: any)
+export async function testInteraction(contextPr: any)
 {
     const temp = contextPr.payload.pull_request;
-    await postComment(payload, contextPr.octokit, temp.owner.login, temp.head.repo.name, temp.number)
+
+    var myDatas = new authDatas()
+    myDatas.baseRepo = temp.base.repo.full_name
+    //to complete ?
+
+    await postComment(myDatas, payload)
 }
 
+/*
 async function pollInteraction(owner: string, repo: string, prId: number, contextPr: any)
 {
     var postSent: boolean = false;
@@ -52,33 +58,12 @@ async function pollInteraction(owner: string, repo: string, prId: number, contex
     
     if (postSent)
         intervalID = setInterval(poll,2*1000)
-}
+}*/
 
-async function pushInteractionComment(owner: string, repo: string, prId: number, installationId: number)
+export async function pushComment(myDatas: authDatas)
 {
-    const callbackUrl = process.env.WEBHOOK_PROXY_URL + "/breakbot/pr/" + owner + "/" + repo + "/" + prId
-    const destUrl = process.env.MARACAS_URL + "/github/pr/" + owner + "/" + repo + "/" + prId + "?callback=" + callbackUrl
-
-    await fetch(destUrl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'installationId': installationId
-        }
-    }).then((res: any) => {
-        console.log("Status post (push mode): " + res.status)
-    })
-    .catch((err: any) => 
-    {
-        console.error(err)
-    })
-}
-
-async function pushCheck(myDatas: authDatas) {
-    const callbackUrl = process.env.WEBHOOK_PROXY_URL + "/breakbot/pr/" + myDatas.baseRepo + "/" + myDatas.prNb
-    const destUrl = process.env.MARACAS_URL + "/github/pr/" + myDatas.baseRepo + "/" + myDatas.prNb + "?callback=" + callbackUrl
-
-    console.log("[pushCheck] Dest url is: " + destUrl)
+    const callbackUrl = `${process.env.WEBHOOK_PROXY_URL}/breakbot/pr/${myDatas.baseRepo}/${myDatas.prNb}`
+    const destUrl = `${process.env.MARACAS_URL}/github/pr/${myDatas.baseRepo}/${myDatas.prNb}?callback=${callbackUrl}`
 
     await fetch(destUrl, {
         method: 'POST',
@@ -87,7 +72,28 @@ async function pushCheck(myDatas: authDatas) {
             'installationId': myDatas.installationId
         }
     }).then((res: any) => {
-        console.log("[pushCheck] Answer from Maracas (push mode): " + res.status + "\n[pushCheck] message: " + res.message)
+        console.log(`[pushComment] Request status: ${res.status}`)
+    })
+    .catch((err: any) => 
+    {
+        console.error(err)
+    })
+}
+
+export async function pushCheck(myDatas: authDatas) {
+    const callbackUrl = `${process.env.WEBHOOK_PROXY_URL}/breakbot/pr/${myDatas.baseRepo}/${myDatas.prNb}`
+    const destUrl = `${process.env.MARACAS_URL}/github/pr/${myDatas.baseRepo}/${myDatas.prNb}?callback=${callbackUrl}`
+
+    console.log(`[pushCheck] Dest url is: ${destUrl}`)
+
+    await fetch(destUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'installationId': myDatas.installationId
+        }
+    }).then((res: any) => {
+        console.log(`[pushCheck] Answer from Maracas (push mode): ${res.status}\n[pushCheck] message: ${res.message}`)
         if (res.status == 202)
         {
             progressCheck(myDatas)
@@ -101,5 +107,3 @@ async function pushCheck(myDatas: authDatas) {
         console.error(err)
     })
 }
-
-export { pollInteraction, testInteraction, pushInteractionComment, pushCheck };
