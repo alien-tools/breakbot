@@ -1,7 +1,6 @@
 import * as checksManagement from "./checksManagement";
 import * as Maracas from "./Maracas";
 import { webhookDatas, reportDatas } from "./authDatas";
-import { postComment } from "./commentsManagement";
 
 
 export async function maracasHandler(req: any) {
@@ -10,15 +9,9 @@ export async function maracasHandler(req: any) {
 
     // not complete /!\
     await myDatas.getConfig()
+    await myDatas.getCheck()
 
-    if (myDatas.comment) {
-        postComment(myDatas, req.body)
-    }
-    else {
-        await myDatas.getCheck()
-        
-        checksManagement.finalUpdate(myDatas, req.body)
-    }
+    checksManagement.finalUpdate(myDatas, req.body)
 }
 
 export async function webhookHandler(context: any) {
@@ -37,12 +30,7 @@ export async function webhookHandler(context: any) {
 
     await myDatas.getConfig()
 
-    if (myDatas.comment) {
-        Maracas.pushComment(myDatas)
-    }
-    else {
-        myDatas = await checksManagement.createCheck(myDatas) // can't createCheck act on our datas ?
+    myDatas = await checksManagement.createCheck(myDatas) // can't createCheck act on our datas ?
 
-        await Maracas.sendRequest(myDatas)
-    }
+    await Maracas.sendRequest(myDatas)
 }  

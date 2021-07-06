@@ -15,7 +15,7 @@ export abstract class authDatas {
 
     //config
     configAcquired?: boolean;
-    comment?: boolean;
+    //comment?: boolean;
     maxDisplayedBC?: number;
     maxDisplayedClients?: number;
 
@@ -97,11 +97,8 @@ export abstract class authDatas {
         this.configAcquired = true
 
         // set config var(s)
-        if (configFile.config.comment) { // because ts is not happy :(
-            this.comment = true
-        }
         
-        // to complete with the other values
+        // ...to complete...
     }
 }
 
