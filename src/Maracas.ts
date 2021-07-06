@@ -2,65 +2,19 @@ const fetch = require('node-fetch');
 
 import { postComment } from './commentsManagement'
 import payload from "../test/fixtures/maracas.v1.json"; //for test purpose
-import { authDatas } from './authClass';
+import { webhookDatas } from './authDatas';
 import { progressCheck } from './checksManagement';
 
 
 export async function testInteraction(contextPr: any)
 {
-    const temp = contextPr.payload.pull_request;
-
-    var myDatas = new authDatas()
-    myDatas.baseRepo = temp.base.repo.full_name
+    var myDatas = webhookDatas.fromCheck(contextPr)
     //to complete ?
 
     await postComment(myDatas, payload)
 }
 
-/*
-async function pollInteraction(owner: string, repo: string, prId: number, contextPr: any)
-{
-    var postSent: boolean = false;
-    const temp = contextPr.payload.pull_request;
-    var intervalID: any;
-    const destUrl = process.env.MARACAS_URL + "/" + owner + "/" + repo + "/" + prId
-
-    const poll = async () =>
-    {
-        fetch(destUrl, { method: 'GET' })
-            .then((res: any) => {
-                //console.log("Status get" + res.status)
-                if (res.status == 200) {
-                    clearInterval(intervalID)
-                }
-                return res.json()
-            })
-            .then((json: any) => postComment(json, contextPr.octokit, temp.owner.login, temp.head.repo.name, temp.number))
-            .catch((err: any) => {
-                console.error(err)
-                clearInterval(intervalID)
-            })
-    }
-
-    // sending the request to Maracas
-    await fetch(destUrl, { method: 'POST' })
-        .then((res: any) =>
-        {
-            //console.log("Status post: " + res.status)
-            if (res.status == 202) {
-                postSent = true
-            }
-        })
-        .catch((err: any) =>
-        {
-            console.error(err)
-        })
-    
-    if (postSent)
-        intervalID = setInterval(poll,2*1000)
-}*/
-
-export async function pushComment(myDatas: authDatas)
+export async function pushComment(myDatas: webhookDatas)
 {
     const callbackUrl = `${process.env.WEBHOOK_PROXY_URL}/breakbot/pr/${myDatas.baseRepo}/${myDatas.prNb}`
     const destUrl = `${process.env.MARACAS_URL}/github/pr/${myDatas.baseRepo}/${myDatas.prNb}?callback=${callbackUrl}`
@@ -80,7 +34,7 @@ export async function pushComment(myDatas: authDatas)
     })
 }
 
-export async function pushCheck(myDatas: authDatas) {
+export async function pushCheck(myDatas: webhookDatas) {
     const callbackUrl = `${process.env.WEBHOOK_PROXY_URL}/breakbot/pr/${myDatas.baseRepo}/${myDatas.prNb}`
     const destUrl = `${process.env.MARACAS_URL}/github/pr/${myDatas.baseRepo}/${myDatas.prNb}?callback=${callbackUrl}`
 

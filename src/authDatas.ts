@@ -2,28 +2,29 @@ import { Octokit } from "@octokit/core";
 import { config } from "@probot/octokit-plugin-config"
 import { createAppAuth } from "@octokit/auth-app"
 
-export class authDatas {
+class authDatas {
     baseRepo: string;
-    baseBranch: string; //isn't the prId enough ?
+    installationId: number;
+
+    baseBranch?: string; //isn't the prId enough ?
     headRepo?: string;
-    headBranch: string;
+    headBranch?: string;
     prNb?: number; // seems to be the number and not the id
     headSHA?: string;
     baseSHA?: string;
     commitSHA?: string;
-    installationId?: number;
+    
     myOctokit?: any;
     checkId?: number;
 
     comment?: boolean;
 
-    constructor() {
-        this.baseRepo = ""
-        this.baseBranch = ""
-        this.headBranch = ""
+    constructor(baseRepo: string, installationId: number) {
+        this.baseRepo = baseRepo
+        this.installationId = installationId
     };
 
-    updatePr(context: any) { //why is it impossible to have multiple constructors ?
+    /*updateFromPr(context: any) { //why is it impossible to have multiple constructors ?
         //this.owner = context.payload.pull_request.base.repo.owner.login
 
         //fullname is better, to get rid of the owner aspect and be ok with forks
@@ -33,14 +34,14 @@ export class authDatas {
         this.headBranch = context.payload.pull_request.head.ref
 
         this.prNb = context.payload.number
-        this.headSHA = context.payload.pull_request.head.sha
+        this.headSHA = context.payload.pull_request.head.sha // it's the last commit's sha !
 
         this.installationId = context.payload.installation.id
 
         this.myOctokit = context.octokit
-    }
+    }*/
 
-    updateCheck(context: any) {
+    /*updateFromCheck(context: any) {
         // to complete ?
         this.myOctokit = context.octokit
 
@@ -49,7 +50,7 @@ export class authDatas {
         this.headSHA = context.payload.check_run.head_sha
 
         this.installationId = context.payload.installation.id
-    }
+    }*/
 
     connectToGit(installationId?: number) {
         console.log("[connectToGit] Starting...")
@@ -125,5 +126,51 @@ export class authDatas {
         if (configFile.config.comment) { // because ts is not happy :(
             this.comment = true
         }
+    }
+}
+
+export class webhookDatas extends authDatas {
+    constructor(baseRepo: string, installationId: number, myOctokit: any) {
+        super(baseRepo, installationId)
+        this.myOctokit = myOctokit
+    }
+
+    static fromPr(context: any) {
+        var newDatas = new webhookDatas(context.payload.pull_request.base.repo.full_name, context.payload.installation.id, context.octokit);
+
+        newDatas.headSHA = context.payload.pull_request.head.sha
+
+        newDatas.prNb = context.payload.number
+
+        return newDatas
+    }
+
+    static fromCheck(context: any) {
+        var newDatas = new webhookDatas(context.payload.repository.full_name, context.payload.installation.id, context.octokit);
+
+        newDatas.headSHA = context.payload.check_run.head_sha
+
+        // needs prNb
+
+        return newDatas
+    }
+
+    async getPrNb() {
+        const pullsList = await this.myOctokit.request(`get /repos/${this.baseRepo}/pulls`)
+
+        const myPull = pullsList.data.find((pull: any) => pull.head.sha == this.headSHA)
+
+        this.prNb = myPull.number
+    }
+}
+
+export class reportDatas extends authDatas {
+    static fromPost(baseRepo: string, installationId: number, prNb: number) {
+        var newDatas = new reportDatas(baseRepo, installationId)
+
+        newDatas.prNb = prNb
+        // ...
+
+        return newDatas
     }
 }

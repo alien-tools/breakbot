@@ -1,7 +1,7 @@
-import { authDatas } from "./authClass"
-import { parseJsonMain } from "./fromatJson"
+import { reportDatas } from "./authDatas"
+import { parseJsonMain } from "./formatJson"
 
-export async function postComment(myDatas: authDatas, bcJson: any) {
+export async function postComment(myDatas: reportDatas, bcJson: any) {
     //const myOctokit = await connectAsApp(myDatas.installationId)
     await myDatas.connectToGit()
 

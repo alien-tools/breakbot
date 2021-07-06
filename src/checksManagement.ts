@@ -1,7 +1,7 @@
-import { authDatas } from "./authClass";
-import { parseJsonMain } from "./fromatJson";
+import { webhookDatas, reportDatas } from "./authDatas";
+import { parseJsonMain } from "./formatJson";
 
-const progressCheck = async (myDatas: authDatas) => {
+const progressCheck = async (myDatas: webhookDatas) => {
     const newCheck =
     {
         status: "in_progress",
@@ -18,7 +18,7 @@ const progressCheck = async (myDatas: authDatas) => {
     }
 }
 
-const updateCheck = async (myDatas: authDatas, myJson: any) => {
+const updateCheck = async (myDatas: reportDatas, myJson: any) => {
 
     console.log(`[updateCheck] Message received from Maracas: ${myJson.message}`)
 
@@ -64,7 +64,7 @@ const updateCheck = async (myDatas: authDatas, myJson: any) => {
     }
 }
 
-async function createCheck(myDatas: authDatas) {
+async function createCheck(myDatas: webhookDatas) {
     const output =
     {
         title: "Sending request to the api...",
