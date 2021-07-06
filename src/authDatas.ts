@@ -2,57 +2,29 @@ import { Octokit } from "@octokit/core";
 import { config } from "@probot/octokit-plugin-config"
 import { createAppAuth } from "@octokit/auth-app"
 
-class authDatas {
+export abstract class authDatas {
     baseRepo: string;
     installationId: number;
 
-    baseBranch?: string; //isn't the prId enough ?
-    headRepo?: string;
-    headBranch?: string;
     prNb?: number; // seems to be the number and not the id
     headSHA?: string;
-    baseSHA?: string;
-    commitSHA?: string;
+    //commitSHA?: string; equivalent to headSHA
     
     myOctokit?: any;
     checkId?: number;
 
+    //config
+    configAcquired?: boolean;
     comment?: boolean;
+    maxDisplayedBC?: number;
+    maxDisplayedClients?: number;
 
     constructor(baseRepo: string, installationId: number) {
         this.baseRepo = baseRepo
         this.installationId = installationId
     };
 
-    /*updateFromPr(context: any) { //why is it impossible to have multiple constructors ?
-        //this.owner = context.payload.pull_request.base.repo.owner.login
-
-        //fullname is better, to get rid of the owner aspect and be ok with forks
-        this.baseRepo = context.payload.pull_request.base.repo.full_name
-        this.baseBranch = context.payload.pull_request.base.ref
-        this.headRepo = context.payload.pull_request.head.repo.full_name
-        this.headBranch = context.payload.pull_request.head.ref
-
-        this.prNb = context.payload.number
-        this.headSHA = context.payload.pull_request.head.sha // it's the last commit's sha !
-
-        this.installationId = context.payload.installation.id
-
-        this.myOctokit = context.octokit
-    }*/
-
-    /*updateFromCheck(context: any) {
-        // to complete ?
-        this.myOctokit = context.octokit
-
-        this.baseRepo = context.payload.repository.full_name
-        
-        this.headSHA = context.payload.check_run.head_sha
-
-        this.installationId = context.payload.installation.id
-    }*/
-
-    connectToGit(installationId?: number) {
+    private connectToGit(installationId?: number) {
         console.log("[connectToGit] Starting...")
 
         if (installationId) {
@@ -122,10 +94,14 @@ class authDatas {
         console.log(`[getConfig] Here is my config file:`)
         console.log(configFile)
 
+        this.configAcquired = true
+
         // set config var(s)
         if (configFile.config.comment) { // because ts is not happy :(
             this.comment = true
         }
+        
+        // to complete with the other values
     }
 }
 
@@ -169,7 +145,8 @@ export class reportDatas extends authDatas {
         var newDatas = new reportDatas(baseRepo, installationId)
 
         newDatas.prNb = prNb
-        // ...
+        
+        // needs an octokit
 
         return newDatas
     }

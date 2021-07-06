@@ -1,18 +1,8 @@
 const fetch = require('node-fetch');
 
-import { postComment } from './commentsManagement'
-import payload from "../test/fixtures/maracas.v1.json"; //for test purpose
 import { webhookDatas } from './authDatas';
-import { progressCheck } from './checksManagement';
+import * as checksManagement from './checksManagement';
 
-
-export async function testInteraction(contextPr: any)
-{
-    var myDatas = webhookDatas.fromCheck(contextPr)
-    //to complete ?
-
-    await postComment(myDatas, payload)
-}
 
 export async function pushComment(myDatas: webhookDatas)
 {
@@ -34,7 +24,7 @@ export async function pushComment(myDatas: webhookDatas)
     })
 }
 
-export async function pushCheck(myDatas: webhookDatas) {
+export async function sendRequest(myDatas: webhookDatas) {
     const callbackUrl = `${process.env.WEBHOOK_PROXY_URL}/breakbot/pr/${myDatas.baseRepo}/${myDatas.prNb}`
     const destUrl = `${process.env.MARACAS_URL}/github/pr/${myDatas.baseRepo}/${myDatas.prNb}?callback=${callbackUrl}`
 
@@ -50,7 +40,7 @@ export async function pushCheck(myDatas: webhookDatas) {
         console.log(`[pushCheck] Answer from Maracas (push mode): ${res.status}\n[pushCheck] message: ${res.message}`)
         if (res.status == 202)
         {
-            progressCheck(myDatas)
+            checksManagement.inProgress(myDatas)
         }
         else {
             // update the check with the message received from maracas

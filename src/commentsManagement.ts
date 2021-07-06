@@ -3,7 +3,6 @@ import { parseJsonMain } from "./formatJson"
 
 export async function postComment(myDatas: reportDatas, bcJson: any) {
     //const myOctokit = await connectAsApp(myDatas.installationId)
-    await myDatas.connectToGit()
 
     var messageReturned = ""
 

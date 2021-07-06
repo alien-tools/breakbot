@@ -1,7 +1,7 @@
 import { webhookDatas, reportDatas } from "./authDatas";
 import { parseJsonMain } from "./formatJson";
 
-const progressCheck = async (myDatas: webhookDatas) => {
+const inProgress = async (myDatas: webhookDatas) => {
     const newCheck =
     {
         status: "in_progress",
@@ -18,12 +18,9 @@ const progressCheck = async (myDatas: webhookDatas) => {
     }
 }
 
-const updateCheck = async (myDatas: reportDatas, myJson: any) => {
+const finalUpdate = async (myDatas: reportDatas, myJson: any) => {
 
     console.log(`[updateCheck] Message received from Maracas: ${myJson.message}`)
-
-    await myDatas.getCheck()
-    await myDatas.getConfig()
 
     var myActions = [{
         label: "Rerun test",
@@ -35,18 +32,18 @@ const updateCheck = async (myDatas: reportDatas, myJson: any) => {
     {
         title: "",
         summary: ""
+        //to complete with a text field
     }
 
     //---Format the Json---
     // Generic declaration
     const nMax = 10
-    const n = myJson.delta.breakingChanges.length
 
-    newOutput.title += `This PR introduces ${n} breaking changes in the base branch.`
+    const parsedJson = parseJsonMain(myJson, nMax)
+    newOutput.title += parsedJson[0]
 
     // Detail on the BC
-    newOutput.summary += "Here is a list of the breaking changes caused."
-    newOutput.summary += parseJsonMain(myJson, nMax)
+    newOutput.summary += parsedJson[2]
 
     const newCheck =
     {
@@ -90,4 +87,4 @@ async function createCheck(myDatas: webhookDatas) {
     return myDatas
 }
 
-export { progressCheck, updateCheck, createCheck }
+export { inProgress, finalUpdate, createCheck }
