@@ -23,7 +23,7 @@ export async function webhookHandler(context: any) {
     if (context.name == 'pull_request') {
         var myDatas = webhookDatas.fromPr(context)
     }
-    else if (context.name == 'check_suite' && context.payload.requested_action?.identifier == "rerun") {
+    else if (context.name == 'check_run' && context.payload.requested_action?.identifier == "rerun") {
         var myDatas = webhookDatas.fromCheck(context)
         await myDatas.getPrNb()
     }
