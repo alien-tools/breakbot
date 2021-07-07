@@ -8,6 +8,7 @@ export async function maracasHandler(req: any) {
     var myDatas = reportDatas.fromPost(`${req.params.owner}/${req.params.repo}`, req.headers.installationid, req.params.prNb)
 
     // not complete /!\
+    await myDatas.connectToGit()
     await myDatas.getConfig()
     await myDatas.getCheck()
 

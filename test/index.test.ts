@@ -1,11 +1,10 @@
-import nock from "nock";
+/*import nock from "nock";
 
 // Requiring our app implementation
 import myProbotApp from "../src/index";
 import { Probot, ProbotOctokit } from "probot";
 
 // Requiring our fixtures
-import payload from "./fixtures/pull_request.opened.json";
 const prCreatedBody = { body: "" };
 const fs = require("fs");
 const path = require("path");
@@ -13,8 +12,13 @@ const path = require("path");
 const privateKey = fs.readFileSync(
   path.join(__dirname, "/fixtures/mock-cert.pem"),
   "utf-8"
-);
+);*/
 
+import payloadPull from "./fixtures/pull_request.opened.json";
+import payloadCheck from "./fixtures/check_run.requested_action.json"
+import { webhookDatas } from "../src/authDatas";
+
+/*
 describe("Bot tests", () => {
   let probot: any;
 
@@ -72,3 +76,70 @@ describe("Bot tests", () => {
     nock.enableNetConnect();
   });
 });
+*/
+
+const baseRepo = "ImMeta/breakbotLib"
+const prNb = 1
+const branchSHA = "headsha1"
+
+describe("Test data classes", () => {
+
+  const mockRequest = jest.fn((path: string, datas: any) => {
+    if (path == `GET /repos/${baseRepo}/pulls/${prNb}`) {
+      
+    } else if (path == `GET /repos/${baseRepo}/commits/${branchSHA}/check-runs`) {
+
+    }
+  })
+
+  var mockOctokit = {
+    request: mockRequest
+  }
+
+  var mockDatas: webhookDatas
+  var mockContext: {
+    octokit: any,
+    payload: any
+  }
+
+  beforeEach(() => {
+    mockDatas = new webhookDatas("ImMeta/breakbotLib", 2, mockOctokit)
+    mockDatas.headSHA = "headsha1"
+  })
+
+  test("webhookDatas.fromPr() correctly creates a data structure", async (done) => {
+    mockContext = {
+      octokit: mockOctokit,
+      payload: payloadPull
+    }
+
+    mockDatas.prNb = 1
+
+    const myDatas = webhookDatas.fromPr(mockContext)
+
+    done(expect(myDatas).toStrictEqual(mockDatas))
+  })
+
+  //add test after a synchronize ?
+
+  test("webhookDatas.fromCheck() correctly creates a data structure", async (done) => {
+    mockContext = {
+      octokit: mockOctokit,
+      payload: payloadCheck
+    }
+
+    const myDatas = webhookDatas.fromCheck(mockContext)
+
+    done(expect(myDatas).toStrictEqual(mockDatas))
+  })
+
+  //test getPrNb
+
+  //test("connectToGit creates a functionnal octokit") //The difficult part
+
+  test("getCheck correctly return a checkId", async (done) => {
+    
+  })
+
+  afterEach(() => { })
+})

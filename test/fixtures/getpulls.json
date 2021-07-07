@@ -1,27 +1,17 @@
 {
-    "action": "opened",
-    "number": 1,
-    "pull_request": {
-        "number": 1,
+    "data": [{
         "id": 14,
-        "title": "library v2",
+        "number": 1,
+        "state": "open",
+        "locked": false,
+        "title": "added a draft for check run creation",
         "user": {
             "login": "ImMeta"
         },
         "body": "",
-        "created_at": "2021-06-07T15:04:06Z",
-        "updated_at": "2021-06-07T15:04:06Z",
-        "closed_at": null,
-        "merged_at": null,
-        "merge_commit_sha": null,
-        "assignee": null,
-        "assignees": [],
-        "requested_reviewers": [],
-        "requested_teams": [],
-        "labels": [],
         "milestone": null,
         "draft": false,
-        "head": {
+        "head": [{
             "ref": "libv2",
             "sha": "headsha1",
             "user": {
@@ -35,8 +25,8 @@
                     "login": "ImMeta"
                 }
             }
-        },
-        "base": {
+        }],
+        "base": [{
             "label": "ImMeta:master",
             "ref": "master",
             "user": {
@@ -52,25 +42,6 @@
                     "login": "ImMeta"
                 }
             }
-        }
-    },
-    "repository": {
-        "id": 37,
-        "node_id": "MDEwOlJlcG9zaXRvcnkzNzQ2OTA1MTM=",
-        "name": "breakbotLib",
-        "full_name": "ImMeta/breakbotLib",
-        "private": false,
-        "owner": {
-            "login": "ImMeta"
-        },
-        "html_url": "https://github.com/ImMeta/breakbotLib",
-        "description": null,
-        "default_branch": "master"
-    },
-    "sender": {
-        "login": "ImMeta"
-    },
-    "installation": {
-        "id": 2
-    }
+        }]
+    }]
 }

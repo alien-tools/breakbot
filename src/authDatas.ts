@@ -24,7 +24,7 @@ export abstract class authDatas {
         this.installationId = installationId
     };
 
-    private connectToGit(installationId?: number) {
+    async connectToGit(installationId?: number) {
         console.log("[connectToGit] Starting...")
 
         if (installationId) {
@@ -42,21 +42,24 @@ export abstract class authDatas {
         console.log("[connectToGit] Done.")
     }
 
-    async getCheck(installationId?: number) {
+    async getCheck() {
         console.log("[getCheck] Starting...")
 
         if (!this.myOctokit) {
-            this.connectToGit(installationId)
+            console.log('[getCheck] No octotkit found')
+            return
         }
         else {
             console.log(`[getCheck] I have an octokit: ${this.myOctokit}`)
         }
         
-        var branchInfos = await this.myOctokit.request(`GET /repos/${ this.baseRepo }/pulls/${ this.prNb }`)
-        
-        var branchSHA = branchInfos.data.head.sha
+        if (this.headSHA == undefined) {
+            var branchInfos = await this.myOctokit.request(`GET /repos/${ this.baseRepo }/pulls/${ this.prNb }`)
+            
+            this.headSHA = branchInfos.data.head.sha
+        }
 
-        var resTest = await this.myOctokit.request(`/repos/${this.baseRepo}/commits/${branchSHA}/check-runs`)
+        var resTest = await this.myOctokit.request(`GET /repos/${this.baseRepo}/commits/${this.headSHA}/check-runs`)
 
         var n = resTest.data.total_count
         const checks = resTest.data.check_runs
@@ -76,11 +79,12 @@ export abstract class authDatas {
         }
     }
 
-    async getConfig(installationId?: number) {
+    async getConfig() {
         console.log("[getConfig] Starting...")
 
         if (!this.myOctokit) {
-            this.connectToGit(installationId)
+            console.log('[getConfig] No octotkit found')
+            return
         }
 
         var addressSplit = this.baseRepo.split("/") 
