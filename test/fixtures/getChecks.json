@@ -16,7 +16,7 @@
             "name": "Breakbot report",
             "check_suite": { "id": 26 },
             "app": {
-                "id": 12
+                "id": 1871
             },
             "pull_requests": []
         },

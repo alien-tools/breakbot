@@ -24,24 +24,6 @@ export abstract class authDatas {
         this.installationId = installationId
     };
 
-    async connectToGit(installationId?: number) {
-        console.log("[connectToGit] Starting...")
-
-        if (installationId) {
-            this.installationId = installationId            
-        }
-        this.myOctokit = new Octokit({
-            authStrategy: createAppAuth,
-            auth: {
-                appId: process.env.APP_ID,
-                privateKey: process.env.PRIVATE_KEY,
-                installationId: this.installationId
-            },
-        });
-
-        console.log("[connectToGit] Done.")
-    }
-
     async getCheck() {
         console.log("[getCheck] Starting...")
 
@@ -54,8 +36,8 @@ export abstract class authDatas {
         }
         
         if (this.headSHA == undefined) {
-            var branchInfos = await this.myOctokit.request(`GET /repos/${ this.baseRepo }/pulls/${ this.prNb }`)
-            
+            var branchInfos = await this.myOctokit.request(`GET /repos/${this.baseRepo}/pulls/${this.prNb}`)
+
             this.headSHA = branchInfos.data.head.sha
         }
 
@@ -133,7 +115,7 @@ export class webhookDatas extends authDatas {
     }
 
     async getPrNb() {
-        const pullsList = await this.myOctokit.request(`get /repos/${this.baseRepo}/pulls`)
+        const pullsList = await this.myOctokit.request(`GET /repos/${this.baseRepo}/pulls`)
 
         const myPull = pullsList.data.find((pull: any) => pull.head.sha == this.headSHA)
 
@@ -150,5 +132,23 @@ export class reportDatas extends authDatas {
         // needs an octokit
 
         return newDatas
+    }
+
+    async connectToGit(installationId?: number) {
+        console.log("[connectToGit] Starting...")
+
+        if (installationId) {
+            this.installationId = installationId
+        }
+        this.myOctokit = new Octokit({
+            authStrategy: createAppAuth,
+            auth: {
+                appId: process.env.APP_ID,
+                privateKey: process.env.PRIVATE_KEY,
+                installationId: this.installationId
+            },
+        });
+
+        console.log("[connectToGit] Done.")
     }
 }

@@ -1,94 +1,46 @@
-/*import nock from "nock";
-
-// Requiring our app implementation
-import myProbotApp from "../src/index";
-import { Probot, ProbotOctokit } from "probot";
-
-// Requiring our fixtures
-const prCreatedBody = { body: "" };
-const fs = require("fs");
-const path = require("path");
-
-const privateKey = fs.readFileSync(
-  path.join(__dirname, "/fixtures/mock-cert.pem"),
-  "utf-8"
-);*/
+import nock from "nock";
 
 import payloadPull from "./fixtures/pull_request.opened.json";
-import payloadCheck from "./fixtures/check_run.requested_action.json"
-import { webhookDatas } from "../src/authDatas";
+import payloadCheck from "./fixtures/check_run.requested_action.json";
 
-/*
-describe("Bot tests", () => {
-  let probot: any;
+import payloadGetChecks from "./fixtures/getChecks.json"
+import payloadGetPulls from "./fixtures/getPulls.json"
+import payloadGetPull from "./fixtures/getPull.json"
 
-  beforeEach(() => {
-    nock.disableNetConnect();
-    probot = new Probot({
-      appId: 123,
-      privateKey,
-      // disable request throttling and retries for testing
-      Octokit: ProbotOctokit.defaults({
-        retry: { enabled: false },
-        throttle: { enabled: false },
-      }),
-    });
-    // Load our app into probot
-    probot.load(myProbotApp);
-    nock.recorder.rec()
-  });
+import { reportDatas, webhookDatas } from "../src/authDatas";
 
-  test("creates a comment when a pull request is opened: no maracas API", async (done) => {
-    const mock = nock("https://api.github.com")
-      // Test that we correctly return a test token
-      .post("/app/installations/2/access_tokens")
-      .reply(200, {
-        type: "token",
-        tokenType: "installation",
-        token: "test",
-        installationId: 2,
-        repositories: ["breakbotLib"],
-        repository_ids: [374690513],
-        permissions: {
-          checks: "write",
-          issues: "write",
-          metadata: "read",
-          pull_request: "write"
-        },
-      })
+import {Octokit} from '@octokit/core'
+import { readFileSync } from "fs";
+const path = require("path");
+jest.mock('@octokit/core') //if not explicitly mocked, seems to act differently
+//import { Octokit } from "@octokit/core";
 
-      // Test that a comment is posted
-      .post("/repos/Metamaus/breakbotLib/issues/1/comments", (body: any) => {
-        done(expect(body).not.toMatchObject(prCreatedBody));
-        return true;
-      })
-      .reply(200)
+import { createAppAuth } from "@octokit/auth-app"
 
-    // Receive a webhook event
-    await probot.receive({ name: "pull_request", payload });
-
-    expect(mock.pendingMocks()).toStrictEqual([]);
-  });
-
-  afterEach(() => {
-    nock.restore()
-    nock.cleanAll();
-    nock.enableNetConnect();
-  });
-});
-*/
 
 const baseRepo = "ImMeta/breakbotLib"
 const prNb = 1
 const branchSHA = "headsha1"
+const checkId = 30
+const installationId = 2
+//const appId = 1871
+const privateKey = readFileSync(
+  path.join(__dirname, "/fixtures/mock-cert.pem"),
+  "utf-8"
+);
 
-describe("Test data classes", () => {
+describe("Test webhookDatas", () => {
 
   const mockRequest = jest.fn((path: string, datas: any) => {
     if (path == `GET /repos/${baseRepo}/pulls/${prNb}`) {
-      
+      return payloadGetPull
     } else if (path == `GET /repos/${baseRepo}/commits/${branchSHA}/check-runs`) {
-
+      return payloadGetChecks
+    } else if (path == `GET /repos/${baseRepo}/pulls`) {
+      return payloadGetPulls
+    } else {
+      console.log(path)
+      return undefined
     }
   })
 
@@ -104,16 +56,16 @@ describe("Test data classes", () => {
 
   beforeEach(() => {
     mockDatas = new webhookDatas("ImMeta/breakbotLib", 2, mockOctokit)
-    mockDatas.headSHA = "headsha1"
+    mockDatas.headSHA = branchSHA
   })
 
-  test("webhookDatas.fromPr() correctly creates a data structure", async (done) => {
+  test("fromPr() correctly creates a data structure", async (done) => {
     mockContext = {
       octokit: mockOctokit,
       payload: payloadPull
     }
 
-    mockDatas.prNb = 1
+    mockDatas.prNb = prNb
 
     const myDatas = webhookDatas.fromPr(mockContext)
 
@@ -122,24 +74,97 @@ describe("Test data classes", () => {
 
   //add test after a synchronize ?
 
-  test("webhookDatas.fromCheck() correctly creates a data structure", async (done) => {
+  test("fromCheck() correctly creates a data structure", async (done) => {
     mockContext = {
       octokit: mockOctokit,
       payload: payloadCheck
     }
-
+    
     const myDatas = webhookDatas.fromCheck(mockContext)
 
     done(expect(myDatas).toStrictEqual(mockDatas))
   })
 
-  //test getPrNb
+  test("getPrNb() correctly get the pull request number", async (done) => {
+    await mockDatas.getPrNb()
 
-  //test("connectToGit creates a functionnal octokit") //The difficult part
-
-  test("getCheck correctly return a checkId", async (done) => {
-    
+    done(expect(mockDatas.prNb).toStrictEqual(prNb))
   })
 
+  test("getCheck() correctly return a checkId when used with webhook datas", async (done) => {
+    mockDatas.prNb = prNb
+
+    await mockDatas.getCheck()
+
+    done(expect(mockDatas.checkId).toStrictEqual(checkId))
+  })
+
+  //test("getConfig returns the config")
+
   afterEach(() => { })
+})
+
+describe("Test reportDatas", () => {
+  const mockRequest = jest.fn((path: string, datas: any) => {
+    if (path == `GET /repos/${baseRepo}/pulls/${prNb}`) {
+      return payloadGetPull
+    } else if (path == `GET /repos/${baseRepo}/commits/${branchSHA}/check-runs`) {
+      return payloadGetChecks
+    } else if (path == `GET /repos/${baseRepo}/pulls`) {
+      return payloadGetPulls
+    } else {
+      console.log(path)
+      return undefined
+    }
+  })
+
+  var mockOctokit = { request: mockRequest }
+
+  var mockDatas: reportDatas
+
+  beforeEach(() => {
+    nock.disableNetConnect();
+    mockDatas = new reportDatas(baseRepo, installationId)
+    mockDatas.prNb = prNb
+  })
+
+  test("fromPost() creates a correct data structure", async (done) => {
+    var myDatas = reportDatas.fromPost(baseRepo, installationId, prNb)
+    
+    done(expect(myDatas).toStrictEqual(mockDatas))
+  })
+
+  test("connectToGit() creates an octokit", async (done) => { //The difficult part
+    const mockArguments = {
+      auth: {
+        appId: process.env.APP_ID,
+        installationId: installationId,
+        privateKey: privateKey
+      },
+      authStrategy: createAppAuth
+    }
+    
+    mockDatas.connectToGit()
+
+    //console.log(`[test] My octokit:`)
+    //console.log(mockDatas.myOctokit) // why is the octokit complete if mock is not explicit ?
+
+    done(expect(Octokit).toHaveBeenCalledWith(mockArguments)) //could be more precise
+  }) 
+
+  test("getCheck() correctly return a checkId when used with reportDatas", async (done) => {
+    mockDatas.myOctokit = mockOctokit
+
+    await mockDatas.getCheck()
+
+    done(expect(mockDatas.checkId).toStrictEqual(checkId))
+  })
+
+  //test("getConfig returns the config")
+
+  afterEach(() => {
+    nock.restore()
+    nock.cleanAll();
+    nock.enableNetConnect();
+  })
 })

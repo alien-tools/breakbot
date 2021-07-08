@@ -1,5 +1,5 @@
 {
-    "data": [{
+    "data": {
         "id": 14,
         "number": 1,
         "state": "open",
@@ -9,9 +9,10 @@
             "login": "ImMeta"
         },
         "body": "",
-        "milestone": null,
-        "draft": false,
-        "head": [{
+        "assignee": {
+            "login": "ImMeta"
+        },
+        "head": {
             "ref": "libv2",
             "sha": "headsha1",
             "user": {
@@ -25,8 +26,8 @@
                     "login": "ImMeta"
                 }
             }
-        }],
-        "base": [{
+        },
+        "base": {
             "label": "ImMeta:master",
             "ref": "master",
             "user": {
@@ -42,6 +43,10 @@
                     "login": "ImMeta"
                 }
             }
-        }]
-    }]
+        },
+        "commits": 3,
+        "additions": 555,
+        "deletions": 9038,
+        "changed_files": 7
+    }
 }
