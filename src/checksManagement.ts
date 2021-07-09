@@ -2,7 +2,7 @@ import { webhookDatas, reportDatas } from "./authDatas";
 import { parseJsonMain } from "./formatJson";
 
 const inProgress = async (myDatas: webhookDatas) => {
-    const newCheck =
+    const check =
     {
         status: "in_progress",
         output: {
@@ -11,7 +11,7 @@ const inProgress = async (myDatas: webhookDatas) => {
         }
     }
     try {
-        myDatas.myOctokit.request(`PATCH /repos/${myDatas.baseRepo}/check-runs/${myDatas.checkId}`, newCheck);
+        myDatas.myOctokit.request(`PATCH /repos/${myDatas.baseRepo}/check-runs/${myDatas.checkId}`, check);
     }
     catch (err) {
         console.error(err)

@@ -1,0 +1,2 @@
+
+### The declaration [main.methodNoLongerStatic.IMethodNoLongerStatic.methodNoLongerStatic()](https://github.com/ImMeta/breakbotLib/blob/master//src/main/methodNoLongerStatic/IMethodNoLongerStatic.java#L5-L7) is impacted by _methodNoLongerStatic_

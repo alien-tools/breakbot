@@ -52,18 +52,31 @@ Located in .env during local developpment, and directly managed by heroku.
 - WEBHOOK\_SECRET: ?
 
 ### Unique to breakbot
-- MARACAS\_URL: The url of the api Maracs, which performs the tests
-- STATE: whether the application is currently in a test phase (=1), should use a polling architecture to communicate with Maracas (=2) or a pushing one (=3)
+- MARACAS\_URL: The url of the api Maracs, which performs the tests)
 
 ## Code sructure
 
 Initialised from the "basic-ts => Comment on new issues - written in TypeScript" probot
 [general tuto](https://probot.github.io/docs/)
 
-Composed of three blocs: 
-- Reception
-- Interraction with MaracasApi
-- Layout and publish
+Composed of different levels: 
+- Reception: from webhooks and http requests
+- Handlers
+- Interaction with Maracas
+- Checks management
+- Parsing
+
+These scripts use authDatas structures to authenticate to github and store the information needed.
+
+### AuthDatas
+Store the informations and contains methods to authenticate to github or complete the missing informations.
+
+#### Self-authentication
+Instead of connecting with Probot.auth (seen [here](https://probot.github.io/api/latest/classes/probot.html))
+We use [octokit identification](https://octokit.github.io/rest.js/v18#authentication)
+As described [here](https://github.com/octokit/auth-app.js/)
+To connect again to the repositry whenever necessary.
+For general informations on authentification for github apps, click [here](https://docs.github.com/en/rest/overview/resources-in-the-rest-api#authentication)
 
 ### Reception
 [Script](./src/index.ts)
@@ -76,22 +89,21 @@ For details on events names, see [here](https://docs.github.com/en/developers/we
 #### Router
 Using express and the [default router in probot](https://probot.github.io/docs/http/) to receive request form Maracas Api once the job ends (**push** mode)
 
-#### Self-authentication
-Instead of connecting with Probot.auth (seen [here](https://probot.github.io/api/latest/classes/probot.html))
-We use [octokit identification](https://octokit.github.io/rest.js/v18#authentication)
-As described [here](https://github.com/octokit/auth-app.js/)
-To connect again to the repositry whenever necessary (**push** mode, gathering informations for checks).
-For general informations on authentification for github apps, click [here](https://docs.github.com/en/rest/overview/resources-in-the-rest-api#authentication)
+### Handlers
+2 uses cases: they deal with a webhook or with a request from Maracas.
 
 ### Interractions with MaracasApi
 [Script](./src/messagesApis.ts)
 Deals with the Maracas Api: sends the request and wait for the answer, wether in push mode, or in poll mode.
 Rq: For the moment, if there is an error with the initial request, break-bot just forfeit on this PR.
 
-### Layout and publish
-[Script](./src/postReport.ts)
-[Checks management](./src/checksUpdate)
-Layout correctly the datas gathered and post them, by finding (in the main script) the check run previously created, and updating it (in check management). 
+### Checks management
+[Checks management](./src/checksManagement.ts)
+Used to create the check, mark them as in progress, and upload the last report.
+
+### Layout the final report: parsing the Json
+[Script](./src/formatJson.ts)
+Layout correctly the datas gathered. 
 
 ## Hosting: Heroku
 Tutorials:
@@ -102,3 +114,18 @@ Tutorials:
 Rq: Probot seems to choose its listenning port correctly for heroku (to check during tests)
 
 Also, heroku (in local) only works with the secret key read from file with [fs](https://nodejs.dev/learn/reading-files-with-nodejs) in synchronous mode.Since this method doesn't work with a normal deployement on heroku, we use the sercet key in .env instead.
+
+## Tests: jest
+
+### Testing structure
+
+All variables used for tests are stored in the [globalVarsTests](./test/globalVarsTests.ts). This includes:
+- URLs
+- environment variables
+- git variables
+
+The json files used to mock different messages from github and maracas are store in the [fixture folder](./test/fixtures)
+
+The examples of generated reports (in three parts since the comments are displayed as a Title, a summary and a text), are located in the [reports folder](./test/fixtures/reports).
+
+/!\ Even though the summary and the text support markdown, the title is only saved as a markdown file for practicity and doesn't support markdown on github.

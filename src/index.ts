@@ -5,6 +5,9 @@ const bodyParser = require("body-parser")
 
 //---Declaration of the app---
 export = (app: Probot, option: any) => {
+  console.log("[index] Options:")
+  console.log(option)
+
   const router = option.getRouter("/breakbot");
 
   router.use(bodyParser.json({ limit: '5mb' }))
