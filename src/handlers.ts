@@ -1,5 +1,5 @@
 import * as checksManagement from "./checksManagement";
-import * as Maracas from "./Maracas";
+import * as maracas from "./maracas";
 import { webhookDatas, reportDatas } from "./authDatas";
 
 
@@ -33,5 +33,5 @@ export async function webhookHandler(context: any) {
 
     myDatas = await checksManagement.createCheck(myDatas) // can't createCheck act on our datas ?
 
-    await Maracas.sendRequest(myDatas)
+    await maracas.sendRequest(myDatas)
 }  
