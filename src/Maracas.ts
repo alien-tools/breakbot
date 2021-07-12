@@ -10,24 +10,23 @@ export async function sendRequest(myDatas: webhookDatas) {
 
     console.log(`[pushCheck] Dest url is: ${destUrl}`)
 
-    await fetch(destUrl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'installationId': myDatas.installationId
-        }
-    }).then((res: any) => {
-        console.log(`[pushCheck] Answer from Maracas (push mode): ${res.status}\n[pushCheck] message: ${res.message}`)
-        if (res.status == 202)
-        {
+    try {
+        let result = await fetch(destUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'installationId': myDatas.installationId
+            }
+        });
+        console.log(`[pushCheck] Answer from Maracas (push mode): ${result.status}\n[pushCheck] message: ${result.message}`)
+        if (result.status == 202) {
             checksManagement.inProgress(myDatas)
         }
         else {
-            // update the check with the message received from maracas
+            console.log(result);
         }
-    })
-    .catch((err: any) => 
-    {
-        console.error(err)
-    })
+    }
+    catch (err: any) {
+        console.log(err);
+    }
 }
