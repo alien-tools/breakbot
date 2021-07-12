@@ -4,6 +4,7 @@ const path = require("path");
 import payloadGetChecks from "./fixtures/getChecks.json"
 import payloadGetPulls from "./fixtures/getPulls.json"
 import payloadGetPull from "./fixtures/getPull.json"
+import payloadPostCheck from "./fixtures/postCheck.json"
 
 export const baseRepo = "ImMeta/breakbotLib"
 export const prNb = 1
@@ -27,6 +28,8 @@ export const mockRequest = jest.fn((path: string, datas: any) => {
         return payloadGetChecks
     } else if (path == `GET /repos/${baseRepo}/pulls`) {
         return payloadGetPulls
+    } else if (path == `POST /repos/${baseRepo}/check-runs`) {
+        return payloadPostCheck
     } else {
         console.log(path)
         return undefined
