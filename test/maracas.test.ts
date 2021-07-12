@@ -18,9 +18,6 @@ export const V2title = readFileSync(path.join(__dirname, "/fixtures/reports/V2-t
 export const V2summary = readFileSync(path.join(__dirname, "/fixtures/reports/V2-summary.md"), "utf-8");
 export const V2message = readFileSync(path.join(__dirname, "/fixtures/reports/V2-message.md"), "utf-8");
 
-const fetch = require('node-fetch');
-jest.mock('node-fetch')
-
 describe("Test interractions with Maracas", () => {
 
     const mockOctokit = {
@@ -35,23 +32,22 @@ describe("Test interractions with Maracas", () => {
     })
 
     test("sendRequest sends a correct request to Maracas", async (done) => {
-        maracas.sendRequest(mockDatas)
-
-        const fetchArguments = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'installationId': globalVars.installationId
-            }
-        }
-
-        done(expect(fetch).toHaveBeenCalledWith(globalVars.completeMaracasUrl, fetchArguments )
-        )
+        const scope = nock(globalVars.maracasUrl, {
+                reqheaders: {
+                    'Content-Type': 'application/json',
+                    'installationId': globalVars.installationId.toString()
+                }
+            })
+            .post(globalVars.completeMaracasUrl.slice(globalVars.maracasUrl.length))
+            .reply(202)
+        await maracas.sendRequest(mockDatas)
+        done(expect(scope.isDone()).toBe(true))
+        done(expect(mockDatas.myOctokit.request).toHaveBeenCalled())
     })
 
     afterEach(() => {
         nock.restore()
-        nock.cleanAll();
+        nock.cleanAll()
     })
 
     afterAll(() => {
