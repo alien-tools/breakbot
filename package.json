@@ -14,7 +14,7 @@
   "scripts": {
     "build": "tsc",
     "start": "probot run ./lib/index.js",
-    "test": "jest"
+    "test": "jest --coverage"
   },
   "dependencies": {
     "@octokit/rest": "^18.5.6",
