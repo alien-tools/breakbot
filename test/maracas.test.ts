@@ -1,44 +1,31 @@
 import nock from "nock"
-import { webhookDatas } from "../src/authDatas"
+import { webhookData } from "../src/authData"
 import * as maracas from "../src/maracas"
-import * as globalVars from "./globalVarsTests"
-
-import payloadv1 from "./fixtures/maracas.v1.json";
-import payloadv2 from "./fixtures/maracas.v2.json";
-import { parseJsonMain } from "../src/formatJson";
-
-import { readFileSync } from "fs";
-const path = require("path");
-
-export const V1title = readFileSync(path.join(__dirname, "/fixtures/reports/V1-title.md"),"utf-8");
-export const V1summary = readFileSync(path.join(__dirname, "/fixtures/reports/V1-summary.md"), "utf-8");
-export const V1message = readFileSync(path.join(__dirname, "/fixtures/reports/V1-message.md"), "utf-8");
-
-export const V2title = readFileSync(path.join(__dirname, "/fixtures/reports/V2-title.md"), "utf-8");
-export const V2summary = readFileSync(path.join(__dirname, "/fixtures/reports/V2-summary.md"), "utf-8");
-export const V2message = readFileSync(path.join(__dirname, "/fixtures/reports/V2-message.md"), "utf-8");
+import { globalVars } from "./globalVarsTests"
 
 describe("Test interractions with Maracas", () => {
 
+    var myVars = new globalVars()
+
     const mockOctokit = {
-        request: globalVars.mockRequest
+        request: myVars.mockRequest
     }
 
-    const mockDatas = new webhookDatas(globalVars.baseRepo, globalVars.installationId, mockOctokit)
-    mockDatas.prNb = globalVars.prNb
+    const mockDatas = new webhookData(myVars.baseRepo, myVars.installationId, mockOctokit)
+    mockDatas.prNb = myVars.prNb
 
     beforeAll(() => {
         nock.disableNetConnect()
     })
 
     test("sendRequest sends a correct request to Maracas", async (done) => {
-        const scope = nock(globalVars.maracasUrl, {
+        const scope = nock(myVars.maracasUrl, {
                 reqheaders: {
                     'Content-Type': 'application/json',
-                    'installationId': globalVars.installationId.toString()
+                'installationId': myVars.installationId.toString()
                 }
             })
-            .post(globalVars.completeMaracasUrl.slice(globalVars.maracasUrl.length))
+            .post(myVars.completeMaracasUrl.slice(myVars.maracasUrl.length))
             .reply(202)
         await maracas.sendRequest(mockDatas)
         done(expect(scope.isDone()).toBe(true))
@@ -52,31 +39,5 @@ describe("Test interractions with Maracas", () => {
 
     afterAll(() => {
         nock.enableNetConnect()
-    })
-})
-
-describe("Checks that the Json received from Maracas is correctly parsed", () => {
-    test("mainParse, no clients tested", async (done) => {
-        const myReport = parseJsonMain(payloadv1, 10)
-        
-        const mockReportv1 = [
-            V1title,
-            V1summary,
-            V1message
-        ]
-
-        done(expect(myReport).toStrictEqual(mockReportv1))
-    })
-
-    test("mainParse, with clients", async (done) => {
-        const myReport = parseJsonMain(payloadv2, 10)
-
-        const mockReportv2 = [
-            V2title,
-            V2summary,
-            V2message
-        ]
-
-        done(expect(myReport).toStrictEqual(mockReportv2))
     })
 })

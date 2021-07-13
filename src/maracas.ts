@@ -1,10 +1,10 @@
 const fetch = require('node-fetch');
 
-import { webhookDatas } from './authDatas';
+import { webhookData } from './authData';
 import * as checksManagement from './checksManagement';
 
 
-export async function sendRequest(myDatas: webhookDatas) {
+export async function sendRequest(myDatas: webhookData) {
     const callbackUrl = `${process.env.WEBHOOK_PROXY_URL}/breakbot/pr/${myDatas.baseRepo}/${myDatas.prNb}`
     const destUrl = `${process.env.MARACAS_URL}/github/pr/${myDatas.baseRepo}/${myDatas.prNb}?callback=${callbackUrl}`
 

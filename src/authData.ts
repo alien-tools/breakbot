@@ -2,7 +2,7 @@ import { Octokit } from "@octokit/core";
 import { config } from "@probot/octokit-plugin-config"
 import { createAppAuth } from "@octokit/auth-app"
 
-export abstract class authDatas {
+export abstract class authData {
     baseRepo: string;
     installationId: number;
 
@@ -57,7 +57,7 @@ export abstract class authDatas {
             console.log("[getCheck] Done.")
         }
         else {
-            console.log("[getCheck] No check found.")
+            console.log("[getCheck] No check found.") //shall we create a check in this case ?
         }
     }
 
@@ -88,14 +88,14 @@ export abstract class authDatas {
     }
 }
 
-export class webhookDatas extends authDatas {
+export class webhookData extends authData {
     constructor(baseRepo: string, installationId: number, myOctokit: any) {
         super(baseRepo, installationId)
         this.myOctokit = myOctokit
     }
 
     static fromPr(context: any) {
-        var newDatas = new webhookDatas(context.payload.pull_request.base.repo.full_name, context.payload.installation.id, context.octokit);
+        var newDatas = new webhookData(context.payload.pull_request.base.repo.full_name, context.payload.installation.id, context.octokit);
 
         newDatas.headSHA = context.payload.pull_request.head.sha
 
@@ -105,7 +105,7 @@ export class webhookDatas extends authDatas {
     }
 
     static fromCheck(context: any) {
-        var newDatas = new webhookDatas(context.payload.repository.full_name, context.payload.installation.id, context.octokit);
+        var newDatas = new webhookData(context.payload.repository.full_name, context.payload.installation.id, context.octokit);
 
         newDatas.headSHA = context.payload.check_run.head_sha
 
@@ -123,9 +123,9 @@ export class webhookDatas extends authDatas {
     }
 }
 
-export class reportDatas extends authDatas {
+export class reportData extends authData {
     static fromPost(baseRepo: string, installationId: number, prNb: number) {
-        var newDatas = new reportDatas(baseRepo, installationId)
+        var newDatas = new reportData(baseRepo, installationId)
 
         newDatas.prNb = prNb
         

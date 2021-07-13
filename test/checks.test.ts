@@ -1,24 +1,26 @@
 import nock from "nock"
-import { reportDatas, webhookDatas } from "../src/authDatas"
-import * as globalVars from "./globalVarsTests"
+import { reportData, webhookData } from "../src/authData"
+import { globalVars } from "./globalVarsTests"
 import * as checksManagement from "../src/checksManagement"
 import payloadv2 from "./fixtures/maracas.v2.json";
 
 describe("Testing check management in normal conditions", () => {
 
+    var myVars = new globalVars()
+
     const mockOctokit = {
-        request: globalVars.mockRequest
+        request: myVars.mockRequest
     }
 
-    var mockWebhookDatas = new webhookDatas(globalVars.baseRepo, globalVars.installationId, mockOctokit) // could be moved to globalVars
-    mockWebhookDatas.headSHA = globalVars.branchSHA
-    mockWebhookDatas.prNb = globalVars.prNb
+    var mockWebhookDatas = new webhookData(myVars.baseRepo, myVars.installationId, mockOctokit) // could be moved to globalVars
+    mockWebhookDatas.headSHA = myVars.branchSHA
+    mockWebhookDatas.prNb = myVars.prNb
 
     //ok because of the tests ?
-    var mockReportDatas = new reportDatas(globalVars.baseRepo, globalVars.installationId)
-    mockReportDatas.prNb = globalVars.prNb
+    var mockReportDatas = new reportData(myVars.baseRepo, myVars.installationId)
+    mockReportDatas.prNb = myVars.prNb
     mockReportDatas.myOctokit = mockOctokit
-    mockReportDatas.checkId = globalVars.checkId
+    mockReportDatas.checkId = myVars.checkId
 
     beforeAll(() => {
         nock.disableNetConnect();
@@ -32,7 +34,7 @@ describe("Testing check management in normal conditions", () => {
         var check =
         {
             name: "Breakbot report",
-            head_sha: globalVars.branchSHA,
+            head_sha: myVars.branchSHA,
             status: "queued",
             output: {
                 title: "Sending request to the api...",
@@ -42,11 +44,11 @@ describe("Testing check management in normal conditions", () => {
 
         checksManagement.createCheck(mockWebhookDatas)
 
-        done(expect(mockOctokit.request).toBeCalledWith(`POST /repos/${globalVars.baseRepo}/check-runs`, check))
+        done(expect(mockOctokit.request).toBeCalledWith(`POST /repos/${myVars.baseRepo}/check-runs`, check))
     })
 
     test("progressCheck", async (done) => {
-        mockWebhookDatas.checkId = globalVars.checkId
+        mockWebhookDatas.checkId = myVars.checkId
 
         const check =
         {
@@ -59,13 +61,13 @@ describe("Testing check management in normal conditions", () => {
         
         checksManagement.inProgress(mockWebhookDatas)
 
-        done(expect(mockOctokit.request).toBeCalledWith(`PATCH /repos/${ globalVars.baseRepo }/check-runs/${ globalVars.checkId }`, check))
+        done(expect(mockOctokit.request).toBeCalledWith(`PATCH /repos/${myVars.baseRepo}/check-runs/${myVars.checkId }`, check))
     })
 
     test("finalUpdate", async (done) => {
         checksManagement.finalUpdate(mockReportDatas, payloadv2)
 
-        done(expect(mockOctokit.request.mock.calls[0][0]).toStrictEqual(`PATCH /repos/${globalVars.baseRepo}/check-runs/${globalVars.checkId}`))
+        done(expect(mockOctokit.request.mock.calls[0][0]).toStrictEqual(`PATCH /repos/${myVars.baseRepo}/check-runs/${myVars.checkId}`))
     })
 
     afterAll(() => {

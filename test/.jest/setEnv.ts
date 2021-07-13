@@ -1,6 +1,8 @@
-import * as globalVars from '../globalVarsTests'
+import { globalVars } from '../globalVarsTests'
 
-process.env.APP_ID = globalVars.appId.toString()
-process.env.PRIVATE_KEY = globalVars.privateKey
-process.env.MARACAS_URL = globalVars.maracasUrl
-process.env.WEBHOOK_PROXY_URL = globalVars.callbackUrl
+var myVars = new globalVars
+
+process.env.APP_ID = myVars.appId.toString()
+process.env.PRIVATE_KEY = myVars.privateKey
+process.env.MARACAS_URL = myVars.maracasUrl
+process.env.WEBHOOK_PROXY_URL = myVars.callbackUrl

@@ -3,9 +3,9 @@ import nock from "nock";
 import payloadPull from "./fixtures/pull_request.opened.json";
 import payloadCheck from "./fixtures/check_run.requested_action.json";
 
-import { reportDatas, webhookDatas } from "../src/authDatas";
+import { reportData, webhookData } from "../src/authData";
 
-import * as globalVars from './globalVarsTests'
+import { globalVars } from './globalVarsTests'
 
 import { Octokit } from '@octokit/core'
 jest.mock('@octokit/core') //if not explicitly mocked, seems to act differently
@@ -13,22 +13,23 @@ jest.mock('@octokit/core') //if not explicitly mocked, seems to act differently
 
 import { createAppAuth } from "@octokit/auth-app"
 
+var myVars = new globalVars()
 
 describe("Test webhookDatas", () => {
 
     var mockOctokit = {
-        request: globalVars.mockRequest
+        request: myVars.mockRequest
     }
 
-    var mockDatas: webhookDatas
+    var mockDatas: webhookData
     var mockContext: {
         octokit: any,
         payload: any
     }
 
     beforeEach(() => {
-        mockDatas = new webhookDatas("ImMeta/breakbotLib", 2, mockOctokit)
-        mockDatas.headSHA = globalVars.branchSHA
+        mockDatas = new webhookData("ImMeta/breakbotLib", 2, mockOctokit)
+        mockDatas.headSHA = myVars.branchSHA
     })
 
     test("fromPr() correctly creates a data structure", async (done) => {
@@ -37,9 +38,9 @@ describe("Test webhookDatas", () => {
             payload: payloadPull
         }
 
-        mockDatas.prNb = globalVars.prNb
+        mockDatas.prNb = myVars.prNb
 
-        const myDatas = webhookDatas.fromPr(mockContext)
+        const myDatas = webhookData.fromPr(mockContext)
 
         done(expect(myDatas).toStrictEqual(mockDatas))
     })
@@ -52,7 +53,7 @@ describe("Test webhookDatas", () => {
             payload: payloadCheck
         }
 
-        const myDatas = webhookDatas.fromCheck(mockContext)
+        const myDatas = webhookData.fromCheck(mockContext)
 
         done(expect(myDatas).toStrictEqual(mockDatas))
     })
@@ -60,15 +61,15 @@ describe("Test webhookDatas", () => {
     test("getPrNb() correctly get the pull request number", async (done) => {
         await mockDatas.getPrNb()
 
-        done(expect(mockDatas.prNb).toStrictEqual(globalVars.prNb))
+        done(expect(mockDatas.prNb).toStrictEqual(myVars.prNb))
     })
 
     test("getCheck() correctly return a checkId when used with webhook datas", async (done) => {
-        mockDatas.prNb = globalVars.prNb
+        mockDatas.prNb = myVars.prNb
 
         await mockDatas.getCheck()
 
-        done(expect(mockDatas.checkId).toStrictEqual(globalVars.checkId))
+        done(expect(mockDatas.checkId).toStrictEqual(myVars.checkId))
     })
 
     //test("getConfig returns the config")
@@ -78,21 +79,21 @@ describe("Test webhookDatas", () => {
 
 describe("Test reportDatas", () => {
 
-    var mockOctokit = { request: globalVars.mockRequest }
+    var mockOctokit = { request: myVars.mockRequest }
 
-    var mockDatas: reportDatas
+    var mockDatas: reportData
 
     beforeAll(() => {
         nock.disableNetConnect();
     })
 
     beforeEach(() => {
-        mockDatas = new reportDatas(globalVars.baseRepo, globalVars.installationId)
-        mockDatas.prNb = globalVars.prNb
+        mockDatas = new reportData(myVars.baseRepo, myVars.installationId)
+        mockDatas.prNb = myVars.prNb
     })
 
     test("fromPost() creates a correct data structure", async (done) => {
-        var myDatas = reportDatas.fromPost(globalVars.baseRepo, globalVars.installationId, globalVars.prNb)
+        var myDatas = reportData.fromPost(myVars.baseRepo, myVars.installationId, myVars.prNb)
 
         done(expect(myDatas).toStrictEqual(mockDatas))
     })
@@ -100,9 +101,9 @@ describe("Test reportDatas", () => {
     test("connectToGit() creates an octokit", async (done) => { //The difficult part
         const mockArguments = {
             auth: {
-                appId: globalVars.appId.toString(),
-                installationId: globalVars.installationId,
-                privateKey: globalVars.privateKey
+                appId: myVars.appId.toString(),
+                installationId: myVars.installationId,
+                privateKey: myVars.privateKey
             },
             authStrategy: createAppAuth
         }
@@ -120,7 +121,7 @@ describe("Test reportDatas", () => {
 
         await mockDatas.getCheck()
 
-        done(expect(mockDatas.checkId).toStrictEqual(globalVars.checkId))
+        done(expect(mockDatas.checkId).toStrictEqual(myVars.checkId))
     })
 
     //test("getConfig returns the config")

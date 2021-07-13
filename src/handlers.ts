@@ -1,11 +1,11 @@
 import * as checksManagement from "./checksManagement";
 import * as maracas from "./maracas";
-import { webhookDatas, reportDatas } from "./authDatas";
+import { webhookData, reportData } from "./authData";
 
 
 export async function maracasHandler(req: any) {
 
-    var myDatas = reportDatas.fromPost(`${req.params.owner}/${req.params.repo}`, req.headers.installationid, req.params.prNb)
+    var myDatas = reportData.fromPost(`${req.params.owner}/${req.params.repo}`, req.headers.installationid, req.params.prNb)
 
     // not complete /!\
     await myDatas.connectToGit()
@@ -18,10 +18,10 @@ export async function maracasHandler(req: any) {
 export async function webhookHandler(context: any) {
 
     if (context.name == 'pull_request') {
-        var myDatas = webhookDatas.fromPr(context)
+        var myDatas = webhookData.fromPr(context)
     }
     else if (context.name == 'check_run' && context.payload.requested_action?.identifier == "rerun") {
-        var myDatas = webhookDatas.fromCheck(context)
+        var myDatas = webhookData.fromCheck(context)
         await myDatas.getPrNb()
     }
     else { //in case sth went wrong
