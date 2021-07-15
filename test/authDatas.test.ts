@@ -9,11 +9,34 @@ import { globalVars } from './globalVarsTests'
 
 import { Octokit } from '@octokit/core'
 jest.mock('@octokit/core') //if not explicitly mocked, seems to act differently
-//import { Octokit } from "@octokit/core";
 
 import { createAppAuth } from "@octokit/auth-app"
 
 var myVars = new globalVars()
+
+//import { config } from "@probot/octokit-plugin-config"
+jest.mock("@probot/octokit-plugin-config", () => ({
+    config: ((myOctokit: any) => {
+        return {
+            config: {
+                get: ((args: any) => {
+                    var addressSplit = myVars.baseRepo.split("/")
+
+                    if ((args.owner == addressSplit[0]) && (args.repo = addressSplit[1]))
+                        return {
+                            config: {
+                                verbose: true,
+                                maxDisplayedBC: 12,
+                            }
+                        }
+                    else {
+                        return undefined
+                    }
+                })
+            }
+        }
+    })
+}))
 
 describe("Test webhookDatas", () => {
 
@@ -72,7 +95,16 @@ describe("Test webhookDatas", () => {
         done(expect(mockDatas.checkId).toStrictEqual(myVars.checkId))
     })
 
-    //test("getConfig returns the config")
+    test("getConfig returns the config", async (done) => {
+        mockDatas.prNb = myVars.prNb
+        mockDatas.checkId = myVars.checkId
+
+        await mockDatas.getConfig()
+
+        done(expect(mockDatas.config).toStrictEqual({
+            verbose: true, maxDisplayedBC: 12,
+        }))
+    })
 
     //afterEach(() => { })
 })
@@ -110,7 +142,6 @@ describe("Test reportDatas", () => {
 
         mockDatas.connectToGit()
 
-        //console.log(`[test] My octokit:`)
         //console.log(mockDatas.myOctokit) // why is the octokit complete if octokit is not explicitly mocked ?
 
         done(expect(Octokit).toHaveBeenCalledWith(mockArguments)) //to improve
@@ -124,7 +155,17 @@ describe("Test reportDatas", () => {
         done(expect(mockDatas.checkId).toStrictEqual(myVars.checkId))
     })
 
-    //test("getConfig returns the config")
+    test("getConfig returns the config", async (done) => {
+        mockDatas.myOctokit = mockOctokit
+        mockDatas.prNb = myVars.prNb
+        mockDatas.checkId = myVars.checkId
+
+        await mockDatas.getConfig()
+
+        done(expect(mockDatas.config).toStrictEqual({
+            verbose: true, maxDisplayedBC: 12,
+        }))
+    })
 
     afterAll(() => {
         nock.restore()

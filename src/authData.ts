@@ -1,4 +1,4 @@
-import { Octokit } from "@octokit/core";
+import { Octokit } from "@octokit/core"
 import { config } from "@probot/octokit-plugin-config"
 import { createAppAuth } from "@octokit/auth-app"
 
@@ -13,11 +13,11 @@ export abstract class authData {
     myOctokit?: any;
     checkId?: number;
 
-    //config
-    configAcquired?: boolean;
-    //comment?: boolean;
-    maxDisplayedBC?: number;
-    maxDisplayedClients?: number;
+    config?: {
+        verbose?: boolean;
+        maxDisplayedBC?: number;
+        maxDisplayedClients?: number;
+    }
 
     constructor(baseRepo: string, installationId: number) {
         this.baseRepo = baseRepo
@@ -80,8 +80,19 @@ export abstract class authData {
         console.log(`[getConfig] Here is my config file:`)
         console.log(configFile)
 
-        this.configAcquired = true
+        this.config = {}
 
+        if (configFile.config.verbose) {
+            this.config.verbose = true
+        }
+
+        if ((configFile.config.maxDisplayedBC) && (typeof(configFile.config.maxDisplayedBC) == "number")) {
+            this.config.maxDisplayedBC = configFile.config.maxDisplayedBC
+        }
+
+        if ((configFile.config.maxDisplayedClients) && (typeof (configFile.config.maxDisplayedClients) == "number")) {
+            this.config.maxDisplayedClients = configFile.config.maxDisplayedClients
+        }
         // set config var(s)
         
         // ...to complete...
