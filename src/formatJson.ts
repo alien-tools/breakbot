@@ -1,5 +1,9 @@
 
-export function parseJsonMain(myJson: any, nMax: number){
+export function parseJsonMain(myJson: any, nMax: number) {
+    const n = myJson.delta.breakingChanges.length
+
+    var titleReturned = `This PR introduces ${n} breaking changes in the base branch.`
+    var summaryReturned = ""
     var messageReturned = ""
 
     // To complete with a summary
@@ -15,5 +19,5 @@ export function parseJsonMain(myJson: any, nMax: number){
 
     });
 
-    return messageReturned
+    return ([titleReturned, summaryReturned, messageReturned])
 }

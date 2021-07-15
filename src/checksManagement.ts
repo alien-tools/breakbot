@@ -1,8 +1,8 @@
-import { authDatas } from "./authClass";
-import { parseJsonMain } from "./fromatJson";
+import { webhookData, reportData } from "./authData";
+import { parseJsonMain } from "./formatJson";
 
-const progressCheck = async (myDatas: authDatas) => {
-    const newCheck =
+const inProgress = async (myDatas: webhookData) => {
+    const check =
     {
         status: "in_progress",
         output: {
@@ -11,19 +11,16 @@ const progressCheck = async (myDatas: authDatas) => {
         }
     }
     try {
-        myDatas.myOctokit.request(`PATCH /repos/${myDatas.baseRepo}/check-runs/${myDatas.checkId}`, newCheck);
+        myDatas.myOctokit.request(`PATCH /repos/${myDatas.baseRepo}/check-runs/${myDatas.checkId}`, check);
     }
     catch (err) {
         console.error(err)
     }
 }
 
-const updateCheck = async (myDatas: authDatas, myJson: any) => {
+const finalUpdate = async (myDatas: reportData, myJson: any) => {
 
     console.log(`[updateCheck] Message received from Maracas: ${myJson.message}`)
-
-    await myDatas.getCheck()
-    await myDatas.getConfig()
 
     var myActions = [{
         label: "Rerun test",
@@ -35,18 +32,18 @@ const updateCheck = async (myDatas: authDatas, myJson: any) => {
     {
         title: "",
         summary: ""
+        //to complete with a text field
     }
 
     //---Format the Json---
     // Generic declaration
     const nMax = 10
-    const n = myJson.delta.breakingChanges.length
 
-    newOutput.title += `This PR introduces ${n} breaking changes in the base branch.`
+    const parsedJson = parseJsonMain(myJson, nMax)
+    newOutput.title += parsedJson[0]
 
     // Detail on the BC
-    newOutput.summary += "Here is a list of the breaking changes caused."
-    newOutput.summary += parseJsonMain(myJson, nMax)
+    newOutput.summary += parsedJson[2]
 
     const newCheck =
     {
@@ -64,7 +61,7 @@ const updateCheck = async (myDatas: authDatas, myJson: any) => {
     }
 }
 
-async function createCheck(myDatas: authDatas) {
+async function createCheck(myDatas: webhookData) {
     const output =
     {
         title: "Sending request to the api...",
@@ -90,4 +87,4 @@ async function createCheck(myDatas: authDatas) {
     return myDatas
 }
 
-export { progressCheck, updateCheck, createCheck }
+export { inProgress, finalUpdate, createCheck }

@@ -1,0 +1,65 @@
+{
+    "message": "ok",
+    "delta": {
+        "breakingChanges": [
+            {
+                "type": "methodAbstractNowDefault",
+                "declaration": "main.methodAbstractNowDefault.IMethodAbstractNowDefault.methodAbstractNowDef()",
+                "path": "/src/main/methodAbstractNowDefault/IMethodAbstractNowDefault.java",
+                "url": "https://github.com/tdegueul/comp-changes/blob/main//src/main/methodAbstractNowDefault/IMethodAbstractNowDefault.java#L5-L5",
+                "startLine": 5,
+                "endLine": 5,
+                "sourceCompatible": false,
+                "binaryCompatible": false,
+                "detections": [
+                    {
+                        "clientUrl": "https://github.com/tdegueul/comp-changes-client",
+                        "elem": "mainclient.methodAbstractNowDefault.AbsMethodAbstractNowDefaultMultiIntSub",
+                        "used": "main.methodAbstractNowDefault.IMethodAbstractNowDefaultSub",
+                        "src": "main.methodAbstractNowDefault.IMethodAbstractNowDefault.methodAbstractNowDef()",
+                        "apiUse": "implements",
+                        "path": "/src/mainclient/methodAbstractNowDefault/AbsMethodAbstractNowDefaultMultiIntSub.java",
+                        "startLine": 6,
+                        "endLine": 8,
+                        "url": "https://github.com/tdegueul/comp-changes-client/blob/main//src/mainclient/methodAbstractNowDefault/AbsMethodAbstractNowDefaultMultiIntSub.java#L6-L8"
+                    },
+                    {
+                        "clientUrl": "https://github.com/tdegueul/comp-changes-client",
+                        "elem": "mainclient.methodAbstractNowDefault.AbsMethodAbstractNowDefaultMultiInt",
+                        "used": "main.methodAbstractNowDefault.IMethodAbstractNowDefault",
+                        "src": "main.methodAbstractNowDefault.IMethodAbstractNowDefault.methodAbstractNowDef()",
+                        "apiUse": "implements",
+                        "path": "/src/mainclient/methodAbstractNowDefault/AbsMethodAbstractNowDefaultMultiInt.java",
+                        "startLine": 6,
+                        "endLine": 8,
+                        "url": "https://github.com/tdegueul/comp-changes-client/blob/main//src/mainclient/methodAbstractNowDefault/AbsMethodAbstractNowDefaultMultiInt.java#L6-L8"
+                    }
+                ]
+            },
+            {
+                "type": "constructorRemoved",
+                "declaration": "main.constructorRemoved.ConstructorRemovedNoParams.ConstructorRemovedNoParams()",
+                "path": "/src/main/constructorRemoved/ConstructorRemovedNoParams.java",
+                "url": "https://github.com/tdegueul/comp-changes/blob/main//src/main/constructorRemoved/ConstructorRemovedNoParams.java#L5-L7",
+                "startLine": 5,
+                "endLine": 7,
+                "sourceCompatible": false,
+                "binaryCompatible": false,
+                "detections": [
+                    {
+                        "clientUrl": "https://github.com/tdegueul/comp-changes-client",
+                        "elem": "mainclient.constructorRemoved.ConstructorRemovedExtNoParams.ConstructorRemovedExtNoParams()",
+                        "used": "main.constructorRemoved.ConstructorRemovedNoParams.ConstructorRemovedNoParams()",
+                        "src": "main.constructorRemoved.ConstructorRemovedNoParams.ConstructorRemovedNoParams()",
+                        "apiUse": "methodInvocation",
+                        "path": "/src/mainclient/constructorRemoved/ConstructorRemovedExtNoParams.java",
+                        "startLine": 7,
+                        "endLine": 9,
+                        "url": "https://github.com/tdegueul/comp-changes-client/blob/main//src/mainclient/constructorRemoved/ConstructorRemovedExtNoParams.java#L7-L9"
+                    }
+                ]
+            }
+        ],
+        "error": null
+    }
+}

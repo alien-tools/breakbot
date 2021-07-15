@@ -1,13 +1,13 @@
 import { Probot } from "probot";
-import { pushCheck, pushComment} from "./messagesApi";
-import { authDatas } from "./authClass";
-import { updateCheck, createCheck } from "./checksManagement";
-import { postComment } from "./commentsManagement";
+import { maracasHandler, webhookHandler } from "./handlers";
 
 const bodyParser = require("body-parser")
 
 //---Declaration of the app---
 export = (app: Probot, option: any) => {
+  console.log("[index] Options:")
+  console.log(option)
+
   const router = option.getRouter("/breakbot");
 
   router.use(bodyParser.json({ limit: '5mb' }))
@@ -15,54 +15,15 @@ export = (app: Probot, option: any) => {
   router.post("/pr/:owner/:repo/:prNb", async (req: any, res: any) => {
     console.log("[router] Final report received from Maracas")
 
-    var myDatas = new authDatas()
-
-    // intialized, could be one function
-    myDatas.baseRepo = `${req.params.owner}/${req.params.repo}`
-    myDatas.prNb = req.params.prNb
+    await maracasHandler(req)
     
-    await myDatas.getConfig(req.headers.installationid)
-
-    if (myDatas.comment) {
-      postComment(myDatas, req.body)
-    }
-    else {
-      updateCheck(myDatas, req.body)
-    }
-      
     res.status(200)
     res.send("Received")
   })
 
-  app.on(["pull_request.opened", "pull_request.synchronize"], async (context) => {
+  app.on(["pull_request.opened", "pull_request.synchronize", "check_run.requested_action"], async (context) => {
+    console.log("[index] Starting a new check")
 
-    var myDatas = new authDatas()
-    myDatas.updatePr(context)
-    await myDatas.getConfig()
-
-    if (myDatas.comment) {
-      pushComment(myDatas)
-    }
-    else {
-      myDatas = await createCheck(myDatas) // can't createCheck act on our datas ?
-  
-      await pushCheck(myDatas)      
-    }
-  
+    webhookHandler(context)
   });
-
-  app.on("check_run.requested_action", async (context) => {
-    // we consider it can only happen when the repo wants checks
-    if (context.payload.requested_action?.identifier == "rerun") {
-      app.log.info("A new check run was requested")
-      var myDatas = new authDatas()
-      myDatas.updateCheck(context)
-
-      // create the test (add a condition here to have optional checks)
-      myDatas = await createCheck(myDatas) // can't createCheck act on our datas ?
-
-      await pushCheck(myDatas)
-    }
-
-  })
 };

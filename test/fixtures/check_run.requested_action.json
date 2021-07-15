@@ -1,0 +1,103 @@
+{
+    "action": "requested_action",
+    "check_run": {
+        "id": 29,
+        "head_sha": "headsha1",
+        "external_id": "",
+        "url": "https://api.github.com/repos/break-bot/spoon/check-runs/2971106161",
+        "html_url": "https://github.com/break-bot/spoon/runs/2971106161",
+        "details_url": "https://github.com/Metamaus/breakbot",
+        "status": "completed",
+        "conclusion": "neutral",
+        "started_at": "2021-07-02T09:43:13Z",
+        "completed_at": "2021-07-06T08:35:07Z",
+        "output": {
+            "title": "This PR introduces 2 breaking changes in the base branch.",
+            "summary": "Here is a list of the breaking changes caused.\n### The declaration [main.methodAbstractNowDefault.IMethodAbstractNowDefault.methodAbstractNowDef()](https://github.com/tdegueul/comp-changes/blob/main//src/main/methodAbstractNowDefault/IMethodAbstractNowDefault.java#L5-L5) is impacted by _methodAbstractNowDefault_\n- Declaration [mainclient.methodAbstractNowDefault.AbsMethodAbstractNowDefaultMultiIntSub](https://github.com/tdegueul/comp-changes-client/blob/main//src/mainclient/methodAbstractNowDefault/AbsMethodAbstractNowDefaultMultiIntSub.java#L6-L8) in [this client](https://github.com/tdegueul/comp-changes-client)\n- Declaration [mainclient.methodAbstractNowDefault.AbsMethodAbstractNowDefaultMultiInt](https://github.com/tdegueul/comp-changes-client/blob/main//src/mainclient/methodAbstractNowDefault/AbsMethodAbstractNowDefaultMultiInt.java#L6-L8) in [this client](https://github.com/tdegueul/comp-changes-client)\n### The declaration [main.constructorRemoved.ConstructorRemovedNoParams.ConstructorRemovedNoParams()](https://github.com/tdegueul/comp-changes/blob/main//src/main/constructorRemoved/ConstructorRemovedNoParams.java#L5-L7) is impacted by _constructorRemoved_\n- Declaration [mainclient.constructorRemoved.ConstructorRemovedExtNoParams.ConstructorRemovedExtNoParams()](https://github.com/tdegueul/comp-changes-client/blob/main//src/mainclient/constructorRemoved/ConstructorRemovedExtNoParams.java#L7-L9) in [this client](https://github.com/tdegueul/comp-changes-client)\n- Declaration [mainclient.constructorRemoved.ConstructorRemovedExtNoParams.constructorRemovedExtNoParamsNoSuper()](https://github.com/tdegueul/comp-changes-client/blob/main//src/mainclient/constructorRemoved/ConstructorRemovedExtNoParams.java#L11-L13) in [this client](https://github.com/tdegueul/comp-changes-client)\n- Declaration [mainclient.constructorRemoved.ConstructorRemovedMI$2.ConstructorRemovedMI$2(mainclient.constructorRemoved.ConstructorRemovedMI)](https://github.com/tdegueul/comp-changes-client/blob/main//mainclient/constructorRemoved/ConstructorRemovedMI/2/ConstructorRemovedMI.2(mainclient.constructorRemoved.ConstructorRemovedMI)#L-1-L-1) in [this client](https://github.com/tdegueul/comp-changes-client)\n- Declaration [mainclient.constructorRemoved.ConstructorRemovedMI.constructorRemovedClientNoParams()](https://github.com/tdegueul/comp-changes-client/blob/main//src/mainclient/constructorRemoved/ConstructorRemovedMI.java#L13-L15) in [this client](https://github.com/tdegueul/comp-changes-client)",
+            "text": null,
+            "annotations_count": 0,
+            "annotations_url": "https://api.github.com/repos/break-bot/spoon/check-runs/2971106161/annotations"
+        },
+        "name": "Breakbot report",
+        "check_suite": {
+            "id": 31,
+            "head_branch": null,
+            "head_sha": "headsha1",
+            "status": "completed",
+            "conclusion": "neutral",
+            "before": null,
+            "after": null,
+            "pull_requests": [],
+            "app": {
+                "id": 11,
+                "slug": "break-bot",
+                "owner": {
+                    "login": "break-bot",
+                    "id": 8
+                },
+                "name": "break-bot",
+                "description": "A bot that detect breaking changes in a pull request and displays them",
+                "permissions": {
+                    "checks": "write",
+                    "issues": "write",
+                    "metadata": "read",
+                    "pull_requests": "write"
+                },
+                "events": [
+                    "check_run",
+                    "check_suite",
+                    "issues",
+                    "pull_request"
+                ]
+            },
+            "created_at": "2021-07-01T09:13:23Z",
+            "updated_at": "2021-07-06T08:35:07Z"
+        },
+        "app": {
+            "id": 1871,
+            "slug": "break-bot",
+            "node_id": "MDM6QXBwMTE5MDE3",
+            "owner": {
+                "login": "break-bot",
+                "id": 8
+            },
+            "name": "break-bot",
+            "description": "A bot that detect breaking changes in a pull request and displays them",
+            "permissions": {
+                "checks": "write",
+                "issues": "write",
+                "metadata": "read",
+                "pull_requests": "write"
+            },
+            "events": [
+                "check_run",
+                "check_suite",
+                "issues",
+                "pull_request"
+            ]
+        },
+        "pull_requests": []
+    },
+    "requested_action": {
+        "identifier": "rerun"
+    },
+    "repository": {
+        "id": 37,
+        "node_id": "MDEwOlJlcG9zaXRvcnkzNzQ2OTA1MTM=",
+        "name": "breakbotLib",
+        "full_name": "ImMeta/breakbotLib",
+        "private": false,
+        "owner": {
+            "login": "ImMeta"
+        },
+        "html_url": "https://github.com/ImMeta/breakbotLib",
+        "description": null,
+        "default_branch": "master"
+    },
+    "sender": {
+        "login": "ImMeta"
+    },
+    "installation": {
+        "id": 2
+    }
+}
