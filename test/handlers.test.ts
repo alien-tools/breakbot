@@ -3,6 +3,8 @@ import {globalVars} from "./globalVarsTests"
 
 import payloadNewPr from "./fixtures/pull_request.opened.json"
 import payloadNewCheck from "./fixtures/check_run.requested_action.json"
+import payloadReport from "./fixtures/maracas.v2.json"
+
 import nock from "nock"
 import { webhookData } from "../src/authData"
 
@@ -10,6 +12,16 @@ const myVars = new globalVars()
 
 import { sendRequest } from "../src/maracas"
 jest.mock("../src/maracas")
+
+//import { Octokit } from '@octokit/core'
+jest.mock('@octokit/core', () => ({
+    constructor: (args: any) => {
+        const myOctokit = {
+            request: myVars.mockRequest
+        }
+        return myOctokit
+    }
+}))
 
 jest.mock("@probot/octokit-plugin-config", () => ({
     config: ((myOctokit: any) => {
@@ -85,8 +97,22 @@ describe("Testing webhookhandler", () => {
     })
 })
 
-describe("Testing reportHandler", () => {
-    test("Maracas reply 202", async (done) => {
-        
+describe.skip("Testing reportHandler", () => {
+    test("Maracas reply 200", async (done) => {
+        const addressSplit = myVars.baseRepo.split("/")
+
+        const mockReq = {
+            status: 200,
+            headers: {
+                installationid: myVars.installationId //Json => lowercase
+            },
+            params: {
+                owner: addressSplit[0],
+                repo: addressSplit[1]
+            },
+            body: payloadReport
+        }
+
+        await handlers.maracasHandler(mockReq)
     })
 })

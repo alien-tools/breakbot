@@ -41,6 +41,7 @@ export class globalVars {
 
     mockRequest = jest.fn((path: string, datas: any) => {
         if (path == `GET /repos/${this.baseRepo}/pulls/${this.prNb}`) {
+            console.log(`[mockRequest] Path received from a Get pull: ${path}`)
             return payloadGetPull
         } else if (path == `GET /repos/${this.baseRepo}/commits/${this.branchSHA}/check-runs`) {
             return payloadGetChecks
@@ -49,7 +50,7 @@ export class globalVars {
         } else if (path == `POST /repos/${this.baseRepo}/check-runs`) {
             return payloadPostCheck
         } else {
-            console.log(path)
+            console.log(`[mockRequest] Path received: ${path}`)
             return undefined
         }
     })

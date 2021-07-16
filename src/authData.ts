@@ -33,9 +33,11 @@ export abstract class authData {
         }
         
         if (this.headSHA == undefined) {
+            console.log(`[getCheck] No SHA found`)
             var branchInfos = await this.myOctokit.request(`GET /repos/${this.baseRepo}/pulls/${this.prNb}`)
-
+            console.log(`[getCHeck] Datas: ${branchInfos.datas}`)
             this.headSHA = branchInfos.data.head.sha
+            console.log(`[getCheck] SHA received from git: ${this.headSHA}`)
         }
 
         var resTest = await this.myOctokit.request(`GET /repos/${this.baseRepo}/commits/${this.headSHA}/check-runs`)
@@ -142,11 +144,13 @@ export class reportData extends authData {
     }
 
     async connectToGit(installationId?: number) {
-        console.log("[connectToGit] Starting...")
+        console.log(`[connectToGit] Starting, with given id ${installationId} and set id ${this.installationId}`)
 
         if (installationId) {
+            console.log(`[connectToGit] Changing installationId...`)
             this.installationId = installationId
         }
+
         this.myOctokit = new Octokit({
             authStrategy: createAppAuth,
             auth: {

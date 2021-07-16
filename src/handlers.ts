@@ -18,6 +18,7 @@ export async function maracasHandler(req: any) {
 export async function webhookHandler(context: any) {
 
     if (context.name == 'pull_request') {
+        console.log(`[webhookHandler] Started in pull_request context`)
         var myDatas = webhookData.fromPr(context)
     }
     else if (context.name == 'check_run' && context.payload.requested_action?.identifier == "rerun") {
