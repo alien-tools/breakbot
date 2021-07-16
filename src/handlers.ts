@@ -21,6 +21,7 @@ export async function webhookHandler(context: any) {
         var myDatas = webhookData.fromPr(context)
     }
     else if (context.name == 'check_run' && context.payload.requested_action?.identifier == "rerun") {
+        console.log(`[webhookHandler] Started in check_run context`)
         var myDatas = webhookData.fromCheck(context)
         await myDatas.getPrNb()
     }
