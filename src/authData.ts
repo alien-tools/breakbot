@@ -31,14 +31,13 @@ export abstract class authData {
             console.log('[getCheck] No octotkit found')
             return
         }
-        else {
-            console.log(`[getCheck] I have an octokit: ${this.myOctokit}`)
-        }
         
         if (this.headSHA == undefined) {
+            console.log(`[getCheck] No SHA found`)
             var branchInfos = await this.myOctokit.request(`GET /repos/${this.baseRepo}/pulls/${this.prNb}`)
-
+            console.log(`[getCHeck] Datas: ${branchInfos.datas}`)
             this.headSHA = branchInfos.data.head.sha
+            console.log(`[getCheck] SHA received from git: ${this.headSHA}`)
         }
 
         var resTest = await this.myOctokit.request(`GET /repos/${this.baseRepo}/commits/${this.headSHA}/check-runs`)
@@ -46,8 +45,7 @@ export abstract class authData {
         var n = resTest.data.total_count
         const checks = resTest.data.check_runs
 
-        console.log(`[getCheck] Datas received from git about the checks :\ntotal_count: ${n}\nchecks:`)
-        console.log(checks)
+        console.log(`[getCheck] Datas received from git about the checks :\ntotal_count: ${n}\nchecks: ${checks}`)
 
         const myCheck = checks.find((check: any) => check.app.id == process.env.APP_ID)
 
@@ -146,11 +144,13 @@ export class reportData extends authData {
     }
 
     async connectToGit(installationId?: number) {
-        console.log("[connectToGit] Starting...")
+        console.log(`[connectToGit] Starting, with given id ${installationId} and set id ${this.installationId}`)
 
         if (installationId) {
+            console.log(`[connectToGit] Changing installationId...`)
             this.installationId = installationId
         }
+
         this.myOctokit = new Octokit({
             authStrategy: createAppAuth,
             auth: {

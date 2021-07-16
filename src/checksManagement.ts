@@ -62,6 +62,8 @@ const finalUpdate = async (myDatas: reportData, myJson: any) => {
 }
 
 async function createCheck(myDatas: webhookData) {
+    console.log(`[createCheck] Starting...`)
+
     const output =
     {
         title: "Sending request to the api...",
@@ -83,6 +85,8 @@ async function createCheck(myDatas: webhookData) {
     catch (err) {
         console.error(err)
     }
+
+    console.log(`[createCheck] Checkid: ${myDatas.checkId}`)
 
     return myDatas
 }

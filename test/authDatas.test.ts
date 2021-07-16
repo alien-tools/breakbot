@@ -142,8 +142,6 @@ describe("Test reportDatas", () => {
 
         mockDatas.connectToGit()
 
-        //console.log(mockDatas.myOctokit) // why is the octokit complete if octokit is not explicitly mocked ?
-
         done(expect(Octokit).toHaveBeenCalledWith(mockArguments)) //to improve
     })
 

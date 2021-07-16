@@ -8,7 +8,7 @@ export async function sendRequest(myDatas: webhookData) {
     const callbackUrl = `${process.env.WEBHOOK_PROXY_URL}/breakbot/pr/${myDatas.baseRepo}/${myDatas.prNb}`
     const destUrl = `${process.env.MARACAS_URL}/github/pr/${myDatas.baseRepo}/${myDatas.prNb}?callback=${callbackUrl}`
 
-    console.log(`[pushCheck] Dest url is: ${destUrl}`)
+    console.log(`[sendRequest] Dest url is: ${destUrl}`)
 
     try {
         let result = await fetch(destUrl, {
@@ -18,12 +18,12 @@ export async function sendRequest(myDatas: webhookData) {
                 'installationId': myDatas.installationId
             }
         });
-        console.log(`[pushCheck] Answer from Maracas (push mode): ${result.status}\n[pushCheck] message: ${result.message}`)
+        console.log(`[sendRequest] Status from Maracas: ${result.status}\n[sendRequest] message: ${result.message}`)
         if (result.status == 202) {
             checksManagement.inProgress(myDatas)
         }
         else {
-            console.log(result);
+            console.log(`[sendRequest] Status from Maracas: ${result.status}`);
         }
     }
     catch (err: any) {
