@@ -1,6 +1,7 @@
 import payloadv1 from "./fixtures/maracas.v1.json";
 import payloadv2 from "./fixtures/maracas.v2.json";
-import { parseJsonMain } from "../src/formatJson";
+import payloadv3 from "./fixtures/maracas.v3.json";
+import { parseJsonMain, parseJson } from "../src/formatJson";
 
 import { readFileSync } from "fs";
 const path = require("path");
@@ -12,6 +13,10 @@ export const V1message = readFileSync(path.join(__dirname, "/fixtures/reports/V1
 export const V2title = readFileSync(path.join(__dirname, "/fixtures/reports/V2-title.md"), "utf-8");
 export const V2summary = readFileSync(path.join(__dirname, "/fixtures/reports/V2-summary.md"), "utf-8");
 export const V2message = readFileSync(path.join(__dirname, "/fixtures/reports/V2-message.md"), "utf-8");
+
+export const V3title = readFileSync(path.join(__dirname, "/fixtures/reports/V3-title.md"), "utf-8");
+export const V3summary = readFileSync(path.join(__dirname, "/fixtures/reports/V3-summary.md"), "utf-8");
+export const V3message = readFileSync(path.join(__dirname, "/fixtures/reports/V3-message.md"), "utf-8");
 
 describe("Checks that the Json received from Maracas is correctly parsed", () => {
     test("mainParse, no clients tested", async (done) => {
@@ -36,5 +41,17 @@ describe("Checks that the Json received from Maracas is correctly parsed", () =>
         ]
 
         done(expect(myReport).toStrictEqual(mockReportv2))
+    })
+
+    test("parsing the new Json, with clients", async (done) => {
+        const myReport = parseJson(payloadv3, 10)
+
+        const mockReportv3 = [
+            V3title,
+            V3summary,
+            V3message
+        ]
+
+        done(expect(myReport).toStrictEqual(mockReportv3))
     })
 })

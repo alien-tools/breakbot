@@ -21,3 +21,21 @@ export function parseJsonMain(myJson: any, nMax: number) {
 
     return ([titleReturned, summaryReturned, messageReturned])
 }
+
+export function parseJson(myJson: any, nMax: number) {
+    const n = myJson.report.delta.brokenDeclarations.length
+
+    var titleReturned = `This PR introduces ${n} breaking changes in the base branch.`
+    var summaryReturned = ""
+    var messageReturned = ""
+
+    // Summary
+
+
+    // Detail on the BC
+    myJson.report.delta.brokenDeclarations.slice(0, nMax).forEach((brokenDeclaration: any) => {
+        messageReturned += `\n### The declaration [${brokenDeclaration.declaration}](${brokenDeclaration.url}) is impacted by _${brokenDeclaration.change}_`
+    })
+
+    return ([titleReturned, summaryReturned, messageReturned])
+}
