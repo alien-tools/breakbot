@@ -1,5 +1,5 @@
 
-export function parseJsonMain(myJson: any, nMax: number) {
+export function parseJsonMain(myJson: any, maxClients: number, maxBC: number) {
     const n = myJson.delta.breakingChanges.length
 
     var titleReturned = `This PR introduces ${n} breaking changes in the base branch.`
@@ -9,11 +9,11 @@ export function parseJsonMain(myJson: any, nMax: number) {
     // To complete with a summary
 
     // Detail on the BC
-    myJson.delta.breakingChanges.slice(0, nMax).forEach((breakingChange: any) => {
+    myJson.delta.breakingChanges.slice(0, maxBC).forEach((breakingChange: any) => {
         
         messageReturned += `\n### The declaration [${breakingChange.declaration}](${breakingChange.url}) is impacted by _${breakingChange.type}_`
         
-        breakingChange.detections.slice(0, nMax).forEach((detection: any) => {
+        breakingChange.detections.slice(0, maxClients).forEach((detection: any) => {
             messageReturned += `\n- Declaration [${detection.elem}](${detection.url}) in [this client](${detection.clientUrl})`
         });
 
@@ -22,7 +22,7 @@ export function parseJsonMain(myJson: any, nMax: number) {
     return ([titleReturned, summaryReturned, messageReturned])
 }
 
-export function parseJson(myJson: any, nMax: number) {
+export function parseJson(myJson: any, maxClients: number, maxBC: number) {
     const n = myJson.report.delta.brokenDeclarations.length
 
     var titleReturned = `This PR introduces ${n} breaking changes in the base branch.`
@@ -33,7 +33,7 @@ export function parseJson(myJson: any, nMax: number) {
 
 
     // Detail on the BC
-    myJson.report.delta.brokenDeclarations.slice(0, nMax).forEach((brokenDeclaration: any) => {
+    myJson.report.delta.brokenDeclarations.slice(0, maxBC).forEach((brokenDeclaration: any) => {
         messageReturned += `\n### The declaration [${brokenDeclaration.declaration}](${brokenDeclaration.url}) is impacted by _${brokenDeclaration.change}_`
 
         const myDetections = myJson.report.detections.filter((detection: any) => detection.src == brokenDeclaration.declaration)
@@ -42,7 +42,7 @@ export function parseJson(myJson: any, nMax: number) {
             messageReturned += `\n- **No clients** are impacted by this breaking change`
         }
         else {
-            myDetections.forEach((detection: any) => {
+            myDetections.slice(0, maxClients).forEach((detection: any) => {
                 messageReturned += `\n- Declaration [${detection.elem}](${detection.url}) in [this client](${detection.clientUrl})`
             })
         }

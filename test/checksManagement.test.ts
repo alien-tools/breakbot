@@ -3,6 +3,13 @@ import { reportData, webhookData } from "../src/authData"
 import { globalVars } from "./globalVarsTests"
 import * as checksManagement from "../src/checksManagement"
 import payloadv2 from "./fixtures/maracas.v2.json";
+import { parseJsonMain } from "../src/formatJson";
+
+jest.mock('../src/formatJson.ts', () => ({
+    parseJsonMain: jest.fn((Json: any, bcMax: number, clientMax: number) => {
+        return (["Title", "Summary", "Text"])
+    })
+}))
 
 describe("Testing check management in normal conditions", () => {
 
@@ -64,9 +71,21 @@ describe("Testing check management in normal conditions", () => {
         done(expect(mockOctokit.request).toBeCalledWith(`PATCH /repos/${myVars.baseRepo}/check-runs/${myVars.checkId }`, check))
     })
 
-    test("finalUpdate", async (done) => {
+    test("finalUpdate, no config", async (done) => {
         checksManagement.finalUpdate(mockReportDatas, payloadv2)
 
+        expect(parseJsonMain).toBeCalledWith(payloadv2, myVars.defaultMax, myVars.defaultMax)
+        done(expect(mockOctokit.request.mock.calls[0][0]).toStrictEqual(`PATCH /repos/${myVars.baseRepo}/check-runs/${myVars.checkId}`))
+    })
+
+    test("finalUpdate, simple config", async (done) => { // to complete
+        mockReportDatas.config = {}
+        mockReportDatas.config.maxDisplayedBC = myVars.bcMax
+        mockReportDatas.config.maxDisplayedClients = myVars.clMax
+
+        checksManagement.finalUpdate(mockReportDatas, payloadv2)
+
+        expect(parseJsonMain).toBeCalledWith(payloadv2, myVars.bcMax, myVars.clMax)
         done(expect(mockOctokit.request.mock.calls[0][0]).toStrictEqual(`PATCH /repos/${myVars.baseRepo}/check-runs/${myVars.checkId}`))
     })
 
