@@ -25,15 +25,26 @@
         },
         "detections": [
             {
-                "clientUrl": null,
+                "clientUrl": "https://github.com/ImMeta/testRepo",
                 "elem": "trystatement.getBody()",
                 "used": "getBody()",
-                "src": "spoon.reflect.code.CtTry.getBody()",
+                "src": "spoon.reflect.code.CtCatch.getBody()",
                 "apiUse": "METHOD_INVOCATION",
                 "path": "/home/dig/maracas-rest/clones/SpoonLabs/99cb46a29fed5b96771bc6f9bd720a19aad3a0a9/src/main/java/fr/inria/coming/codefeatures/codeanalyze/AbstractCodeAnalyzer.java",
                 "startLine": 1116,
                 "endLine": 1116,
-                "url": null
+                "url": "https://github.com/ImMeta/testRepo/src/main.java"
+            },
+            {
+                "clientUrl": "https://github.com/ImMeta/testRepo",
+                "elem": "catchstatement.getBody()",
+                "used": "getBody()",
+                "src": "spoon.reflect.code.CtCatch.getBody()",
+                "apiUse": "METHOD_INVOCATION",
+                "path": "/home/dig/maracas-rest/clones/SpoonLabs/99cb46a29fed5b96771bc6f9bd720a19aad3a0a9/src/main/java/fr/inria/coming/codefeatures/codeanalyze/AbstractCodeAnalyzer.java",
+                "startLine": 1116,
+                "endLine": 1116,
+                "url": "https://github.com/ImMeta/testRepo/src/index.java"
             }
         ],
         "error": null

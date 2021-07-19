@@ -1,6 +1,6 @@
 
 ### The declaration [spoon.reflect.code.CtBodyHolder.getBody()](https://github.com/spoon/spoon/blob/main//src/main/CtBodyHolder.java) is impacted by _METHOD_REMOVED_
-- Declaration [mainclient.methodAbstractNowDefault.AbsMethodAbstractNowDefaultMultiIntSub](https://github.com/tdegueul/comp-changes-client/blob/main//src/mainclient/methodAbstractNowDefault/AbsMethodAbstractNowDefaultMultiIntSub.java#L6-L8) in [this client](https://github.com/tdegueul/comp-changes-client)
-- Declaration [mainclient.methodAbstractNowDefault.AbsMethodAbstractNowDefaultMultiInt](https://github.com/tdegueul/comp-changes-client/blob/main//src/mainclient/methodAbstractNowDefault/AbsMethodAbstractNowDefaultMultiInt.java#L6-L8) in [this client](https://github.com/tdegueul/comp-changes-client)
+- **No clients** are impacted by this breaking change
 ### The declaration [spoon.reflect.code.CtCatch.getBody()](https://github.com/spoon/spoon/blob/main//src/main/CtCatch.java) is impacted by _METHOD_REMOVED_
-- Declaration [mainclient.constructorRemoved.ConstructorRemovedExtNoParams.ConstructorRemovedExtNoParams()](https://github.com/tdegueul/comp-changes-client/blob/main//src/mainclient/constructorRemoved/ConstructorRemovedExtNoParams.java#L7-L9) in [this client](https://github.com/tdegueul/comp-changes-client)
+- Declaration [trystatement.getBody()](https://github.com/ImMeta/testRepo/src/main.java) in [this client](https://github.com/ImMeta/testRepo)
+- Declaration [catchstatement.getBody()](https://github.com/ImMeta/testRepo/src/index.java) in [this client](https://github.com/ImMeta/testRepo)

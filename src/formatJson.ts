@@ -35,6 +35,17 @@ export function parseJson(myJson: any, nMax: number) {
     // Detail on the BC
     myJson.report.delta.brokenDeclarations.slice(0, nMax).forEach((brokenDeclaration: any) => {
         messageReturned += `\n### The declaration [${brokenDeclaration.declaration}](${brokenDeclaration.url}) is impacted by _${brokenDeclaration.change}_`
+
+        const myDetections = myJson.report.detections.filter((detection: any) => detection.src == brokenDeclaration.declaration)
+        
+        if (myDetections.length == 0) {
+            messageReturned += `\n- **No clients** are impacted by this breaking change`
+        }
+        else {
+            myDetections.forEach((detection: any) => {
+                messageReturned += `\n- Declaration [${detection.elem}](${detection.url}) in [this client](${detection.clientUrl})`
+            })
+        }
     })
 
     return ([titleReturned, summaryReturned, messageReturned])
