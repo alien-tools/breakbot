@@ -1,11 +1,13 @@
 
 function countClients(detections: any) {
 
+    // to modify: how to identify a client 
+
     let clients = new Map()
     
     detections.forEach((detection: any) => {
         if (!clients.has(detection.clientUrl)) {
-            clients.set(detection.clientUrl, 1)            
+            clients.set(detection.clientUrl, 1)
         }
         else {
             const newValue = clients.get(detection.clientUrl)
