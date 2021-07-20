@@ -1,0 +1,63 @@
+{
+    "message": "ok",
+    "report": {
+        "delta": {
+            "jarV1": "file:///home/dig/maracas-rest/./clones/381618567/8ebca446de98192d1a993f8bf41cbfc1ffb0924c/target/spoon-core-9.1.0-SNAPSHOT.jar",
+            "jarV2": "file:///home/dig/maracas-rest/./clones/381618567/14188a899d1d88edbad36e09e701d3ebdebb607b/target/spoon-core-9.1.0-SNAPSHOT.jar",
+            "brokenDeclarations": [
+                {
+                    "declaration": "spoon.reflect.code.CtBodyHolder.getBody()",
+                    "change": "METHOD_REMOVED",
+                    "path": "",
+                    "startLine": -1,
+                    "endLine": -1,
+                    "url": "https://github.com/spoon/spoon/blob/main//src/main/CtBodyHolder.java"
+                },
+                {
+                    "declaration": "spoon.reflect.code.CtCatch.getBody()",
+                    "change": "METHOD_REMOVED",
+                    "path": "",
+                    "startLine": -1,
+                    "endLine": -1,
+                    "url": "https://github.com/spoon/spoon/blob/main//src/main/CtCatch.java"
+                }
+            ]
+        },
+        "detections": [
+            {
+                "clientUrl": "https://github.com/ImMeta/testRepo",
+                "elem": "trystatement.getBody()",
+                "used": "getBody()",
+                "src": "spoon.reflect.code.CtCatch.getBody()",
+                "apiUse": "METHOD_INVOCATION",
+                "path": "/home/dig/maracas-rest/clones/SpoonLabs/99cb46a29fed5b96771bc6f9bd720a19aad3a0a9/src/main/java/fr/inria/coming/codefeatures/codeanalyze/AbstractCodeAnalyzer.java",
+                "startLine": 1116,
+                "endLine": 1116,
+                "url": "https://github.com/ImMeta/testRepo/src/main.java"
+            },
+            {
+                "clientUrl": "https://github.com/ImUser/OtherRepo",
+                "elem": "catchstatement.getBody()",
+                "used": "getBody()",
+                "src": "spoon.reflect.code.CtCatch.getBody()",
+                "apiUse": "METHOD_INVOCATION",
+                "path": "/home/dig/maracas-rest/clones/SpoonLabs/99cb46a29fed5b96771bc6f9bd720a19aad3a0a9/src/main/java/fr/inria/coming/codefeatures/codeanalyze/AbstractCodeAnalyzer.java",
+                "startLine": 1116,
+                "endLine": 1116,
+                "url": "https://github.com/ImUser/OtherRepo/src/index.java"
+            },
+            {
+                "clientUrl": "https://github.com/ImMeta/testRepo",
+                "elem": "statement.getBody()",
+                "used": "getBody()",
+                "src": "spoon.reflect.code.CtCatch.getBody()",
+                "apiUse": "METHOD_INVOCATION",
+                "path": "/home/dig/maracas-rest/clones/SpoonLabs/99cb46a29fed5b96771bc6f9bd720a19aad3a0a9/src/main/java/fr/inria/coming/codefeatures/codeanalyze/AbstractCodeAnalyzer.java",
+                "startLine": 1116,
+                "endLine": 1116,
+                "url": "https://github.com/ImMeta/testRepo/src/index.java"
+            }
+        ],
+        "error": null
+    }
+}
