@@ -18,12 +18,16 @@ export async function sendRequest(myDatas: webhookData) {
                 'installationId': myDatas.installationId
             }
         });
-        console.log(`[sendRequest] Status from Maracas: ${result.status}\n[sendRequest] message: ${result.message}`)
+
+        console.log(`[sendRequest] Status from Maracas: ${result.status}`)
+    
         if (result.status == 202) {
             checksManagement.inProgress(myDatas)
         }
         else {
-            console.log(`[sendRequest] Status from Maracas: ${result.status}`);
+            result = await result.json()
+            console.log(`[sendRequest] message: ${result.message}`)
+            checksManagement.failed(myDatas, result.message)
         }
     }
     catch (err: any) {

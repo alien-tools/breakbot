@@ -1,9 +1,26 @@
 import { webhookData, reportData } from "./authData";
 import { parseJsonMain } from "./formatJson";
 
-const inProgress = async (myDatas: webhookData) => {
-    const check =
-    {
+export const failed = async (myDatas: webhookData, message: string) => {
+    const check = {
+        status: "completed",
+        conclusion: "cancelled",
+        output: {
+            title: "Something went wrong",
+            summary: message
+        }
+    }
+
+    try {
+        myDatas.myOctokit.request(`PATCH /repos/${myDatas.baseRepo}/check-runs/${myDatas.checkId}`, check);
+    }
+    catch (err) {
+        console.error(err)
+    }
+}
+
+export const inProgress = async (myDatas: webhookData) => {
+    const check = {
         status: "in_progress",
         output: {
             title: "Maracas is processing...",
@@ -18,7 +35,7 @@ const inProgress = async (myDatas: webhookData) => {
     }
 }
 
-const finalUpdate = async (myDatas: reportData, myJson: any) => {
+export const finalUpdate = async (myDatas: reportData, myJson: any) => {
 
     console.log(`[updateCheck] Message received from Maracas: ${myJson.message}`)
 
@@ -74,7 +91,7 @@ const finalUpdate = async (myDatas: reportData, myJson: any) => {
     }
 }
 
-async function createCheck(myDatas: webhookData) {
+export async function createCheck(myDatas: webhookData) {
     console.log(`[createCheck] Starting...`)
 
     const output =
@@ -103,5 +120,3 @@ async function createCheck(myDatas: webhookData) {
 
     return myDatas
 }
-
-export { inProgress, finalUpdate, createCheck }

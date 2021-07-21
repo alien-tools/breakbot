@@ -4,6 +4,8 @@ import * as maracas from "../src/maracas"
 import * as checks from "../src/checksManagement"
 import { globalVars } from "./globalVarsTests"
 
+import payload404 from "./fixtures/maracas.404.json";
+
 jest.mock('../src/checksManagement')
 
 describe("Test interractions with Maracas", () => {
@@ -29,7 +31,7 @@ describe("Test interractions with Maracas", () => {
                 }
             })
             .post(myVars.completeMaracasUrl.slice(myVars.maracasUrl.length))
-            .reply(202)
+            .reply(202, {message: "ok"})
         
         await maracas.sendRequest(mockDatas)
 
@@ -37,7 +39,7 @@ describe("Test interractions with Maracas", () => {
         done(expect(checks.inProgress).toHaveBeenCalled())
     })
 
-    test("sendRequest doesn't update the test if Maracas sends an error", async (done) => {
+    test("sendRequest update the test with a different message if Maracas sends an error", async (done) => {
         const scope = nock(myVars.maracasUrl, {
                 reqheaders: {
                     'Content-Type': 'application/json',
@@ -45,12 +47,12 @@ describe("Test interractions with Maracas", () => {
                 }
             })
             .post(myVars.completeMaracasUrl.slice(myVars.maracasUrl.length))
-            .reply(404)
+            .reply(404, payload404)
 
         await maracas.sendRequest(mockDatas)
 
         expect(scope.isDone()).toBe(true)
-        done(expect(checks.inProgress).not.toHaveBeenCalled())
+        done(expect(checks.failed).toHaveBeenCalledWith(mockDatas, "An error occured"))
     })
 
     afterEach(() => {
