@@ -1,6 +1,8 @@
 import payloadv1 from "./fixtures/maracas.v1.json";
 import payloadv2 from "./fixtures/maracas.v2.json";
 import payloadv3 from "./fixtures/maracas.v3.json";
+import payloadv4 from "./fixtures/maracas.v4.json";
+
 import { parseJsonMain, parseJson } from "../src/formatJson";
 
 import { readFileSync } from "fs";
@@ -18,6 +20,10 @@ export const V3title = readFileSync(path.join(__dirname, "/fixtures/reports/V3-t
 export const V3summary = readFileSync(path.join(__dirname, "/fixtures/reports/V3-summary.md"), "utf-8");
 export const V3message = readFileSync(path.join(__dirname, "/fixtures/reports/V3-message.md"), "utf-8");
 
+export const V4title = readFileSync(path.join(__dirname, "/fixtures/reports/V4-title.md"), "utf-8");
+export const V4summary = readFileSync(path.join(__dirname, "/fixtures/reports/V4-summary.md"), "utf-8");
+export const V4message = readFileSync(path.join(__dirname, "/fixtures/reports/V4-message.md"), "utf-8");
+
 describe("Checks that the Json received from Maracas is correctly parsed", () => {
     test("mainParse, no clients tested", async (done) => {
         const myReport = parseJsonMain(payloadv1, 10, 10)
@@ -31,7 +37,7 @@ describe("Checks that the Json received from Maracas is correctly parsed", () =>
         done(expect(myReport).toStrictEqual(mockReportv1))
     })
 
-    test("mainParse, with clients", async (done) => {
+    test("mainParse, with 1 client", async (done) => {
         const myReport = parseJsonMain(payloadv2, 10, 10)
 
         const mockReportv2 = [
@@ -43,7 +49,7 @@ describe("Checks that the Json received from Maracas is correctly parsed", () =>
         done(expect(myReport).toStrictEqual(mockReportv2))
     })
 
-    test("parsing the new Json, with clients", async (done) => {
+    test("parsing the new Json, with 1 client", async (done) => {
         const myReport = parseJson(payloadv3, 10, 10)
 
         const mockReportv3 = [
@@ -53,5 +59,17 @@ describe("Checks that the Json received from Maracas is correctly parsed", () =>
         ]
 
         done(expect(myReport).toStrictEqual(mockReportv3))
+    })
+
+    test("parsing the new Json, with several clients", async (done) => {
+        const myReport = parseJson(payloadv4, 10, 10)
+
+        const mockReportv4 = [
+            V4title,
+            V4summary,
+            V4message
+        ]
+
+        done(expect(myReport).toStrictEqual(mockReportv4))
     })
 })
