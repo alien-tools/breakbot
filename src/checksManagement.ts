@@ -1,5 +1,5 @@
 import { webhookData, reportData } from "./authData";
-import { parseJson } from "./formatJson";
+import { parseJsonMain } from "./formatJson";
 
 const inProgress = async (myDatas: webhookData) => {
     const check =
@@ -49,8 +49,8 @@ const finalUpdate = async (myDatas: reportData, myJson: any) => {
     }
 
 
-    const parsedJson = parseJson(myJson, maxBC, maxClients)
-    //const parsedJson = parseJsonMain(myJson, maxBC, maxClients)
+    //const parsedJson = parseJson(myJson, maxBC, maxClients)
+    const parsedJson = parseJsonMain(myJson, maxBC, maxClients)
 
     newOutput.title += parsedJson[0]
 
