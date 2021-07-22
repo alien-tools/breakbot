@@ -1,109 +1,38 @@
 # Break-Bot: code details
 
-## How to start break-bot
-
-### Locally
-This doesn't work right now unless you change the adress both in the .env and on the app configuration page.
-```sh
-# Install dependencies
-npm install
-
-# Build the app
-npm run build
-
-# Run the bot
-npm start
-```
-
-### Locally with heroku
-Not recommended since there is an issue with config vars (see last part, Hosting, for more details).
-Uses the Procfile to start, instead of the package.json
-```sh
-# Install dependencies
-npm install
-
-# Build the app
-npm run build
-
-# Run the bot
-heroku local web
-```
-
-### Deploy on heroku
-For more informations, see the last part **Hosting: Heroku**
-```sh
-# To push from main
-git push heroku main
-
-# To push from a different branch than main
-git push heroku testbranch:main
-```
-
-## Config vars
-
-Located in .env during local developpment, and directly managed by heroku.
-
-### Used by probot
-- APP\_ID: the id given by github to the app when registered
-- GITHUB\_CLIENT\_ID: ?
-- GITHUB\_CLIENT\_SECRET: ?
-- PRIVATE\_KEY: the RSA access key used to connect as an app to github, read differently in heroku local development mode
-- WEBHOOk\_PROXY\_URL: the adress of the app (is also declared diectly on github)
-- WEBHOOK\_SECRET: ?
-
-### Unique to breakbot
-- MARACAS\_URL: The url of the api Maracs, which performs the tests)
-
 ## Code sructure
 
 Initialised from the "basic-ts => Comment on new issues - written in TypeScript" probot
 [general tuto](https://probot.github.io/docs/)
 
-Composed of different levels: 
-- Reception: from webhooks and http requests
-- Handlers
-- Interaction with Maracas
-- Checks management
-- Parsing
+Composed of different aspects: 
+1. The [reception](./src/index.ts) initializes the routes available to communicate with the bot. An http route for Maracas to send the report to the bot and a [webhook](https://docs.github.com/en/developers/webhooks-and-events/webhooks/about-webhooks) endpoint for interracting with the repository.
+2. The [handlers](./src/handlers.ts) organizes the reactions of the bot to the events listed above.
+3. The [interaction with Maracas](./src/maracas.ts) notify Maracas about the new pull request.
+4. The [checks management](./src/checksManagement.ts) contains ll the functions used to create and update checks.
+5. The [parsing](./src/formatJson) reads the json received from maracas and format it into an array of three fields: a title, a summary and a complete list of the breaking changes.
 
-These scripts use authDatas structures to authenticate to github and store the information needed.
+These scripts use [authData classes](./src/authData.ts) to store the information needed to authenticate to github and identify the current pull request.
 
-### AuthDatas
-Store the informations and contains methods to authenticate to github or complete the missing informations.
+### [AuthData](./src/authData.ts): an abstract class
+This class stores the informations about the pull request and contains methods to authenticate to github or complete the missing informations. Implemented in two different subclasses, depending on how they were initialized.
 
-#### Self-authentication
-Instead of connecting with Probot.auth (seen [here](https://probot.github.io/api/latest/classes/probot.html))
-We use [octokit identification](https://octokit.github.io/rest.js/v18#authentication)
-As described [here](https://github.com/octokit/auth-app.js/)
-To connect again to the repositry whenever necessary.
-For general informations on authentification for github apps, click [here](https://docs.github.com/en/rest/overview/resources-in-the-rest-api#authentication)
+1. **webhookDatas**: initialized from a webhook, which contains a lot of information, including an already initialized [octokit](https://octokit.github.io/rest.js/v18)
 
-### Reception
-[Script](./src/index.ts)
-The main script: creates the probot app and the endpoints. Create a check on the last commit added to the PR.
+2. **reportDatas**: initialized with little informations, to publish Maracas' report.
+    - Self-authentication: Instead of connecting with Probot.auth (seen [here](https://probot.github.io/api/latest/classes/probot.html)) we use [octokit identification](https://octokit.github.io/rest.js/v18#authentication) as described [here](https://github.com/octokit/auth-app.js/) to connect again to the repositry whenever necessary.
+    For general informations on authentication for github apps, click [here](https://docs.github.com/en/rest/overview/resources-in-the-rest-api#authentication).
 
-#### Webhooks
-Nothing fancy, using the regular expressions from [here](https://probot.github.io/docs/webhooks/) to receive notifications form github.
+
+### [Reception](./src/index.ts)
+
+- **Webhooks**: Nothing fancy, using the regular expressions from [here](https://probot.github.io/docs/webhooks/) to receive notifications form github.
 For details on events names, see [here](https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads)
 
-#### Router
-Using express and the [default router in probot](https://probot.github.io/docs/http/) to receive request form Maracas Api once the job ends (**push** mode)
+- **Router**: Using express and the [default router in probot](https://probot.github.io/docs/http/) to receive request form Maracas Api once the job ends (**push** mode)
 
-### Handlers
-2 uses cases: they deal with a webhook or with a request from Maracas.
-
-### Interractions with MaracasApi
-[Script](./src/messagesApis.ts)
-Deals with the Maracas Api: sends the request and wait for the answer, wether in push mode, or in poll mode.
-Rq: For the moment, if there is an error with the initial request, break-bot just forfeit on this PR.
-
-### Checks management
-[Checks management](./src/checksManagement.ts)
-Used to create the check, mark them as in progress, and upload the last report.
-
-### Layout the final report: parsing the Json
-[Script](./src/formatJson.ts)
-Layout correctly the datas gathered. 
+### [Interractions with MaracasApi](./src/maracas.ts)
+This script is called by a handler after a new check is requested: It notifies maracas that a new report is needed, create a new check on the pull request and updates it with the maracas response: if everything is ok, it confirm that maracas is processing the request, else it displays the error message in the check summary.
 
 ## Hosting: Heroku
 Tutorials:
@@ -111,21 +40,27 @@ Tutorials:
 - [Preparing an app for heroku](https://devcenter.heroku.com/articles/preparing-a-codebase-for-heroku-deployment) 
 - [probot doc for using heroku](https://probot.github.io/docs/deployment/#heroku)
 
-Rq: Probot seems to choose its listenning port correctly for heroku (to check during tests)
+Rq: Probot seems to choose its listenning port correctly for heroku
 
 Also, heroku (in local) only works with the secret key read from file with [fs](https://nodejs.dev/learn/reading-files-with-nodejs) in synchronous mode.Since this method doesn't work with a normal deployement on heroku, we use the sercet key in .env instead.
 
-## Tests: jest
+## Tests
+The tests are base on [jest](), and the http requests are mocked with [nock]().
+
+```sh
+# run the tests locally
+npm test
+```
 
 ### Testing structure
 
-All variables used for tests are stored in the [globalVarsTests](./test/globalVarsTests.ts). This includes:
+All variables used during tests are stored in the [globalVars](./test/globalVarsTests.ts) class. This includes:
 - URLs
 - environment variables
 - git variables
 
-The json files used to mock different messages from github and maracas are store in the [fixture folder](./test/fixtures)
+The json files used to mock different messages from github and maracas are stored in the [fixture folder](./test/fixtures)
 
-The examples of generated reports (in three parts since the comments are displayed as a Title, a summary and a text), are located in the [reports folder](./test/fixtures/reports).
+The examples of generated reports (in three parts since the reports are displayed as a Title, a summary and a text), are located in the [reports folder](./test/fixtures/reports).
 
 /!\ Even though the summary and the text support markdown, the title is only saved as a markdown file for practicity and doesn't support markdown on github.
