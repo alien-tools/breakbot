@@ -71,6 +71,24 @@ describe("Testing check management in normal conditions", () => {
         done(expect(mockOctokit.request).toBeCalledWith(`PATCH /repos/${myVars.baseRepo}/check-runs/${myVars.checkId }`, check))
     })
 
+    test("failed", async (done) => {
+        mockWebhookDatas.checkId = myVars.checkId
+
+        const check =
+        {
+            status: "completed",
+            conclusion: "cancelled",
+            output: {
+                title: "Something went wrong",
+                summary: "Not found"
+            }
+        }
+
+        checksManagement.failed(mockWebhookDatas, "Not found")
+
+        done(expect(mockOctokit.request).toBeCalledWith(`PATCH /repos/${myVars.baseRepo}/check-runs/${myVars.checkId}`, check))
+    })
+
     test("finalUpdate, no config", async (done) => {
         checksManagement.finalUpdate(mockReportDatas, payloadv2)
 
