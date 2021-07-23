@@ -1,0 +1,6 @@
+{   
+    "extends": "@istanbuljs/nyc-config-typescript",
+    "exclude": [
+        "test/globalVarsTests.ts"
+    ]
+}
