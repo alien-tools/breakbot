@@ -143,13 +143,8 @@ export class reportData extends authData {
         return newDatas
     }
 
-    async connectToGit(installationId?: number) {
-        console.log(`[connectToGit] Starting, with given id ${installationId} and set id ${this.installationId}`)
-
-        if (installationId) {
-            console.log(`[connectToGit] Changing installationId...`)
-            this.installationId = installationId
-        }
+    async connectToGit() {
+        console.log(`[connectToGit] Starting, with set id ${this.installationId}`)
 
         this.myOctokit = new Octokit({
             authStrategy: createAppAuth,
