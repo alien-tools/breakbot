@@ -45,7 +45,7 @@ export function impactOnClients(detections: any, clients: Map<string, number>) {
     return returnString
 }
 
-export function parseJsonMain(myJson: any, maxClients: number, maxBC: number) {
+export function parseJson(myJson: any, maxClients: number, maxBC: number) {
     const n = myJson.delta.breakingChanges.length
 
     var titleReturned = `This PR introduces ${n} breaking changes in the base branch.`
@@ -68,7 +68,7 @@ export function parseJsonMain(myJson: any, maxClients: number, maxBC: number) {
     return ([titleReturned, summaryReturned, messageReturned])
 }
 
-export function parseJson(myJson: any, maxClients: number, maxBC: number) {
+export function parseJsonMain(myJson: any, maxClients: number, maxBC: number) {
 
     const n = myJson.report.delta.brokenDeclarations.length
 
