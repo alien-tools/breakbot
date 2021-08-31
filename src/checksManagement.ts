@@ -1,5 +1,5 @@
 import { webhookData, reportData } from "./authData";
-import { parseJsonMain } from "./formatJson";
+import { parseJson } from "./formatJson";
 
 export const failed = async (myDatas: webhookData, message: string) => {
     const check = {
@@ -66,8 +66,7 @@ export const finalUpdate = async (myDatas: reportData, myJson: any) => {
     }
 
 
-    //const parsedJson = parseJson(myJson, maxBC, maxClients)
-    const parsedJson = parseJsonMain(myJson, maxBC, maxClients)
+    const parsedJson = parseJson(myJson, maxBC, maxClients)
 
     newOutput.title += parsedJson[0]
 

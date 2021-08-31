@@ -1,10 +1,8 @@
-import payloadv1 from "./fixtures/maracas.v1.json";
-import payloadv2 from "./fixtures/maracas.v2.json";
 import payloadv3 from "./fixtures/maracas.v3.json";
 import payloadv4 from "./fixtures/maracas.v4.json";
 import payloadv5 from "./fixtures/maracas.v5.json";
 
-import { parseJsonMain, parseJson } from "../src/formatJson";
+import { parseJson } from "../src/formatJson";
 
 import { readFileSync } from "fs";
 const path = require("path");
@@ -30,30 +28,6 @@ export const V5summary = readFileSync(path.join(__dirname, "/fixtures/reports/V5
 export const V5message = readFileSync(path.join(__dirname, "/fixtures/reports/V5-message.md"), "utf-8");
 
 describe("Checks that the Json received from Maracas is correctly parsed", () => {
-    test("mainParse, no clients tested", async (done) => {
-        const myReport = parseJsonMain(payloadv1, 10, 10)
-
-        const mockReportv1 = [
-            V1title,
-            V1summary,
-            V1message
-        ]
-
-        done(expect(myReport).toStrictEqual(mockReportv1))
-    })
-
-    test("mainParse, with 1 client", async (done) => {
-        const myReport = parseJsonMain(payloadv2, 10, 10)
-
-        const mockReportv2 = [
-            V2title,
-            V2summary,
-            V2message
-        ]
-
-        done(expect(myReport).toStrictEqual(mockReportv2))
-    })
-
     test("parsing the new Json, with 1 client", async (done) => {
         const myReport = parseJson(payloadv3, 10, 10)
 

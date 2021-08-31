@@ -2,11 +2,11 @@ import nock from "nock"
 import { reportData, webhookData } from "../src/authData"
 import { globalVars } from "./globalVarsTests"
 import * as checksManagement from "../src/checksManagement"
-import payloadv2 from "./fixtures/maracas.v2.json";
-import { parseJsonMain } from "../src/formatJson";
+import payloadv3 from "./fixtures/maracas.v3.json";
+import { parseJson } from "../src/formatJson";
 
 jest.mock('../src/formatJson.ts', () => ({
-    parseJsonMain: jest.fn((Json: any, bcMax: number, clientMax: number) => {
+    parseJson: jest.fn((Json: any, bcMax: number, clientMax: number) => {
         return (["Title", "Summary", "Text"])
     })
 }))
@@ -90,9 +90,9 @@ describe("Testing check management in normal conditions", () => {
     })
 
     test("finalUpdate, no config", async (done) => {
-        checksManagement.finalUpdate(mockReportDatas, payloadv2)
+        checksManagement.finalUpdate(mockReportDatas, payloadv3)
 
-        expect(parseJsonMain).toBeCalledWith(payloadv2, myVars.defaultMax, myVars.defaultMax)
+        expect(parseJson).toBeCalledWith(payloadv3, myVars.defaultMax, myVars.defaultMax)
         done(expect(mockOctokit.request.mock.calls[0][0]).toStrictEqual(`PATCH /repos/${myVars.baseRepo}/check-runs/${myVars.checkId}`))
     })
 
@@ -101,9 +101,9 @@ describe("Testing check management in normal conditions", () => {
         mockReportDatas.config.maxDisplayedBC = myVars.bcMax
         mockReportDatas.config.maxDisplayedClients = myVars.clMax
 
-        checksManagement.finalUpdate(mockReportDatas, payloadv2)
+        checksManagement.finalUpdate(mockReportDatas, payloadv3)
 
-        expect(parseJsonMain).toBeCalledWith(payloadv2, myVars.bcMax, myVars.clMax)
+        expect(parseJson).toBeCalledWith(payloadv3, myVars.bcMax, myVars.clMax)
         done(expect(mockOctokit.request.mock.calls[0][0]).toStrictEqual(`PATCH /repos/${myVars.baseRepo}/check-runs/${myVars.checkId}`))
     })
 

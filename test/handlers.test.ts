@@ -3,7 +3,7 @@ import {globalVars} from "./globalVarsTests"
 
 import payloadNewPr from "./fixtures/pull_request.opened.json"
 import payloadNewCheck from "./fixtures/check_run.requested_action.json"
-import payloadReport from "./fixtures/maracas.v2.json"
+import payloadReport from "./fixtures/maracas.v3.json"
 
 import nock from "nock"
 import { webhookData } from "../src/authData"
