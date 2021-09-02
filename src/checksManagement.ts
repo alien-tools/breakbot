@@ -54,11 +54,12 @@ export const finalUpdate = async (myDatas: reportData, myJson: any) => {
 
     //---Format the Json---
     // Generic declaration
-    var maxBC = 10
-    var maxClients = 10
+    var maxBCs = 50
+    var maxClients = 50
+    var maxDetections = 50
     if (myDatas.config?.maxDisplayedBC) {
-        maxBC = myDatas.config?.maxDisplayedBC
-        console.log(`[updateCheck] New max bc: ${maxBC}`)
+        maxBCs = myDatas.config?.maxDisplayedBC
+        console.log(`[updateCheck] New max bc: ${maxBCs}`)
     }
     if (myDatas.config?.maxDisplayedClients) {
         maxClients = myDatas.config?.maxDisplayedClients
@@ -66,7 +67,7 @@ export const finalUpdate = async (myDatas: reportData, myJson: any) => {
     }
 
 
-    const parsedJson = parseJson(myJson)
+    const parsedJson = parseJson(myJson, maxBCs, maxClients, maxDetections)
 
     newOutput.title += parsedJson[0]
 

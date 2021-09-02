@@ -1,4 +1,4 @@
-export function parseJson(myJson: any) {
+export function parseJson(myJson: any, maxBCs: number, maxClients: number, maxDetections: number) {
     if (myJson.report.error != null)
         return ([myJson.report.error, null, null])
 
@@ -18,14 +18,14 @@ export function parseJson(myJson: any) {
         
         Declaration | Kind | Impacted clients
         ----------- | ---- | ----------------
-        ${bcs.map((bc: any) => `
+        ${bcs.slice(0, maxBCs).map((bc: any) => `
         [\`${bc.declaration}\`](${bc.url}) | [\`${bc.change}\`]() | <WIP>
         `).join("")}
 
         #### Impact on clients
         Client | Status | Detections
         ------ | ------ | ----------
-        ${clients.map((c : any) => `
+        ${clients.slice(0, maxClients).map((c : any) => `
         [${c.url}](${c.url}) | ${c.detections > 0 ? `:x:` : `:heavy_check_mark`} | ${c.detections.length}
         `).join("")}
     `
@@ -36,7 +36,7 @@ export function parseJson(myJson: any) {
 
         Location | Breaking declaration | Kind | Use Type  
         -------- | -------------------- | ---- | --------
-        ${c.detections.map((d: any) => `
+        ${c.detections.slice(0, maxDetections).map((d: any) => `
         [\`${d.elem}\`](${d.url}) | \`${d.src}\` | <WIP> | \`${d.apiUse}\`
         `).join("")}
         `).join("")}
