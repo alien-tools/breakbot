@@ -45,13 +45,6 @@ export const finalUpdate = async (myDatas: reportData, myJson: any) => {
         identifier: "rerun"
     }]
 
-    var newOutput =
-    {
-        title: "",
-        summary: "",
-        text: ""
-    }
-
     //---Format the Json---
     // Generic declaration
     var maxBCs = 50
@@ -69,11 +62,12 @@ export const finalUpdate = async (myDatas: reportData, myJson: any) => {
 
     const parsedJson = parseJson(myJson, maxBCs, maxClients, maxDetections)
 
-    newOutput.title += parsedJson[0]
-
-    newOutput.summary += parsedJson[1]
-
-    newOutput.text += parsedJson[2]
+    var newOutput =
+    {
+        title: parsedJson[0],
+        summary: parsedJson[1],
+        text: parsedJson[2]
+    }
 
     const newCheck =
     {
