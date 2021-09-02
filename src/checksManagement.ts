@@ -66,7 +66,7 @@ export const finalUpdate = async (myDatas: reportData, myJson: any) => {
     }
 
 
-    const parsedJson = parseJson(myJson, maxBC, maxClients)
+    const parsedJson = parseJson(myJson)
 
     newOutput.title += parsedJson[0]
 

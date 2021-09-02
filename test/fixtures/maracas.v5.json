@@ -23,7 +23,7 @@
                 }
             ]
         },
-        "detections": [],
+        "clientDetections": [],
         "error": null
     }
 }

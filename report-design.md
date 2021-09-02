@@ -14,6 +14,14 @@ Some design goals:
 This pull request introduces **3 breaking changes**, causing **16 detections** in client code.
 **2 of 3 clients are impacted** by the changes (66%).
 
+#### Breaking changes
+
+Declaration | Kind | Impacted clients
+----------- | ---- | ----------------
+[`spoon.A`]()     | [`CLASS_LESS_ACCESSIBLE`]() | 1 ([SpoonLabs/nopol](https://github.com/SpoonLabs/nopol))
+[`spoon.B#m()`]() | [`METHOD_REMOVED`]() | 2 ([SpoonLabs/nopol](https://github.com/SpoonLabs/nopol), [SpoonLabs/flacoco](https://github.com/SpoonLabs/flacoco))
+[`spoon.B#f`]()   | [`FIELD_NOW_FINAL`]() | 0
+
 #### Impact on clients
 
 Client | Status | Detections
@@ -23,20 +31,12 @@ Client | Status | Detections
 [SpoonLabs/nopol](https://github.com/SpoonLabs/nopol) | :x: | [11]()
 — | :x: | 16
 
-#### Breaking changes
-
-Declaration | Kind | Impacted clients
------------ | ---- | ----------------
-[`spoon.A`]()     | [`CLASS_LESS_ACCESSIBLE`]() | 1 ([SpoonLabs/nopol](https://github.com/SpoonLabs/nopol))
-[`spoon.B#m()`]() | [`METHOD_REMOVED`]() | 2 ([SpoonLabs/nopol](https://github.com/SpoonLabs/nopol), [SpoonLabs/flacoco](https://github.com/SpoonLabs/flacoco))
-[`spoon.B#f`]()   | [`FIELD_NOW_FINAL`]() | 0
-
 ### Full report
 
 #### [SpoonLabs/flacoco](https://github.com/SpoonLabs/flacoco)
 
 Location | Breaking declaration | Kind | Use Type  
--------- | -------------------- | ---- | -------
+-------- | -------------------- | ---- | --------
 [`flacoco.X`]()     | [`spoon.A`]()     | [`CLASS_LESS_ACCESSIBLE`]() | `EXTENDS`
 [`flacoco.Y#a()`]() | [`spoon.B#f`]()   | [`FIELD_NOW_FINAL`]()       | `FIELD_ACCESS`
 [`flacoco.Z#b()`]() | [`spoon.B#m()`]() | [`METHOD_REMOVED`]()        | `METHOD_INVOCATION`
