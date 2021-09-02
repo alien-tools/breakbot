@@ -5,6 +5,7 @@ Some design goals:
   - Full details available (client by client, statement by statement, etc.)
   - 'Obscure' terminology (kinds of BCs, use types, etc.) should be documented (e.g., links to an external documentation)
   - Source code references (breaking declarations, broken statements in client code, etc.) should point to the actual code on GitHub
+  - TODO: check GitHub Checks' annotations API (can we weave BCs/detections directly in source code listings?)
 
 ---
 
