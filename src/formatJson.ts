@@ -15,35 +15,38 @@ export function parseJson(myJson: any, maxBCs: number, maxClients: number, maxDe
     var summary = stripIndent`
         This pull request introduces **${bcs.length} breaking changes**, causing **${detections.length} detections** in client code.
         **${brokenClients.length} of ${clients.length} clients are impacted** by the changes (${brokenClients.length / clients.length * 100}%).
+    `
 
-        #### Breaking changes
+    var message = stripIndent`
+        ### Breaking changes
         Declaration | Kind | Impacted clients
         ----------- | ---- | ----------------
     `
-
     
     bcs.slice(0, maxBCs).forEach((bc: any) => {
-        summary += "\n"
-        summary += `[\`${bc.declaration}\`](${bc.url}) | [\`${bc.change}\`]() | WIP`
+        message += "\n"
+        message += `[\`${bc.declaration}\`](${bc.url}) | [\`${bc.change}\`]() | WIP`
     })
 
-    summary += "\n\n"
-    summary += stripIndent`
-        #### Impact on clients
+    message += "\n\n"
+    message += stripIndent`
+        ### Impact on clients
         Client | Status | Detections
         ------ | ------ | ----------
     `
 
     clients.slice(0, maxClients).forEach((c : any) => {
-        summary += "\n"
-        summary += `[${c.url}](${c.url}) | ${c.detections.length > 0 ? `:x:` : `:heavy_check_mark`} | ${c.detections.length}`
+        message += "\n"
+        message += `[${c.url}](${c.url}) | ${c.detections.length > 0 ? `:x:` : `:heavy_check_mark:`} | ${c.detections.length}`
     })
 
-    var message = ""
+    message += "\n"
+    message += `— | ${detections.length > 0 ? `:x:` : `:heavy_check_mark:`} | ${detections.length}`;
+
     brokenClients.forEach((c: any) => {
+        message += "\n\n"
         message += stripIndent`
             #### [${c.url}](${c.url})
-
             Location | Breaking declaration | Kind | Use Type  
             -------- | -------------------- | ---- | --------
         `
@@ -52,8 +55,6 @@ export function parseJson(myJson: any, maxBCs: number, maxClients: number, maxDe
             message += "\n"
             message += `[\`${d.elem}\`](${d.url}) | \`${d.src}\` | WIP | \`${d.apiUse}\``
         })
-
-        message += "\n"
     })
 
     return ([title, summary, message])

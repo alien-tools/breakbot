@@ -29,7 +29,7 @@ export const V5message = readFileSync(path.join(__dirname, "/fixtures/reports/V5
 
 describe("Checks that the Json received from Maracas is correctly parsed", () => {
     test("parsing the new Json, with 1 client", async (done) => {
-        const myReport = parseJson(payloadv3, 10, 10)
+        const myReport = parseJson(payloadv3, 10, 10, 10)
 
         const mockReportv3 = [
             V3title,
@@ -41,7 +41,7 @@ describe("Checks that the Json received from Maracas is correctly parsed", () =>
     })
 
     test("parsing the new Json, with several clients", async (done) => {
-        const myReport = parseJson(payloadv4, 10, 10)
+        const myReport = parseJson(payloadv4, 10, 10, 10)
 
         const mockReportv4 = [
             V4title,
@@ -53,7 +53,7 @@ describe("Checks that the Json received from Maracas is correctly parsed", () =>
     })
 
     test("parsing the new Json, with no clients", async (done) => {
-        const myReport = parseJson(payloadv5, 10, 10)
+        const myReport = parseJson(payloadv5, 10, 10, 10)
 
         const mockReportv5 = [
             V5title,
