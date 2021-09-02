@@ -28,6 +28,11 @@ export function parseJson(myJson: any, maxBCs: number, maxClients: number, maxDe
         message += `[\`${bc.declaration}\`](${bc.url}) | [\`${bc.change}\`]() | WIP`
     })
 
+    if (bcs.length > maxBCs) {
+        message += "\n"
+        message += `*${bcs.length - maxBCs} additional breaking changes not shown.*`
+    }
+
     message += "\n\n"
     message += stripIndent`
         ### Impact on clients
@@ -39,6 +44,11 @@ export function parseJson(myJson: any, maxBCs: number, maxClients: number, maxDe
         message += "\n"
         message += `[${c.url}](${c.url}) | ${c.detections.length > 0 ? `:x:` : `:heavy_check_mark:`} | ${c.detections.length}`
     })
+
+    if (clients.length > maxClients) {
+        message += "\n"
+        message += `*${clients.length - maxClients} additional clients not shown.*`
+    }
 
     message += "\n"
     message += `— | ${detections.length > 0 ? `:x:` : `:heavy_check_mark:`} | ${detections.length}`;
@@ -55,6 +65,11 @@ export function parseJson(myJson: any, maxBCs: number, maxClients: number, maxDe
             message += "\n"
             message += `[\`${d.elem}\`](${d.url}) | \`${d.src}\` | WIP | \`${d.apiUse}\``
         })
+
+        if (c.detections.length > maxDetections) {
+            message += "\n"
+            message += `*${c.detections.length - maxDetections} additional detections not shown.*`
+        }
     })
 
     return ([title, summary, message])
