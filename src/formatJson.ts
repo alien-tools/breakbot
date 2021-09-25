@@ -14,7 +14,7 @@ export function parseJson(myJson: any, maxBCs: number, maxClients: number, maxDe
 
     var summary = stripIndent`
         This pull request introduces **${bcs.length} breaking changes**, causing **${detections.length} detections** in client code.
-        **${brokenClients.length} of ${clients.length} clients are impacted** by the changes (${brokenClients.length / clients.length * 100}%).
+        **${brokenClients.length} of ${clients.length} clients are impacted** by the changes (${Math.floor(brokenClients.length / clients.length * 100)}%).
     `
 
     var message = stripIndent`
