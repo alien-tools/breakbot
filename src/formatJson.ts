@@ -26,10 +26,10 @@ export function parseJson(myJson: any, maxBCs: number, maxClients: number, maxDe
     
     bcs.slice(0, maxBCs).forEach((bc: any) => {
         const impactedClients = clients.filter((c: any) =>
-            c.detections.filter((d: any) => d.src == bc.declaration).length > 0)
+            c.detections.filter((d: any) => d.src === bc.declaration).length > 0)
         const impactedDetections = clients.flatMap((c: any) =>
-            c.detections.filter((d: any) => d.src == bc.declaration))
-        const impactedClientsText = impactedClients.length > 0 ? `${impactedClients.length} (${impactedClients.map((c: any) => c.url)})` : "None"
+            c.detections.filter((d: any) => d.src === bc.declaration))
+        const impactedClientsText = impactedClients.length > 0 ? `${impactedClients.length} (${impactedClients.map((c: any) => `[${c.url}](${c.url})`).join(", ")})` : "None"
         const impactedDetectionsText = impactedDetections.length > 0 ? impactedDetections.length : "None"
 
         message += "\n"
@@ -70,8 +70,9 @@ export function parseJson(myJson: any, maxBCs: number, maxClients: number, maxDe
         `
 
         c.detections.slice(0, maxDetections).forEach((d: any) => {
+            const kind = bcs.find((bc: any) => bc.declaration === d.src).change
             message += "\n"
-            message += `[\`${d.elem}\`](${d.url}) | \`${d.src}\` | WIP | \`${d.apiUse}\``
+            message += `[\`${d.elem}\`](${d.url}) | \`${d.src}\` | \`${kind}\` | \`${d.apiUse}\``
         })
 
         if (c.detections.length > maxDetections) {
