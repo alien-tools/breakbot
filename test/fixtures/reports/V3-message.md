@@ -1,7 +1,17 @@
+### Breaking changes
+Declaration | Kind | Impacted clients
+----------- | ---- | ----------------
+[`spoon.reflect.code.CtBodyHolder.getBody()`](https://github.com/spoon/spoon/blob/main//src/main/CtBodyHolder.java) | [`METHOD_REMOVED`]() | WIP
+[`spoon.reflect.code.CtCatch.getBody()`](https://github.com/spoon/spoon/blob/main//src/main/CtCatch.java) | [`METHOD_REMOVED`]() | WIP
 
-### The declaration [spoon.reflect.code.CtBodyHolder.getBody()](https://github.com/spoon/spoon/blob/main//src/main/CtBodyHolder.java) is impacted by _METHOD_REMOVED_
-- **No clients** are impacted by this breaking change
-### The declaration [spoon.reflect.code.CtCatch.getBody()](https://github.com/spoon/spoon/blob/main//src/main/CtCatch.java) is impacted by _METHOD_REMOVED_
-- [This client](https://github.com/ImMeta/testRepo) was impacted 2 times:
-    - Declaration [trystatement.getBody()](https://github.com/ImMeta/testRepo/src/main.java)
-    - Declaration [catchstatement.getBody()](https://github.com/ImMeta/testRepo/src/index.java)
+### Impact on clients
+Client | Status | Detections
+------ | ------ | ----------
+[https://github.com/ImMeta/testRepo](https://github.com/ImMeta/testRepo) | :x: | 2
+— | :x: | 2
+
+#### [https://github.com/ImMeta/testRepo](https://github.com/ImMeta/testRepo)
+Location | Breaking declaration | Kind | Use Type
+-------- | -------------------- | ---- | --------
+[`trystatement.getBody()`](https://github.com/ImMeta/testRepo/src/main.java) | `spoon.reflect.code.CtCatch.getBody()` | WIP | `METHOD_INVOCATION`
+[`catchstatement.getBody()`](https://github.com/ImMeta/testRepo/src/index.java) | `spoon.reflect.code.CtCatch.getBody()` | WIP | `METHOD_INVOCATION`

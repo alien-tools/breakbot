@@ -17,6 +17,7 @@ export abstract class authData {
         verbose?: boolean;
         maxDisplayedBC?: number;
         maxDisplayedClients?: number;
+        maxDisplayedDetections?: number
     }
 
     constructor(baseRepo: string, installationId: number) {
@@ -90,6 +91,10 @@ export abstract class authData {
 
         if ((configFile.config.maxDisplayedClients) && (typeof (configFile.config.maxDisplayedClients) == "number")) {
             this.config.maxDisplayedClients = configFile.config.maxDisplayedClients
+        }
+
+        if ((configFile.config.maxDisplayedDetections) && (typeof (configFile.config.maxDisplayedDetections) == "number")) {
+            this.config.maxDisplayedDetections = configFile.config.maxDisplayedDetections
         }
         // set config var(s)
         

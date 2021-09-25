@@ -9,12 +9,13 @@ export function parseJson(myJson: any, maxBCs: number, maxClients: number, maxDe
     const clients = report.clientDetections
     const brokenClients = clients.filter((c: any) => c.detections.length > 0)
     const detections = brokenClients.flatMap((c: any) => c.detections)
+    const percentBroken = clients.length > 0 ? Math.floor(brokenClients.length / clients.length * 100) : 0
 
     const title = "Break-bot report"
 
     var summary = stripIndent`
         This pull request introduces **${bcs.length} breaking changes**, causing **${detections.length} detections** in client code.
-        **${brokenClients.length} of ${clients.length} clients are impacted** by the changes (${Math.floor(brokenClients.length / clients.length * 100)}%).
+        **${brokenClients.length} of ${clients.length} clients are impacted** by the changes (${percentBroken}%).
     `
 
     var message = stripIndent`
@@ -57,7 +58,7 @@ export function parseJson(myJson: any, maxBCs: number, maxClients: number, maxDe
         message += "\n\n"
         message += stripIndent`
             #### [${c.url}](${c.url})
-            Location | Breaking declaration | Kind | Use Type  
+            Location | Breaking declaration | Kind | Use Type
             -------- | -------------------- | ---- | --------
         `
 

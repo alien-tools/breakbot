@@ -26,6 +26,7 @@ export class globalVars {
     defaultMax: number; //hardcoed in finalUpdate for the moment
     bcMax: number;
     clMax: number;
+    dMax: number;
 
     constructor() {
         this.baseRepo = "ImMeta/breakbotLib"
@@ -42,9 +43,10 @@ export class globalVars {
         this.maracasUrl = "http://fakeurl.com"
         this.completeMaracasUrl = `${this.maracasUrl}/github/pr/${this.baseRepo}/${this.prNb}?callback=${this.completeCallbackUrl}`
         
-        this.defaultMax = 10
-        this.bcMax = 13
-        this.clMax = 5
+        this.defaultMax = 50
+        this.bcMax = this.defaultMax
+        this.clMax = this.defaultMax
+        this.dMax = this.defaultMax
     }
 
     mockRequest = jest.fn((path: string, datas: any) => {

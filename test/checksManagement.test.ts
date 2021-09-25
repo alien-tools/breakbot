@@ -92,7 +92,7 @@ describe("Testing check management in normal conditions", () => {
     test("finalUpdate, no config", async (done) => {
         checksManagement.finalUpdate(mockReportDatas, payloadv3)
 
-        expect(parseJson).toBeCalledWith(payloadv3, myVars.defaultMax, myVars.defaultMax)
+        expect(parseJson).toBeCalledWith(payloadv3, myVars.defaultMax, myVars.defaultMax, myVars.defaultMax)
         done(expect(mockOctokit.request.mock.calls[0][0]).toStrictEqual(`PATCH /repos/${myVars.baseRepo}/check-runs/${myVars.checkId}`))
     })
 
@@ -100,10 +100,11 @@ describe("Testing check management in normal conditions", () => {
         mockReportDatas.config = {}
         mockReportDatas.config.maxDisplayedBC = myVars.bcMax
         mockReportDatas.config.maxDisplayedClients = myVars.clMax
+        mockReportDatas.config.maxDisplayedDetections = myVars.dMax
 
         checksManagement.finalUpdate(mockReportDatas, payloadv3)
 
-        expect(parseJson).toBeCalledWith(payloadv3, myVars.bcMax, myVars.clMax)
+        expect(parseJson).toBeCalledWith(payloadv3, myVars.bcMax, myVars.clMax, myVars.dMax)
         done(expect(mockOctokit.request.mock.calls[0][0]).toStrictEqual(`PATCH /repos/${myVars.baseRepo}/check-runs/${myVars.checkId}`))
     })
 

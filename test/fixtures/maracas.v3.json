@@ -25,7 +25,7 @@
         },
         "clientDetections": [
             {
-                "clientUrl": "https://github.com/ImMeta/testRepo",
+                "url": "https://github.com/ImMeta/testRepo",
                 "detections": [
                     {
                         "elem": "trystatement.getBody()",
