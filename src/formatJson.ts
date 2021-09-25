@@ -20,13 +20,20 @@ export function parseJson(myJson: any, maxBCs: number, maxClients: number, maxDe
 
     var message = stripIndent`
         ### Breaking changes
-        Declaration | Kind | Impacted clients
-        ----------- | ---- | ----------------
+        Declaration | Kind | Status | Impacted clients | Detections
+        ----------- | ---- | ------ | ---------------- | ----------
     `
     
     bcs.slice(0, maxBCs).forEach((bc: any) => {
+        const impactedClients = clients.filter((c: any) =>
+            c.detections.filter((d: any) => d.src == bc.declaration).length > 0)
+        const impactedDetections = clients.flatMap((c: any) =>
+            c.detections.filter((d: any) => d.src == bc.declaration))
+        const impactedClientsText = impactedClients.length > 0 ? `${impactedClients.length} (${impactedClients.map((c: any) => c.url)})` : "None"
+        const impactedDetectionsText = impactedDetections.length > 0 ? impactedDetections.length : "None"
+
         message += "\n"
-        message += `[\`${bc.declaration}\`](${bc.url}) | [\`${bc.change}\`]() | WIP`
+        message += `[\`${bc.declaration}\`](${bc.url}) | [\`${bc.change}\`]() | ${impactedClients.length > 0 ? `:x:` : `:heavy_check_mark:`} | ${impactedClientsText} | ${impactedDetectionsText}`
     })
 
     if (bcs.length > maxBCs) {
