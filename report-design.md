@@ -16,19 +16,19 @@ This pull request introduces **3 breaking changes**, causing **16 detections** i
 
 #### Breaking changes
 
-Declaration | Kind | Status | Impacted clients
------------ | ---- | ------ | ----------------
-[`spoon.A`]()     | [`CLASS_LESS_ACCESSIBLE`]() | :x: | 1 ([SpoonLabs/nopol](https://github.com/SpoonLabs/nopol))
-[`spoon.B#m()`]() | [`METHOD_REMOVED`]() | :x: | 2 ([SpoonLabs/nopol](https://github.com/SpoonLabs/nopol), [SpoonLabs/flacoco](https://github.com/SpoonLabs/flacoco))
-[`spoon.B#f`]()   | [`FIELD_NOW_FINAL`]() | :heavy_check_mark: | 0
+| Status             | Declaration       | Kind                        | Impacted clients                                                                                                     |
+|--------------------|-------------------|-----------------------------|----------------------------------------------------------------------------------------------------------------------|
+| :x:                | [`spoon.A`]()     | [`CLASS_LESS_ACCESSIBLE`]() | 1 ([SpoonLabs/nopol](https://github.com/SpoonLabs/nopol))                                                            |
+| :x:                | [`spoon.B#m()`]() | [`METHOD_REMOVED`]()        | 2 ([SpoonLabs/nopol](https://github.com/SpoonLabs/nopol), [SpoonLabs/flacoco](https://github.com/SpoonLabs/flacoco)) |
+| :heavy_check_mark: | [`spoon.B#f`]()   | [`FIELD_NOW_FINAL`]()       | 0                                                                                                                    |
 
 #### Impact on clients
 
-Client | Status | Detections
------- | ------ | ----------
-[SpoonLabs/flacoco](https://github.com/SpoonLabs/flacoco) | :x: | [5]()
-[SpoonLabs/coming](https://github.com/SpoonLabs/coming) | :heavy_check_mark: | [0]()
-[SpoonLabs/nopol](https://github.com/SpoonLabs/nopol) | :x: | [11]()
+| Status             | Client                                                    | Detections |
+|--------------------|-----------------------------------------------------------|------------|
+| :x:                | [SpoonLabs/flacoco](https://github.com/SpoonLabs/flacoco) | [5]()      |
+| :heavy_check_mark: | [SpoonLabs/coming](https://github.com/SpoonLabs/coming)   | [0]()      |
+| :x:                | [SpoonLabs/nopol](https://github.com/SpoonLabs/nopol)     | [11]()     |
 
 ### Full report
 
