@@ -23,10 +23,14 @@
 
 | Breaking Change | Cases | Impacted Clients |
 |:---------------------------------------------------------------|:-----:|:------:|
-| [Method No Longer Static](#bc:method-no-longer-static)         | 1     | 4      |
-| [Method Abstract Now Default](#bc:method-abstract-now-default) | 1     | 2      |
-| [Constructor Removed](#bc:constructor-removed)                 | 2     | 4      |
-| **Total**                                                      | **4** | **10** |
+| [Method No Longer Static](#bc:method-no-longer-static)         | 1     | 4 (50%) |
+| [Method Abstract Now Default](#bc:method-abstract-now-default) | 1     | 2 (25%) |
+| [Constructor Removed](#bc:constructor-removed)                 | 2     | 4 (50%) |
+| **Total**                                                      | **4** | **8 (100%) <sup>1</sup>** |
+
+<small>
+<sup>1</sup> The percentage of impacted clients is computed as the ratio between the number of impacted clients and the total number of unique clients.
+</small>
 
 ---
 ## Breaking Changes
@@ -35,8 +39,8 @@
 
 | Id | Declaration `main` | Declaration `prepare-v2` | Impacted Clients |
 |----|--------------------|--------------------------|:----------------:|
-| [1]()  | [methodNoLongerStatic()](https://github.com/tdegueul/comp-changes/blob/main//src/main/methodNoLongerStatic/MethodNoLongerStatic.java#L5-L7) | [methodNoLongerStatic()](https://github.com/tdegueul/comp-changes/blob/prepare-v2/src/main/methodNoLongerStatic/MethodNoLongerStatic.java#L5-L7) | 3 |
-| [2]()  | [methodNoLongerStatic2()](https://github.com/tdegueul/comp-changes/blob/main//src/main/methodNoLongerStatic/MethodNoLongerStatic.java#L5-L7) | [methodNoLongerStatic2()](https://github.com/tdegueul/comp-changes/blob/prepare-v2/src/main/methodNoLongerStatic/MethodNoLongerStatic.java#L5-L7) | 1 |
+| [1]()  | [methodNoLongerStatic()](https://github.com/tdegueul/comp-changes/blob/main//src/main/methodNoLongerStatic/MethodNoLongerStatic.java#L5-L7) | [methodNoLongerStatic()](https://github.com/tdegueul/comp-changes/blob/prepare-v2/src/main/methodNoLongerStatic/MethodNoLongerStatic.java#L5-L7) | 3 (37.5%) |
+| [2]()  | [methodNoLongerStatic2()](https://github.com/tdegueul/comp-changes/blob/main//src/main/methodNoLongerStatic/MethodNoLongerStatic.java#L5-L7) | [methodNoLongerStatic2()](https://github.com/tdegueul/comp-changes/blob/prepare-v2/src/main/methodNoLongerStatic/MethodNoLongerStatic.java#L5-L7) | 1 (12.5%) |
 
 #### #1 methodNoLongerStatic()
 
@@ -63,11 +67,15 @@
 
 ## Impacted Clients
 
-Client | Repository | Status | Detections
------- | ---------- | ------ | ----------
-[CompChanges]() | [maracas/CompChanges](https://github.com/SpoonLabs/flacoco) | :x: | [4]()
-[OtherClient]() | [venom/OtherClient](https://github.com/SpoonLabs/coming) | :heavy_check_mark: | [6]()
+Client | Repository | Status | Impacted Classes <sup>1</sup> | Impacted Methods <sup>2</sup> | 
+------ | ---------- | ------ | ---------------- | ---------------- |
+[CompChanges]() | [maracas/CompChanges](https://github.com/SpoonLabs/flacoco) | :x: | 2 (50%) | 4 (80%)
+[OtherClient]() | [venom/OtherClient](https://github.com/SpoonLabs/coming) | :heavy_check_mark: | 6 (50%) | 2 (100%)
 
+<small>
+<sup>1</sup> The percentage of broken classes is computed as the ratio between the number of broken classes and the number of classes using the library.  
+<sup>2</sup> The percentage of broken methods is computed as the ratio between the number of broken methods and the number of methods using the library.  
+</small>
 
 ### [CompChanges]() <a class="anchor" id="client:compchanges"></a>
 
