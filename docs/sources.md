@@ -4,7 +4,10 @@ This document contains some relevant sources used in the scope of the Alien proj
 ## Cases
 
 ### Report Changes
+- Guava 30.0-jre and 30.1.1-jre [API Differences Between Guava 30.0-jre and Guava 30.1.1-jre](https://guava.dev/releases/30.1.1-jre/api/diffs/)
 - Java SE 17 (2021) [API Differences between Java SE 16 (build 36) & Java SE 17 (build 35)](https://cr.openjdk.java.net/~iris/se/17/latestSpec/apidiffs/overview-summary.html)
+- Linux Kernel (2021) [Linux Kernel Reverse CI](https://linux.kernelci.org/job/)
+- Scala (2021) [Scala 2 Community Build](https://github.com/scala/community-build)
 
 
 ### Breaking Changes
@@ -17,6 +20,13 @@ This document contains some relevant sources used in the scope of the Alien proj
 - Apache Spark (2019) [[SPARK-25496][SQL] Deprecate from_utc_timestamp and to_utc_timestamp](https://github.com/apache/spark/pull/24195)
 - Apache Spark (2020) [Revert "[SPARK-33139][SQL] protect setActionSession and clearActiveSession"](https://github.com/apache/spark/pull/30367)
 
+
+### Dependabot & Pull Requests
+- Dependabot (2020) [Dependabot doesn't notify about broken dependencies](https://github.com/dependabot/dependabot-core/issues/2032)
+
+
+### Policies
+- [nixpkgs Breaking Change Policy](https://github.com/NixOS/rfcs/blob/4a57757f2aa27f7d2f3671909f652ae72ca7f248/rfcs/0088-nixpkgs-breaking-change-policy.md)
 
 ## Papers
 
@@ -40,8 +50,10 @@ This document contains some relevant sources used in the scope of the Alien proj
 - [NoRegrets](https://github.com/cs-au-dk/NoRegrets)
 - [swagger-brake](https://github.com/redskap/swagger-brake)
 
+### Reverse CI
+- [SemVer Stability Score](https://dependabot.com/compatibility-score/?dependency-name=com.google.guava%3Aguava&package-manager=maven&version-scheme=semver)
 
 ## Websites
 
-### Types of Beeaking Changes
+### Types of Breaking Changes
 - OpenJDK (2017) [Kinds of Compatibility](https://wiki.openjdk.java.net/display/csr/Kinds+of+Compatibility)
