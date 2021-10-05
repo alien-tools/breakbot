@@ -27,18 +27,18 @@ This pull request introduces **3 breaking changes**, causing **16 detections** i
 | Status             | Client                                                    | Detections |
 |--------------------|-----------------------------------------------------------|------------|
 | :x:                | [SpoonLabs/flacoco](https://github.com/SpoonLabs/flacoco) | [5]()      |
-| :heavy_check_mark: | [SpoonLabs/coming](https://github.com/SpoonLabs/coming)   | [0]()      |
 | :x:                | [SpoonLabs/nopol](https://github.com/SpoonLabs/nopol)     | [11]()     |
+| :heavy_check_mark: | [SpoonLabs/coming](https://github.com/SpoonLabs/coming)   | [0]()      |
 
 ### Full report
 
 #### [SpoonLabs/flacoco](https://github.com/SpoonLabs/flacoco)
 
-Location | Breaking declaration | Kind | Use Type  
--------- | -------------------- | ---- | --------
-[`flacoco.X`]()     | [`spoon.A`]()     | [`CLASS_LESS_ACCESSIBLE`]() | `EXTENDS`
-[`flacoco.Y#a()`]() | [`spoon.B#f`]()   | [`FIELD_NOW_FINAL`]()       | `FIELD_ACCESS`
-[`flacoco.Z#b()`]() | [`spoon.B#m()`]() | [`METHOD_REMOVED`]()        | `METHOD_INVOCATION`
+Location | Code | Breaking declaration | Kind | Use Type  
+-------- | ---- | -------------------- | ---- | --------
+[`X.java:11`]() | flacoco.X     | [`spoon.A`]()     | [`CLASS_LESS_ACCESSIBLE`]() | `EXTENDS`
+[`Y.java:23-31`]() | flacoco.Y#a() | [`spoon.B#f`]()   | [`FIELD_NOW_FINAL`]()       | `FIELD_ACCESS`
+[`Z.java:112-118`]() | flacoco.Z#b() | [`spoon.B#m()`]() | [`METHOD_REMOVED`]()        | `METHOD_INVOCATION`
 
 #### [SpoonLabs/coming](https://github.com/SpoonLabs/coming)
 ...
