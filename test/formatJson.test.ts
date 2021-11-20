@@ -1,3 +1,4 @@
+import payloadv2 from "./fixtures/maracas.v2.json";
 import payloadv3 from "./fixtures/maracas.v3.json";
 import payloadv4 from "./fixtures/maracas.v4.json";
 import payloadv5 from "./fixtures/maracas.v5.json";
@@ -28,6 +29,18 @@ export const V5summary = readFileSync(path.join(__dirname, "/fixtures/reports/V5
 export const V5message = readFileSync(path.join(__dirname, "/fixtures/reports/V5-message.md"), "utf-8");
 
 describe("Checks that the Json received from Maracas is correctly parsed", () => {
+    test("parsing the new Json, with 1 client in error", async (done) => {
+        const myReport = parseJson(payloadv2, 10, 10, 10)
+
+        const mockReportv2 = [
+            V2title,
+            V2summary,
+            V2message
+        ]
+
+        done(expect(myReport).toStrictEqual(mockReportv2))
+    })
+
     test("parsing the new Json, with 1 client", async (done) => {
         const myReport = parseJson(payloadv3, 10, 10, 10)
 

@@ -1,6 +1,10 @@
+### Breaking changes
+Declaration | Kind | Status | Impacted clients | Detections
+----------- | ---- | ------ | ---------------- | ----------
+[`spoon.reflect.code.CtBodyHolder.getBody()`](https://github.com/spoon/spoon/blob/main//src/main/CtBodyHolder.java) | [`METHOD_REMOVED`]() | :heavy_check_mark: | None | None
+[`spoon.reflect.code.CtCatch.getBody()`](https://github.com/spoon/spoon/blob/main//src/main/CtCatch.java) | [`METHOD_REMOVED`]() | :heavy_check_mark: | None | None
 
-### The declaration [main.methodAbstractNowDefault.IMethodAbstractNowDefault.methodAbstractNowDef()](https://github.com/tdegueul/comp-changes/blob/main//src/main/methodAbstractNowDefault/IMethodAbstractNowDefault.java#L5-L5) is impacted by _methodAbstractNowDefault_
-- Declaration [mainclient.methodAbstractNowDefault.AbsMethodAbstractNowDefaultMultiIntSub](https://github.com/tdegueul/comp-changes-client/blob/main//src/mainclient/methodAbstractNowDefault/AbsMethodAbstractNowDefaultMultiIntSub.java#L6-L8) in [this client](https://github.com/tdegueul/comp-changes-client)
-- Declaration [mainclient.methodAbstractNowDefault.AbsMethodAbstractNowDefaultMultiInt](https://github.com/tdegueul/comp-changes-client/blob/main//src/mainclient/methodAbstractNowDefault/AbsMethodAbstractNowDefaultMultiInt.java#L6-L8) in [this client](https://github.com/tdegueul/comp-changes-client)
-### The declaration [main.constructorRemoved.ConstructorRemovedNoParams.ConstructorRemovedNoParams()](https://github.com/tdegueul/comp-changes/blob/main//src/main/constructorRemoved/ConstructorRemovedNoParams.java#L5-L7) is impacted by _constructorRemoved_
-- Declaration [mainclient.constructorRemoved.ConstructorRemovedExtNoParams.ConstructorRemovedExtNoParams()](https://github.com/tdegueul/comp-changes-client/blob/main//src/mainclient/constructorRemoved/ConstructorRemovedExtNoParams.java#L7-L9) in [this client](https://github.com/tdegueul/comp-changes-client)
+### Impact on clients
+Client | Status | Detections
+------ | ------ | ----------
+— | :heavy_check_mark: | 0

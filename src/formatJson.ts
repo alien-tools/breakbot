@@ -6,7 +6,9 @@ export function parseJson(myJson: any, maxBCs: number, maxClients: number, maxDe
 
     const report = myJson.report
     const bcs = report.delta.brokenDeclarations
-    const clients = report.clientDetections
+    const allClients = report.clientDetections
+    const clients = allClients.filter((c: any) => c.error == null);
+    const clientsError = allClients.filter((c: any) => c.error != null);
     const brokenClients = clients.filter((c: any) => c.detections.length > 0)
     const detections = brokenClients.flatMap((c: any) => c.detections)
     const percentBroken = clients.length > 0 ? Math.floor(brokenClients.length / clients.length * 100) : 0
@@ -16,6 +18,7 @@ export function parseJson(myJson: any, maxBCs: number, maxClients: number, maxDe
     var summary = stripIndent`
         This pull request introduces **${bcs.length} breaking changes**, causing **${detections.length} detections** in client code.
         **${brokenClients.length} of ${clients.length} clients are impacted** by the changes (${percentBroken}%).
+        ${clientsError.length > 0 ? `Maracas encountered an error when attempting to process the following clients: ${clientsError.map((c: any) => `[${c.url}](${c.url})`).join(", ")}.` : ``}
     `
 
     var message = stripIndent`
@@ -50,10 +53,7 @@ export function parseJson(myJson: any, maxBCs: number, maxClients: number, maxDe
 
     clients.slice(0, maxClients).forEach((c : any) => {
         message += "\n"
-        if (c.error != null)
-            message += `[${c.url}](${c.url}) | Error | Error`
-        else
-            message += `[${c.url}](${c.url}) | ${c.detections.length > 0 ? `:x:` : `:heavy_check_mark:`} | ${c.detections.length}`
+        message += `[${c.url}](${c.url}) | ${c.detections.length > 0 ? `:x:` : `:heavy_check_mark:`} | ${c.detections.length}`
     })
 
     if (clients.length > maxClients) {
