@@ -36,7 +36,7 @@ export function parseJson(myJson: any, maxBCs: number, maxClients: number, maxDe
         const impactedDetectionsText = impactedDetections.length > 0 ? impactedDetections.length : "None"
 
         message += "\n"
-        message += `[\`${bc.declaration}\`](${bc.url}) | [\`${bc.change}\`]() | ${impactedClients.length > 0 ? `:x:` : `:heavy_check_mark:`} | ${impactedClientsText} | ${impactedDetectionsText}`
+        message += `[\`${bc.declaration}\`](${bc.fileUrl}) ([diff](${bc.diffUrl})) | [\`${bc.change}\`]() | ${impactedClients.length > 0 ? `:x:` : `:heavy_check_mark:`} | ${impactedClientsText} | ${impactedDetectionsText}`
     })
 
     if (bcs.length > maxBCs) {

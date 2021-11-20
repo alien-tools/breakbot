@@ -1,8 +1,8 @@
 ### Breaking changes
 Declaration | Kind | Status | Impacted clients | Detections
 ----------- | ---- | ------ | ---------------- | ----------
-[`spoon.reflect.code.CtBodyHolder.getBody()`](https://github.com/spoon/spoon/blob/main//src/main/CtBodyHolder.java) | [`METHOD_REMOVED`]() | :heavy_check_mark: | None | None
-[`spoon.reflect.code.CtCatch.getBody()`](https://github.com/spoon/spoon/blob/main//src/main/CtCatch.java) | [`METHOD_REMOVED`]() | :x: | 2 ([https://github.com/ImMeta/testRepo](https://github.com/ImMeta/testRepo), [https://github.com/ImUser/OtherRepo](https://github.com/ImUser/OtherRepo)) | 3
+[`spoon.reflect.code.CtBodyHolder.getBody()`](https://github.com/spoon/spoon/blob/main//src/main/CtCatch.java) ([diff](https://github.com/spoon/spoon/blob/main//src/main/CtCatch.java)) | [`METHOD_REMOVED`]() | :heavy_check_mark: | None | None
+[`spoon.reflect.code.CtCatch.getBody()`](https://github.com/spoon/spoon/blob/main//src/main/CtCatch.java) ([diff](https://github.com/spoon/spoon/blob/main//src/main/CtCatch.java)) | [`METHOD_REMOVED`]() | :x: | 2 ([https://github.com/ImMeta/testRepo](https://github.com/ImMeta/testRepo), [https://github.com/ImUser/OtherRepo](https://github.com/ImUser/OtherRepo)) | 3
 
 ### Impact on clients
 Client | Status | Detections

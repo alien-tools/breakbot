@@ -11,7 +11,8 @@
                     "path": "",
                     "startLine": -1,
                     "endLine": -1,
-                    "url": "https://github.com/spoon/spoon/blob/main//src/main/CtBodyHolder.java"
+                    "fileUrl": "https://github.com/spoon/spoon/blob/main//src/main/CtBodyHolder.java",
+                    "diffUrl": "https://github.com/spoon/spoon/blob/main//src/main/CtBodyHolder.java"
                 },
                 {
                     "declaration": "spoon.reflect.code.CtCatch.getBody()",
@@ -19,7 +20,8 @@
                     "path": "",
                     "startLine": -1,
                     "endLine": -1,
-                    "url": "https://github.com/spoon/spoon/blob/main//src/main/CtCatch.java"
+                    "fileUrl": "https://github.com/spoon/spoon/blob/main//src/main/CtBodyHolder.java",
+                    "diffUrl": "https://github.com/spoon/spoon/blob/main//src/main/CtBodyHolder.java"
                 }
             ]
         },
