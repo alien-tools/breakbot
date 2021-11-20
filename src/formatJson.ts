@@ -50,7 +50,10 @@ export function parseJson(myJson: any, maxBCs: number, maxClients: number, maxDe
 
     clients.slice(0, maxClients).forEach((c : any) => {
         message += "\n"
-        message += `[${c.url}](${c.url}) | ${c.detections.length > 0 ? `:x:` : `:heavy_check_mark:`} | ${c.detections.length}`
+        if (c.error != null)
+            message += `[${c.url}](${c.url}) | Error | Error`
+        else
+            message += `[${c.url}](${c.url}) | ${c.detections.length > 0 ? `:x:` : `:heavy_check_mark:`} | ${c.detections.length}`
     })
 
     if (clients.length > maxClients) {
