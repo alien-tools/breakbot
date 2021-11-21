@@ -49,9 +49,9 @@
                         "endLine": 1116,
                         "url": "https://github.com/ImMeta/testRepo/src/index.java"
                     }
-                ]
+                ],
+                "error": null
             }
-        ],
-        "error": null
+        ]
     }
 }

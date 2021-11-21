@@ -4,7 +4,7 @@ import * as maracas from "../src/maracas"
 import * as checks from "../src/checksManagement"
 import { globalVars } from "./globalVarsTests"
 
-import payload404 from "./fixtures/maracas.404.json";
+import payloadv1 from "./fixtures/maracas.v1.json";
 
 jest.mock('../src/checksManagement')
 
@@ -47,12 +47,12 @@ describe("Test interractions with Maracas", () => {
                 }
             })
             .post(myVars.completeMaracasUrl.slice(myVars.maracasUrl.length))
-            .reply(404, payload404)
+            .reply(404, payloadv1)
 
         await maracas.sendRequest(mockDatas)
 
         expect(scope.isDone()).toBe(true)
-        done(expect(checks.failed).toHaveBeenCalledWith(mockDatas, "An error occured"))
+        done(expect(checks.failed).toHaveBeenCalledWith(mockDatas, "unlucky"))
     })
 
     afterEach(() => {

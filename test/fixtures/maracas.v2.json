@@ -30,8 +30,12 @@
                 "url": "https://github.com/ImMeta/testRepo",
                 "detections": [],
                 "error": "Unlucky"
+            },
+            {
+                "url": "https://github.com/ImMeta/testRepo2",
+                "detections": [],
+                "error": "Unlucky 2"
             }
-        ],
-        "error": null
+        ]
     }
 }
