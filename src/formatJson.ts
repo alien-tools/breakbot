@@ -8,7 +8,7 @@ export function parseJson(myJson: any, maxBCs: number, maxClients: number, maxDe
 
     const report = myJson.report
     const bcs = report.delta.brokenDeclarations
-    const allClients = report.clientDetections
+    const allClients = report.clientReports
     const clients = allClients.filter((c: any) => c.error == null);
     const clientsError = allClients.filter((c: any) => c.error != null);
     const brokenClients = clients.filter((c: any) => c.detections.length > 0)
