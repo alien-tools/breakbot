@@ -27,12 +27,12 @@
         },
         "clientDetections": [
             {
-                "url": "https://github.com/ImMeta/testRepo",
+                "url": "ImMeta/testRepo",
                 "detections": [],
                 "error": "Unlucky"
             },
             {
-                "url": "https://github.com/ImMeta/testRepo2",
+                "url": "ImMeta/testRepo2",
                 "detections": [],
                 "error": "Unlucky 2"
             }

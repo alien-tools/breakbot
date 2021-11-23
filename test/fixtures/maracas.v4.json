@@ -27,7 +27,7 @@
         },
         "clientDetections": [
             {
-                "url": "https://github.com/ImMeta/testRepo",
+                "url": "ImMeta/testRepo",
                 "detections": [
                     {
                         "elem": "trystatement.getBody()",
@@ -53,7 +53,7 @@
                 "error": null
             },
             {
-                "url": "https://github.com/ImUser/OtherRepo",
+                "url": "ImUser/OtherRepo",
                 "detections": [
                     {
                         "elem": "catchstatement.getBody()",

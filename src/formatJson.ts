@@ -18,7 +18,7 @@ export function parseJson(myJson: any, maxBCs: number, maxClients: number, maxDe
     var summary = stripIndent`
         This pull request introduces **${bcs.length} breaking changes**, causing **${detections.length} detections** in client code.
         **${brokenClients.length} of ${clients.length} clients are impacted** by the changes (${percentBroken}%).
-        ${clientsError.length > 0 ? `Maracas encountered an error when attempting to process the following clients: ${clientsError.map((c: any) => `[${c.url}](${c.url}) (*${c.error}*)`).join(", ")}.` : ``}
+        ${clientsError.length > 0 ? `Maracas encountered an error when attempting to process the following clients: ${clientsError.map((c: any) => `[${c.url}](https://github.com/${c.url}) (*${c.error}*)`).join(", ")}.` : ``}
     `
 
     var message = stripIndent`
@@ -32,7 +32,7 @@ export function parseJson(myJson: any, maxBCs: number, maxClients: number, maxDe
             c.detections.filter((d: any) => d.src === bc.declaration).length > 0)
         const impactedDetections = clients.flatMap((c: any) =>
             c.detections.filter((d: any) => d.src === bc.declaration))
-        const impactedClientsText = impactedClients.length > 0 ? `${impactedClients.length} (${impactedClients.map((c: any) => `[${c.url}](${c.url})`).join(", ")})` : "None"
+        const impactedClientsText = impactedClients.length > 0 ? `${impactedClients.length} (${impactedClients.map((c: any) => `[${c.url}](https://github.com/${c.url})`).join(", ")})` : "None"
         const impactedDetectionsText = impactedDetections.length > 0 ? impactedDetections.length : "None"
 
         message += "\n"
@@ -53,7 +53,7 @@ export function parseJson(myJson: any, maxBCs: number, maxClients: number, maxDe
 
     clients.slice(0, maxClients).forEach((c : any) => {
         message += "\n"
-        message += `[${c.url}](${c.url}) | ${c.detections.length > 0 ? `:x:` : `:heavy_check_mark:`} | ${c.detections.length}`
+        message += `[${c.url}](https://github.com/${c.url}) | ${c.detections.length > 0 ? `:x:` : `:heavy_check_mark:`} | ${c.detections.length}`
     })
 
     message += "\n"
@@ -67,7 +67,7 @@ export function parseJson(myJson: any, maxBCs: number, maxClients: number, maxDe
     brokenClients.forEach((c: any) => {
         message += "\n\n"
         message += stripIndent`
-            #### [${c.url}](${c.url})
+            #### [${c.url}](https://github.com/${c.url})
             Location | Breaking declaration | Kind | Use Type
             -------- | -------------------- | ---- | --------
         `
