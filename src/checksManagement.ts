@@ -2,20 +2,29 @@ import writeReport from './writeReport';
 import PullRequest from './pullRequest';
 import BreakbotConfig from './breakbotConfig';
 
-export async function failed(pr: PullRequest, checkId: number, message: string) {
+export async function createCheck(pr: PullRequest) {
+  console.log('[createCheck] Starting...');
+
+  const output = {
+    title: 'Sending request to the api...',
+    summary: '',
+  };
+
   const check = {
-    status: 'completed',
-    conclusion: 'cancelled',
-    output: {
-      title: 'Something went wrong',
-      summary: message,
-    },
+    name: 'Breakbot report',
+    head_sha: pr.headSHA,
+    status: 'queued',
+    output,
   };
 
   try {
-    await pr.octokit.request(`PATCH /repos/${pr.repository}/check-runs/${checkId}`, check);
+    const resNewCheck = await pr.octokit.request(`POST /repos/${pr.repository}/check-runs`, check);
+    const checkId = resNewCheck.data.id;
+    console.log(`[createCheck] Check ID = ${checkId}`);
+    return checkId;
   } catch (err) {
     console.error(err);
+    return -1;
   }
 }
 
@@ -65,28 +74,19 @@ export async function finalUpdate(pr: PullRequest, checkId: number, config: Brea
   }
 }
 
-export async function createCheck(pr: PullRequest) {
-  console.log('[createCheck] Starting...');
-
-  const output = {
-    title: 'Sending request to the api...',
-    summary: '',
-  };
-
+export async function failed(pr: PullRequest, checkId: number, message: string) {
   const check = {
-    name: 'Breakbot report',
-    head_sha: pr.headSHA,
-    status: 'queued',
-    output,
+    status: 'completed',
+    conclusion: 'cancelled',
+    output: {
+      title: 'Something went wrong',
+      summary: message,
+    },
   };
 
   try {
-    const resNewCheck = await pr.octokit.request(`POST /repos/${pr.repository}/check-runs`, check);
-    const checkId = resNewCheck.data.id;
-    console.log(`[createCheck] Check ID = ${checkId}`);
-    return checkId;
+    await pr.octokit.request(`PATCH /repos/${pr.repository}/check-runs/${checkId}`, check);
   } catch (err) {
     console.error(err);
-    return -1;
   }
 }

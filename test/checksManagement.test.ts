@@ -1,106 +1,71 @@
 import nock from 'nock';
-import WebhookData from '../src/webhookData';
-import ReportData from '../src/reportData';
-import GlobalVars from './globalVarsTests';
-import { failed, finalUpdate, inProgress, createCheck } from '../src/checksManagement';
-import payloadv3 from './fixtures/maracas.v3.json';
-import writeReport from '../src/writeReport';
+import { createCheck } from '../src/checksManagement';
+import DoneCallback = jest.DoneCallback;
+import PullRequest from '../src/pullRequest';
+import { Octokit } from '@octokit/core';
+import { mocked } from 'ts-jest/utils';
+
+import payloadGetChecks from './fixtures/getChecks.json';
+import payloadGetPulls from './fixtures/getPulls.json';
+import payloadGetPull from './fixtures/getPull.json';
+import payloadPostCheck from './fixtures/postCheck.json';
+
+jest.mock('@octokit/core', () => {
+  return {
+    Octokit: jest.fn(() => {
+      return {
+        request: (req: string, data: any) => {
+          console.log(`[mockRequest] Req received: ${req} ${data}`);
+          if (req === `GET /repos/alien-tools/comp-changes/pulls/2`) {
+            console.log(`[mockRequest] Req received from a Get pull: ${req}`);
+            return payloadGetPull;
+          } if (req === `GET /repos/alien-tools/comp-changes/commits/sha123456789/check-runs`) {
+            return payloadGetChecks;
+          } if (req === `GET /repos/alien-tools/comp-changes/pulls`) {
+            return payloadGetPulls;
+          } if (req === `POST /repos/alien-tools/comp-changes/check-runs`) {
+            return payloadPostCheck;
+          }
+          return undefined;
+        },
+      };
+    }),
+  };
+});
 
 jest.mock('../src/writeReport.ts', () =>
-  jest.fn((Json: any, bcMax: number, clientMax: number) => (['Title', 'Summary', 'Text']))
+  jest.fn((report: any, maxBCs: number, maxClients: number, maxDetections: number) =>
+    (['Title', 'Summary', 'Text']))
 );
 
 describe('Testing check management in normal conditions', () => {
-  const myVars = new GlobalVars();
-
-  const mockOctokit = {
-    request: myVars.mockRequest,
-  };
-
-  const mockWebhookDatas = new WebhookData(myVars.baseRepo, myVars.installationId, mockOctokit); // could be moved to globalVars
-  mockWebhookDatas.headSHA = myVars.branchSHA;
-  mockWebhookDatas.prNb = myVars.prNb;
-
-  // ok because of the tests ?
-  const mockReportDatas = new ReportData(myVars.baseRepo, myVars.installationId);
-  mockReportDatas.prNb = myVars.prNb;
-  mockReportDatas.myOctokit = mockOctokit;
-  mockReportDatas.checkId = myVars.checkId;
+  const OctokitMock = mocked(Octokit, true);
+  const testPR = new PullRequest(
+    new Octokit(),
+    "alien-tools/comp-changes",
+    123456789,
+    2,
+    "sha123456789"
+  );
 
   beforeAll(() => {
     nock.disableNetConnect();
   });
 
-  beforeEach(() => {
-    mockOctokit.request.mockClear();
+  test('createCheck', async (done: DoneCallback) => {
+    const checkId = await createCheck(testPR);
+
+    done(expect(checkId).toBe(30));
   });
 
-  test('createCheck', async (done) => {
-    const check = {
-      name: 'Breakbot report',
-      head_sha: myVars.branchSHA,
-      status: 'queued',
-      output: {
-        title: 'Sending request to the api...',
-        summary: '',
-      },
-    };
+  test('createCheck2', async (done: DoneCallback) => {
+    const checkId = await createCheck(testPR);
 
-    await createCheck(mockWebhookDatas);
-
-    done(expect(mockOctokit.request).toBeCalledWith(`POST /repos/${myVars.baseRepo}/check-runs`, check));
+    done(expect(checkId).toBe(30));
   });
 
-  test('progressCheck', async (done) => {
-    mockWebhookDatas.checkId = myVars.checkId;
-
-    const check = {
-      status: 'in_progress',
-      output: {
-        title: 'Maracas is processing...',
-        summary: '',
-      },
-    };
-
-    await inProgress(mockWebhookDatas);
-
-    done(expect(mockOctokit.request).toBeCalledWith(`PATCH /repos/${myVars.baseRepo}/check-runs/${myVars.checkId}`, check));
-  });
-
-  test('failed', async (done) => {
-    mockWebhookDatas.checkId = myVars.checkId;
-
-    const check = {
-      status: 'completed',
-      conclusion: 'cancelled',
-      output: {
-        title: 'Something went wrong',
-        summary: 'Not found',
-      },
-    };
-
-    await failed(mockWebhookDatas, 'Not found');
-
-    done(expect(mockOctokit.request).toBeCalledWith(`PATCH /repos/${myVars.baseRepo}/check-runs/${myVars.checkId}`, check));
-  });
-
-  test('finalUpdate, no config', async (done) => {
-    await finalUpdate(mockReportDatas, payloadv3);
-
-    expect(writeReport).toBeCalledWith(payloadv3, myVars.defaultMax, myVars.defaultMax, myVars.defaultMax);
-    done(expect(mockOctokit.request.mock.calls[0][0]).toStrictEqual(`PATCH /repos/${myVars.baseRepo}/check-runs/${myVars.checkId}`));
-  });
-
-  test('finalUpdate, simple config', async (done) => { // to complete
-    mockReportDatas.config = {};
-    mockReportDatas.config.maxDisplayedBC = myVars.bcMax;
-    mockReportDatas.config.maxDisplayedClients = myVars.clMax;
-    mockReportDatas.config.maxDisplayedDetections = myVars.dMax;
-
-    await finalUpdate(mockReportDatas, payloadv3);
-
-    expect(writeReport).toBeCalledWith(payloadv3, myVars.bcMax, myVars.clMax, myVars.dMax);
-    done(expect(mockOctokit.request.mock.calls[0][0]).toStrictEqual(`PATCH /repos/${myVars.baseRepo}/check-runs/${myVars.checkId}`));
+  afterEach(() => {
+    OctokitMock.mockClear();
   });
 
   afterAll(() => {
