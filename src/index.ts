@@ -1,29 +1,28 @@
-import { Probot } from "probot";
-import { maracasHandler, webhookHandler } from "./handlers";
+import { Probot } from 'probot';
+import { maracasHandler, webhookHandler } from './handlers';
 
-const bodyParser = require("body-parser")
+const bodyParser = require('body-parser');
 
-//---Declaration of the app---
 export = (app: Probot, option: any) => {
-  console.log("[index] Options:")
-  console.log(option)
+  console.log('[index] Options:');
+  console.log(option);
 
-  const router = option.getRouter("/breakbot");
+  const router = option.getRouter('/breakbot');
 
-  router.use(bodyParser.json({ limit: '5mb' }))
+  router.use(bodyParser.json({ limit: '5mb' }));
 
-  router.post("/pr/:owner/:repo/:prNb", async (req: any, res: any) => {
-    console.log("[router] Final report received from Maracas")
+  router.post('/pr/:owner/:repo/:prNb', async (req: any, res: any) => {
+    console.log('[router] Final report received from Maracas');
 
-    await maracasHandler(req)
-    
-    res.status(200)
-    res.send("Received")
-  })
+    await maracasHandler(req);
 
-  app.on(["pull_request.opened", "pull_request.synchronize", "check_run.requested_action"], async (context) => {
-    console.log("[index] Starting a new check")
+    res.status(200);
+    res.send('Received');
+  });
 
-    webhookHandler(context)
+  app.on(['pull_request.opened', 'pull_request.synchronize', 'check_run.requested_action'], async (context) => {
+    console.log('[index] Starting a new check');
+
+    await webhookHandler(context);
   });
 };

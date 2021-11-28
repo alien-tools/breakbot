@@ -1,173 +1,168 @@
-import nock from "nock";
+import nock from 'nock';
 
-import payloadPull from "./fixtures/pull_request.opened.json";
-import payloadCheck from "./fixtures/check_run.requested_action.json";
+import { Octokit } from '@octokit/core'; // if not explicitly mocked, seems to act differently
+import { createAppAuth } from '@octokit/auth-app';
+import payloadPull from './fixtures/pull_request.opened.json';
+import payloadCheck from './fixtures/check_run.requested_action.json';
 
-import { reportData, webhookData } from "../src/authData";
+import WebhookData from '../src/webhookData';
+import ReportData from '../src/reportData';
 
-import { globalVars } from './globalVarsTests'
+import GlobalVars from './globalVarsTests';
 
-import { Octokit } from '@octokit/core'
-jest.mock('@octokit/core') //if not explicitly mocked, seems to act differently
+jest.mock('@octokit/core');
 
-import { createAppAuth } from "@octokit/auth-app"
+const myVars = new GlobalVars();
 
-var myVars = new globalVars()
+jest.mock('@probot/octokit-plugin-config', () => ({
+  config: ((myOctokit: any) => ({
+    config: {
+      get: ((args: any) => {
+        const addressSplit = myVars.baseRepo.split('/');
 
-//import { config } from "@probot/octokit-plugin-config"
-jest.mock("@probot/octokit-plugin-config", () => ({
-    config: ((myOctokit: any) => {
-        return {
+        if ((args.owner === addressSplit[0]) && (args.repo === addressSplit[1])) {
+          return {
             config: {
-                get: ((args: any) => {
-                    var addressSplit = myVars.baseRepo.split("/")
-
-                    if ((args.owner == addressSplit[0]) && (args.repo = addressSplit[1]))
-                        return {
-                            config: {
-                                verbose: true,
-                                maxDisplayedBC: 12,
-                            }
-                        }
-                    else {
-                        return undefined
-                    }
-                })
-            }
+              verbose: true,
+              maxDisplayedBC: 12,
+            },
+          };
         }
-    })
-}))
 
-describe("Test webhookDatas", () => {
+        return undefined;
+      }),
+    },
+  })),
+}));
 
-    var mockOctokit = {
-        request: myVars.mockRequest
-    }
+describe('Test webhookDatas', () => {
+  const mockOctokit = {
+    request: myVars.mockRequest,
+  };
 
-    var mockDatas: webhookData
-    var mockContext: {
+  let mockDatas: WebhookData;
+  let mockContext: {
         octokit: any,
         payload: any
-    }
+    };
 
-    beforeEach(() => {
-        mockDatas = new webhookData("ImMeta/breakbotLib", 2, mockOctokit)
-        mockDatas.headSHA = myVars.branchSHA
-    })
+  beforeEach(() => {
+    mockDatas = new WebhookData('ImMeta/breakbotLib', 2, mockOctokit);
+    mockDatas.headSHA = myVars.branchSHA;
+  });
 
-    test("fromPr() correctly creates a data structure", async (done) => {
-        mockContext = {
-            octokit: mockOctokit,
-            payload: payloadPull
-        }
+  test('fromPr() correctly creates a data structure', async (done) => {
+    mockContext = {
+      octokit: mockOctokit,
+      payload: payloadPull,
+    };
 
-        mockDatas.prNb = myVars.prNb
+    mockDatas.prNb = myVars.prNb;
 
-        const myDatas = webhookData.fromPr(mockContext)
+    const myDatas = WebhookData.fromPr(mockContext);
 
-        done(expect(myDatas).toStrictEqual(mockDatas))
-    })
+    done(expect(myDatas).toStrictEqual(mockDatas));
+  });
 
-    //add test after a synchronize ?
+  // add test after a synchronize ?
 
-    test("fromCheck() correctly creates a data structure", async (done) => {
-        mockContext = {
-            octokit: mockOctokit,
-            payload: payloadCheck
-        }
+  test('fromCheck() correctly creates a data structure', async (done) => {
+    mockContext = {
+      octokit: mockOctokit,
+      payload: payloadCheck,
+    };
 
-        const myDatas = webhookData.fromCheck(mockContext)
+    const myDatas = WebhookData.fromCheck(mockContext);
 
-        done(expect(myDatas).toStrictEqual(mockDatas))
-    })
+    done(expect(myDatas).toStrictEqual(mockDatas));
+  });
 
-    test("getPrNb() correctly get the pull request number", async (done) => {
-        await mockDatas.getPrNb()
+  test('getPrNb() correctly get the pull request number', async (done) => {
+    await mockDatas.getPrNb();
 
-        done(expect(mockDatas.prNb).toStrictEqual(myVars.prNb))
-    })
+    done(expect(mockDatas.prNb).toStrictEqual(myVars.prNb));
+  });
 
-    test("getCheck() correctly return a checkId when used with webhook datas", async (done) => {
-        mockDatas.prNb = myVars.prNb
+  test('getCheck() correctly return a checkId when used with webhook datas', async (done) => {
+    mockDatas.prNb = myVars.prNb;
 
-        await mockDatas.getCheck()
+    await mockDatas.getCheck();
 
-        done(expect(mockDatas.checkId).toStrictEqual(myVars.checkId))
-    })
+    done(expect(mockDatas.checkId).toStrictEqual(myVars.checkId));
+  });
 
-    test("getConfig returns the config", async (done) => {
-        mockDatas.prNb = myVars.prNb
-        mockDatas.checkId = myVars.checkId
+  test('getConfig returns the config', async (done) => {
+    mockDatas.prNb = myVars.prNb;
+    mockDatas.checkId = myVars.checkId;
 
-        await mockDatas.getConfig()
+    await mockDatas.getConfig();
 
-        done(expect(mockDatas.config).toStrictEqual({
-            verbose: true, maxDisplayedBC: 12,
-        }))
-    })
+    done(expect(mockDatas.config).toStrictEqual({
+      verbose: true, maxDisplayedBC: 12,
+    }));
+  });
 
-    //afterEach(() => { })
-})
+  // afterEach(() => { })
+});
 
-describe("Test reportDatas", () => {
+describe('Test reportDatas', () => {
+  const mockOctokit = { request: myVars.mockRequest };
 
-    var mockOctokit = { request: myVars.mockRequest }
+  let mockDatas: ReportData;
 
-    var mockDatas: reportData
+  beforeAll(() => {
+    nock.disableNetConnect();
+  });
 
-    beforeAll(() => {
-        nock.disableNetConnect();
-    })
+  beforeEach(() => {
+    mockDatas = new ReportData(myVars.baseRepo, myVars.installationId);
+    mockDatas.prNb = myVars.prNb;
+  });
 
-    beforeEach(() => {
-        mockDatas = new reportData(myVars.baseRepo, myVars.installationId)
-        mockDatas.prNb = myVars.prNb
-    })
+  test('fromPost() creates a correct data structure', async (done) => {
+    const myDatas = ReportData.fromPost(myVars.baseRepo, myVars.installationId, myVars.prNb);
 
-    test("fromPost() creates a correct data structure", async (done) => {
-        var myDatas = reportData.fromPost(myVars.baseRepo, myVars.installationId, myVars.prNb)
+    done(expect(myDatas).toStrictEqual(mockDatas));
+  });
 
-        done(expect(myDatas).toStrictEqual(mockDatas))
-    })
+  test('connectToGit() creates an octokit', async (done) => { // The difficult part
+    const mockArguments = {
+      auth: {
+        appId: myVars.appId.toString(),
+        installationId: myVars.installationId,
+        privateKey: myVars.privateKey,
+      },
+      authStrategy: createAppAuth,
+    };
 
-    test("connectToGit() creates an octokit", async (done) => { //The difficult part
-        const mockArguments = {
-            auth: {
-                appId: myVars.appId.toString(),
-                installationId: myVars.installationId,
-                privateKey: myVars.privateKey
-            },
-            authStrategy: createAppAuth
-        }
+    mockDatas.connectToGit();
 
-        mockDatas.connectToGit()
+    done(expect(Octokit).toHaveBeenCalledWith(mockArguments)); // to improve
+  });
 
-        done(expect(Octokit).toHaveBeenCalledWith(mockArguments)) //to improve
-    })
+  test('getCheck() correctly return a checkId when used with reportDatas', async (done) => {
+    mockDatas.myOctokit = mockOctokit;
 
-    test("getCheck() correctly return a checkId when used with reportDatas", async (done) => {
-        mockDatas.myOctokit = mockOctokit
+    await mockDatas.getCheck();
 
-        await mockDatas.getCheck()
+    done(expect(mockDatas.checkId).toStrictEqual(myVars.checkId));
+  });
 
-        done(expect(mockDatas.checkId).toStrictEqual(myVars.checkId))
-    })
+  test('getConfig returns the config', async (done) => {
+    mockDatas.myOctokit = mockOctokit;
+    mockDatas.prNb = myVars.prNb;
+    mockDatas.checkId = myVars.checkId;
 
-    test("getConfig returns the config", async (done) => {
-        mockDatas.myOctokit = mockOctokit
-        mockDatas.prNb = myVars.prNb
-        mockDatas.checkId = myVars.checkId
+    await mockDatas.getConfig();
 
-        await mockDatas.getConfig()
+    done(expect(mockDatas.config).toStrictEqual({
+      verbose: true, maxDisplayedBC: 12,
+    }));
+  });
 
-        done(expect(mockDatas.config).toStrictEqual({
-            verbose: true, maxDisplayedBC: 12,
-        }))
-    })
-
-    afterAll(() => {
-        nock.restore()
-        nock.cleanAll();
-        nock.enableNetConnect();
-    })
-})
+  afterAll(() => {
+    nock.restore();
+    nock.cleanAll();
+    nock.enableNetConnect();
+  });
+});

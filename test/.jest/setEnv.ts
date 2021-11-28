@@ -1,6 +1,6 @@
-import { globalVars } from '../globalVarsTests'
+import GlobalVars from '../globalVarsTests'
 
-var myVars = new globalVars
+var myVars = new GlobalVars()
 
 process.env.APP_ID = myVars.appId.toString()
 process.env.PRIVATE_KEY = myVars.privateKey
