@@ -1,35 +1,86 @@
-import * as checksManagement from './checksManagement';
+import { Octokit } from '@octokit/core';
+import { createAppAuth } from '@octokit/auth-app';
+import { createCheck, finalUpdate } from './checksManagement';
 import sendRequest from './maracas';
-import webhookData from './webhookData';
-import reportData from './reportData';
+import PullRequest from './pullRequest';
+import { readConfigFile } from './breakbotConfig';
 
-export async function maracasHandler(req: any) {
-  const myDatas = reportData.fromPost(`${req.params.owner}/${req.params.repo}`, req.headers.installationid, req.params.prNb);
+export async function handleMaracasPost(req: any) {
+  const repository = `${req.params.owner}/${req.params.repo}`;
+  const prNb = req.params.prNb;
 
-  await myDatas.connectToGit();
-  await myDatas.getConfig();
-  await myDatas.getCheck();
+  console.log('[handlers] Authenticating to Octokit');
+  const octokit = new Octokit({
+    authStrategy: createAppAuth,
+    auth: {
+      appId: process.env.APP_ID,
+      privateKey: process.env.PRIVATE_KEY,
+      installationId: req.headers.installationId,
+    },
+  });
 
-  await checksManagement.finalUpdate(myDatas, req.body);
+  const config = await readConfigFile(repository, octokit);
+
+  console.log(`[handlers] Retrieving headSHA for ${repository}#${prNb}`);
+  const prData = await octokit.request(`GET /repos/${repository}/pulls/${prNb}`);
+  const headSHA = prData.data.head.sha;
+
+  const checksData = await octokit.request(`GET /repos/${repository}/commits/${headSHA}/check-runs`);
+  const total = checksData.data.total_count;
+  const checks = checksData.data.check_runs;
+
+  console.log(`[handlers] Checks information: total_count=${total} checks=${checks}`);
+
+  const bbCheck = checks.find((check: any) => check.app.id == process.env.APP_ID);
+
+  if (bbCheck) {
+    console.log(`[handlers] Found check ID ${bbCheck.id}`);
+    let pr = new PullRequest(
+      octokit,
+      repository,
+      req.headers.installationId,
+      prNb,
+      headSHA,
+    );
+
+    await finalUpdate(pr, bbCheck.id, config, req.body);
+  } else {
+    console.log('[handlers] No check found.');
+  }
 }
 
-export async function webhookHandler(context: any) {
-  let myDatas;
-  if (context.name === 'pull_request') {
-    console.log('[webhookHandler] Started in pull_request context');
-    myDatas = webhookData.fromPr(context);
-  } else if (context.name === 'check_run' && context.payload.requested_action?.identifier === 'rerun') {
-    console.log('[webhookHandler] Started in check_run context');
-    myDatas = webhookData.fromCheck(context);
-    await myDatas.getPrNb();
-  } else { // in case sth went wrong
-    console.log(`[webhookHandler] Something went wrong, the context came from: ${context.name}`);
-    return;
-  }
+export async function handlePullRequestWebhook(context: any) {
+  console.log('[handlers] Invoked from "pull_request" webhook');
 
-  await myDatas.getConfig();
+  let repository = context.payload.pull_request.base.repo.full_name;
+  let prData = new PullRequest(
+    context.octokit,
+    repository,
+    context.payload.installation.id,
+    context.payload.number,
+    context.payload.pull_request.head.sha
+  );
 
-  myDatas = await checksManagement.createCheck(myDatas); // can't createCheck act on our datas ?
+  let checkId = await createCheck(prData);
+  await sendRequest(prData, checkId);
+}
 
-  await sendRequest(myDatas);
+export async function handleCheckWebhook(context: any) {
+  console.log('[handlers] Invoked from "check_run" or "rerun" webhook');
+
+  const repository = context.payload.repository.full_name;
+  const headSHA = context.payload.check_run.head_sha;
+  const prs = await context.octokit.request(`GET /repos/${repository}/pulls`);
+  const pr = prs.data.find((pr: any) => pr.head.sha === headSHA)
+
+  let prData = new PullRequest(
+    context.octokit,
+    repository,
+    context.payload.installation.id,
+    pr.number,
+    headSHA
+  );
+
+  let checkId = await createCheck(prData);
+  await sendRequest(prData, checkId);
 }

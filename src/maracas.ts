@@ -1,31 +1,31 @@
-import webhookData from './webhookData';
-import * as checksManagement from './checksManagement';
+import { inProgress, failed } from './checksManagement';
+import PullRequest from './pullRequest';
 
 const fetch = require('node-fetch');
 
-export default async function sendRequest(myDatas: webhookData) {
-  const callbackUrl = `${process.env.WEBHOOK_PROXY_URL}/breakbot/pr/${myDatas.baseRepo}/${myDatas.prNb}`;
-  const destUrl = `${process.env.MARACAS_URL}/github/pr/${myDatas.baseRepo}/${myDatas.prNb}?callback=${callbackUrl}`;
+export default async function sendRequest(pr: PullRequest, checkId: number) {
+  const callbackUrl = `${process.env.WEBHOOK_PROXY_URL}/breakbot/pr/${pr.repository}/${pr.prNb}`;
+  const maracasUrl = `${process.env.MARACAS_URL}/github/pr/${pr.repository}/${pr.prNb}?callback=${callbackUrl}`;
 
-  console.log(`[sendRequest] Dest url is: ${destUrl}`);
+  console.log(`[sendRequest] Maracas url is: ${maracasUrl}`);
 
   try {
-    const result = await fetch(destUrl, {
+    const result = await fetch(maracasUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        installationId: myDatas.installationId.toString(),
+        installationId: pr.installationId.toString(),
       },
     });
 
     console.log(`[sendRequest] Status from Maracas: ${result.status}`);
 
     if (result.status === 202) {
-      await checksManagement.inProgress(myDatas);
+      await inProgress(pr, checkId);
     } else {
       const json: any = await result.json();
       console.log(`[sendRequest] message: ${json.message}`);
-      await checksManagement.failed(myDatas, json.message);
+      await failed(pr, checkId, json.message);
     }
   } catch (err: any) {
     console.log(err);

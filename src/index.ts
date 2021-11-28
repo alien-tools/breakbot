@@ -1,5 +1,9 @@
 import { Probot } from 'probot';
-import { maracasHandler, webhookHandler } from './handlers';
+import {
+  handleCheckWebhook,
+  handlePullRequestWebhook,
+  handleMaracasPost,
+} from './handlers';
 
 const bodyParser = require('body-parser');
 
@@ -14,15 +18,21 @@ export = (app: Probot, option: any) => {
   router.post('/pr/:owner/:repo/:prNb', async (req: any, res: any) => {
     console.log('[router] Final report received from Maracas');
 
-    await maracasHandler(req);
+    await handleMaracasPost(req);
 
     res.status(200);
     res.send('Received');
   });
 
-  app.on(['pull_request.opened', 'pull_request.synchronize', 'check_run.requested_action'], async (context) => {
+  app.on(['pull_request.opened', 'pull_request.synchronize'], async (context) => {
     console.log('[index] Starting a new check');
 
-    await webhookHandler(context);
+    await handlePullRequestWebhook(context);
+  });
+
+  app.on(['check_run.requested_action'], async (context) => {
+    console.log('[index] Starting a new check');
+
+    await handleCheckWebhook(context);
   });
 };

@@ -1,8 +1,8 @@
-import webhookData from './webhookData';
-import reportData from './reportData';
 import writeReport from './writeReport';
+import PullRequest from './pullRequest';
+import BreakbotConfig from './breakbotConfig';
 
-export async function failed(myDatas: webhookData, message: string) {
+export async function failed(pr: PullRequest, checkId: number, message: string) {
   const check = {
     status: 'completed',
     conclusion: 'cancelled',
@@ -13,13 +13,13 @@ export async function failed(myDatas: webhookData, message: string) {
   };
 
   try {
-    myDatas.myOctokit.request(`PATCH /repos/${myDatas.baseRepo}/check-runs/${myDatas.checkId}`, check);
+    await pr.octokit.request(`PATCH /repos/${pr.repository}/check-runs/${checkId}`, check);
   } catch (err) {
     console.error(err);
   }
 }
 
-export async function inProgress(myDatas: webhookData) {
+export async function inProgress(pr: PullRequest, checkId: number) {
   const check = {
     status: 'in_progress',
     output: {
@@ -28,41 +28,27 @@ export async function inProgress(myDatas: webhookData) {
     },
   };
   try {
-    myDatas.myOctokit.request(`PATCH /repos/${myDatas.baseRepo}/check-runs/${myDatas.checkId}`, check);
+    await pr.octokit.request(`PATCH /repos/${pr.repository}/check-runs/${checkId}`, check);
   } catch (err) {
     console.error(err);
   }
 }
 
-export async function finalUpdate(myDatas: reportData, myJson: any) {
-  console.log(`[updateCheck] Message received from Maracas: ${myJson.message}`);
+export async function finalUpdate(pr: PullRequest, checkId: number, config: BreakbotConfig, report: any) {
+  console.log(`[finalUpdate] Report received from Maracas: ${report.message}`);
 
   const myActions = [{
-    label: 'Rerun test',
-    description: '',
+    label: 'Re-analyze pull request',
+    description: 'Re-analyze pull request',
     identifier: 'rerun',
   }];
 
-  // ---Format the Json---
-  // Generic declaration
-  let maxBCs = 50;
-  let maxClients = 50;
-  const maxDetections = 50;
-  if (myDatas.config?.maxDisplayedBC) {
-    maxBCs = myDatas.config?.maxDisplayedBC;
-    console.log(`[updateCheck] New max bc: ${maxBCs}`);
-  }
-  if (myDatas.config?.maxDisplayedClients) {
-    maxClients = myDatas.config?.maxDisplayedClients;
-    console.log(`[updateCheck] New max clients: ${maxClients}`);
-  }
-
-  const parsedJson = writeReport(myJson, maxBCs, maxClients, maxDetections);
+  const [title, summary, text] = writeReport(report, config.maxBCs, config.maxClients, config.maxDetections);
 
   const newOutput = {
-    title: parsedJson[0],
-    summary: parsedJson[1],
-    text: parsedJson[2],
+    title,
+    summary,
+    text,
   };
 
   const newCheck = {
@@ -73,14 +59,13 @@ export async function finalUpdate(myDatas: reportData, myJson: any) {
   };
 
   try {
-    myDatas.myOctokit.request(`PATCH /repos/${myDatas.baseRepo}/check-runs/${myDatas.checkId}`, newCheck);
+    await pr.octokit.request(`PATCH /repos/${pr.repository}/check-runs/${checkId}`, newCheck);
   } catch (err) {
     console.error(err);
   }
 }
 
-export async function createCheck(myDatas: webhookData) {
-  const newDatas = myDatas;
+export async function createCheck(pr: PullRequest) {
   console.log('[createCheck] Starting...');
 
   const output = {
@@ -90,19 +75,18 @@ export async function createCheck(myDatas: webhookData) {
 
   const check = {
     name: 'Breakbot report',
-    head_sha: newDatas.headSHA,
+    head_sha: pr.headSHA,
     status: 'queued',
     output,
   };
 
   try {
-    const resNewCheck = await newDatas.myOctokit.request(`POST /repos/${newDatas.baseRepo}/check-runs`, check);
-    newDatas.checkId = resNewCheck.data.id;
+    const resNewCheck = await pr.octokit.request(`POST /repos/${pr.repository}/check-runs`, check);
+    const checkId = resNewCheck.data.id;
+    console.log(`[createCheck] Check ID = ${checkId}`);
+    return checkId;
   } catch (err) {
     console.error(err);
+    return -1;
   }
-
-  console.log(`[createCheck] Checkid: ${newDatas.checkId}`);
-
-  return newDatas;
 }
