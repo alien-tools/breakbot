@@ -7,7 +7,7 @@ import payloadv4 from './fixtures/maracas.v4.json';
 import payloadv5 from './fixtures/maracas.v5.json';
 import payloadv6 from './fixtures/maracas.v6.json';
 
-import writeReport from '../src/writeReport';
+import writeReport from '../src/report';
 
 describe('Checks that the Json received from Maracas is correctly parsed', () => {
   test('parsing the new Json, with a root error', async (done) => {

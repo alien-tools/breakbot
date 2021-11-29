@@ -1,6 +1,6 @@
-import writeReport from './writeReport';
+import writeReport from './report';
 import PullRequest from './pullRequest';
-import BreakbotConfig from './breakbotConfig';
+import BreakbotConfig from './config';
 
 export async function createCheck(pr: PullRequest) {
   console.log('[createCheck] Starting...');

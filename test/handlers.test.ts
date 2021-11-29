@@ -1,31 +1,48 @@
 import nock from 'nock';
-import * as handlers from '../src/handlers';
+import { Octokit } from '@octokit/core';
+import { mocked } from 'ts-jest/utils';
+
+import {
+  handleCheckWebhook,
+  handlePullRequestWebhook,
+  handleMaracasPost,
+} from '../src/handlers';
+import sendRequest from '../src/maracas';
 import GlobalVars from './globalVarsTests';
 
 import payloadNewPr from './fixtures/pull_request.opened.json';
 import payloadNewCheck from './fixtures/check_run.requested_action.json';
 import payloadReport from './fixtures/maracas.v3.json';
-
-import WebhookData from '../src/webhookData';
-
-import sendRequest from '../src/maracas';
+import payloadGetChecks from './fixtures/getChecks.json';
+import payloadGetPulls from './fixtures/getPulls.json';
+import payloadGetPull from './fixtures/getPull.json';
+import payloadPostCheck from './fixtures/postCheck.json';
 
 const myVars = new GlobalVars();
 
 jest.mock('../src/maracas');
 
-// import { Octokit } from '@octokit/core'
 jest.mock('@octokit/core', () => ({
-  constructor: (args: any) => {
-    const myOctokit = {
-      request: myVars.mockRequest,
-    };
-    return myOctokit;
-  },
+  Octokit: jest.fn(() => ({
+    request: (req: string, data: any) => {
+      console.log(`[mockRequest] Req received: ${req} ${data}`);
+      if (req === 'GET /repos/alien-tools/comp-changes/pulls/2') {
+        console.log(`[mockRequest] Req received from a Get pull: ${req}`);
+        return payloadGetPull;
+      } if (req === 'GET /repos/alien-tools/comp-changes/commits/sha123456789/check-runs') {
+        return payloadGetChecks;
+      } if (req === 'GET /repos/alien-tools/comp-changes/pulls') {
+        return payloadGetPulls;
+      } if (req === 'POST /repos/alien-tools/comp-changes/check-runs') {
+        return payloadPostCheck;
+      }
+      return undefined;
+    },
+  })),
 }));
 
 jest.mock('@probot/octokit-plugin-config', () => ({
-  config: ((myOctokit: any) => ({
+  config: ((octokit: any) => ({
     config: {
       get: ((args: any) => {
         const addressSplit = myVars.baseRepo.split('/');
@@ -46,18 +63,7 @@ jest.mock('@probot/octokit-plugin-config', () => ({
 }));
 
 describe('Testing webhookhandler', () => {
-  const mockOctokit = {
-    request: myVars.mockRequest,
-  };
-
-  const mockDatas = new WebhookData('ImMeta/breakbotLib', 2, mockOctokit);
-  mockDatas.headSHA = myVars.branchSHA;
-  mockDatas.prNb = myVars.prNb;
-  mockDatas.checkId = myVars.checkId;
-  mockDatas.config = {
-    maxDisplayedBC: 12,
-    verbose: true,
-  };
+  const OctokitMock = mocked(Octokit, true);
 
   beforeEach(() => {
     nock.disableNetConnect();
@@ -67,34 +73,35 @@ describe('Testing webhookhandler', () => {
   test('Opened pull request, no error', async (done) => {
     const mockContext = {
       name: 'pull_request',
-      octokit: mockOctokit,
+      octokit: new Octokit(),
       payload: payloadNewPr,
     };
 
-    await handlers.webhookHandler(mockContext);
+    await handlePullRequestWebhook(mockContext);
 
-    done(expect(sendRequest).toHaveBeenCalledWith(mockDatas));
+    done(expect(sendRequest).toHaveBeenCalledWith(undefined, undefined));
   });
 
   test('Rerequested test, no error', async (done) => {
     const mockContext = {
       name: 'check_run',
-      octokit: mockOctokit,
+      octokit: new Octokit(),
       payload: payloadNewCheck,
     };
 
-    await handlers.webhookHandler(mockContext);
+    await handleCheckWebhook(mockContext);
 
-    done(expect(sendRequest).toHaveBeenCalledWith(mockDatas));
+    done(expect(sendRequest).toHaveBeenCalledWith(undefined));
   });
 
   afterEach(() => {
+    OctokitMock.mockClear();
     nock.enableNetConnect();
   });
 });
 
 describe.skip('Testing reportHandler', () => {
-  test('Maracas reply 200', async (done) => {
+  test('Maracas reply 200', async (done: any) => {
     const addressSplit = myVars.baseRepo.split('/');
 
     const mockReq = {
@@ -109,6 +116,6 @@ describe.skip('Testing reportHandler', () => {
       body: payloadReport,
     };
 
-    await handlers.maracasHandler(mockReq);
+    await handleMaracasPost(mockReq);
   });
 });

@@ -1,4 +1,4 @@
-import { inProgress, failed } from './checksManagement';
+import { inProgress, failed } from './checks';
 import PullRequest from './pullRequest';
 
 const fetch = require('node-fetch');
