@@ -1,1 +1,1 @@
-An error occured: unlucky
+An error occurred: unlucky

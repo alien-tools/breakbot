@@ -4,10 +4,12 @@ import { createCheck, finalUpdate } from './checks';
 import sendRequest from './maracas';
 import PullRequest from './pullRequest';
 import { readConfigFile } from './config';
+import { Request } from 'express';
+import { Context } from 'probot';
 
-export async function handleMaracasPost(req: any) {
+export async function handleMaracasPost(req: Request) {
   const repository = `${req.params.owner}/${req.params.repo}`;
-  const { prNb } = req.params;
+  const prNb = parseInt(req.params.prNb);
 
   console.log('[handlers] Authenticating to Octokit');
   const octokit = new Octokit({
@@ -37,7 +39,7 @@ export async function handleMaracasPost(req: any) {
     console.log(`[handlers] Found check ID ${bbCheck.id}`);
     const pr = new PullRequest(
       repository,
-      req.headers.installationId,
+      parseInt(req.header('installationId') ?? '-1'),
       prNb,
       headSHA,
     );
@@ -48,7 +50,7 @@ export async function handleMaracasPost(req: any) {
   }
 }
 
-export async function handlePullRequestWebhook(context: any) {
+export async function handlePullRequestWebhook(context: Context) {
   console.log('[handlers] Invoked from "pull_request" webhook');
 
   const repository = context.payload.pull_request.base.repo.full_name;
@@ -59,11 +61,11 @@ export async function handlePullRequestWebhook(context: any) {
     context.payload.pull_request.head.sha,
   );
 
-  const checkId = await createCheck(context.octokit, pr);
-  await sendRequest(context.octokit, pr, checkId);
+  const checkId = await createCheck(context, pr);
+  await sendRequest(context, pr, checkId);
 }
 
-export async function handleCheckWebhook(context: any) {
+export async function handleCheckWebhook(context: Context) {
   console.log('[handlers] Invoked from "check_run" or "rerun" webhook');
 
   const repository = context.payload.repository.full_name;
@@ -78,6 +80,6 @@ export async function handleCheckWebhook(context: any) {
     headSHA,
   );
 
-  const checkId = await createCheck(context.octokit, pr);
-  await sendRequest(context.octokit, pr, checkId);
+  const checkId = await createCheck(context, pr);
+  await sendRequest(context, pr, checkId);
 }

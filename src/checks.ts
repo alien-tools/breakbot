@@ -3,8 +3,9 @@ import { Octokit } from '@octokit/core';
 import writeReport from './report';
 import PullRequest from './pullRequest';
 import BreakbotConfig from './config';
+import { Context } from 'probot';
 
-export async function createCheck(octokit: Octokit, pr: PullRequest) {
+export async function createCheck(context: Context, pr: PullRequest): Promise<number> {
   console.log('[createCheck] Starting...');
 
   const output = {
@@ -12,15 +13,15 @@ export async function createCheck(octokit: Octokit, pr: PullRequest) {
     summary: '',
   };
 
-  const check = {
-    name: 'Breakbot report',
-    head_sha: pr.headSHA,
-    status: 'queued',
-    output,
-  };
-
   try {
-    const resNewCheck = await octokit.request(`POST /repos/${pr.repository}/check-runs`, check);
+    const resNewCheck = await context.octokit.checks.create({
+      owner: context.repo().owner,
+      repo: context.repo().repo,
+      name: 'Breakbot report',
+      head_sha: pr.headSHA,
+      status: 'queued',
+      output,
+    });
     const checkId = resNewCheck.data.id;
     console.log(`[createCheck] Check ID = ${checkId}`);
     return checkId;
@@ -30,7 +31,7 @@ export async function createCheck(octokit: Octokit, pr: PullRequest) {
   }
 }
 
-export async function inProgress(octokit: Octokit, pr: PullRequest, checkId: number) {
+export async function inProgress(context: Context, pr: PullRequest, checkId: number) {
   const check = {
     status: 'in_progress',
     output: {
@@ -39,7 +40,7 @@ export async function inProgress(octokit: Octokit, pr: PullRequest, checkId: num
     },
   };
   try {
-    await octokit.request(`PATCH /repos/${pr.repository}/check-runs/${checkId}`, check);
+    await context.octokit.request(`PATCH /repos/${pr.repository}/check-runs/${checkId}`, check);
   } catch (err) {
     console.error(err);
   }
@@ -82,7 +83,7 @@ export async function finalUpdate(
   }
 }
 
-export async function failed(octokit: Octokit, pr: PullRequest, checkId: number, message: string) {
+export async function failed(context: Context, pr: PullRequest, checkId: number, message: string) {
   const check = {
     status: 'completed',
     conclusion: 'cancelled',
@@ -93,7 +94,7 @@ export async function failed(octokit: Octokit, pr: PullRequest, checkId: number,
   };
 
   try {
-    await octokit.request(`PATCH /repos/${pr.repository}/check-runs/${checkId}`, check);
+    await context.octokit.request(`PATCH /repos/${pr.repository}/check-runs/${checkId}`, check);
   } catch (err) {
     console.error(err);
   }

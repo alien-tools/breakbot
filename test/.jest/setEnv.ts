@@ -1,8 +1,4 @@
-import GlobalVars from '../globalVarsTests'
-
-var myVars = new GlobalVars()
-
-process.env.APP_ID = myVars.appId.toString()
-process.env.PRIVATE_KEY = myVars.privateKey
-process.env.MARACAS_URL = myVars.maracasUrl
-process.env.WEBHOOK_PROXY_URL = myVars.callbackUrl
+process.env.APP_ID = "1871"
+process.env.PRIVATE_KEY = "private-key"
+process.env.MARACAS_URL = "http://maracas-server.org"
+process.env.WEBHOOK_PROXY_URL = "http://webhook-server.org"
