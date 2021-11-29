@@ -29,7 +29,7 @@ jest.mock('@octokit/core', () => ({
   })),
 }));
 
-jest.mock('../src/writeReport.ts', () => jest.fn((report: any, maxBCs: number, maxClients: number, maxDetections: number) => (['Title', 'Summary', 'Text'])));
+jest.mock('../src/report.ts', () => jest.fn((report: any, maxBCs: number, maxClients: number, maxDetections: number) => (['Title', 'Summary', 'Text'])));
 
 describe('Testing check management in normal conditions', () => {
   const OctokitMock = mocked(Octokit, true);

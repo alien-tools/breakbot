@@ -41,11 +41,11 @@ export default class GlobalVars {
   dMax: number;
 
   constructor() {
-    this.baseRepo = 'ImMeta/breakbotLib';
-    this.prNb = 1;
-    this.branchSHA = 'headsha1';
+    this.baseRepo = 'alien-tools/comp-changes';
+    this.prNb = 2;
+    this.branchSHA = 'sha123456789';
     this.checkId = 30;
-    this.installationId = 2;
+    this.installationId = 123456789;
     this.appId = 1871;
     this.privateKey = privateKey;
 
