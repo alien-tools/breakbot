@@ -1,6 +1,6 @@
 import { Octokit } from '@octokit/core';
 
-import { inProgress, failed } from './checks';
+import { failed, inProgress } from './checks';
 import PullRequest from './pullRequest';
 
 const fetch = require('node-fetch');

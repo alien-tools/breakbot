@@ -31,7 +31,7 @@ export async function handleMaracasPost(req: any) {
 
   console.log(`[handlers] Checks information: total_count=${total} checks=${checks}`);
 
-  const bbCheck = checks.find((check: any) => check.app.id == process.env.APP_ID);
+  const bbCheck = checks.find((check: any) => check.app.id.toString() === process.env.APP_ID);
 
   if (bbCheck) {
     console.log(`[handlers] Found check ID ${bbCheck.id}`);

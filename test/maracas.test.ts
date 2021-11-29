@@ -1,10 +1,7 @@
 import nock from 'nock';
 
 import { Octokit } from '@octokit/core';
-import {
-  inProgress,
-  failed,
-} from '../src/checks';
+import { failed, inProgress, } from '../src/checks';
 import sendRequest from '../src/maracas';
 import GlobalVars from './globalVarsTests';
 
@@ -40,9 +37,12 @@ describe('Test interractions with Maracas', () => {
 
     await sendRequest(octokit, pr, checkId);
 
-    expect(scope.isDone()).toBe(true);
-    expect(inProgress).toHaveBeenCalledTimes(1);
-    expect(inProgress).toHaveBeenCalledWith(octokit, pr, checkId);
+    expect(scope.isDone())
+      .toBe(true);
+    expect(inProgress)
+      .toHaveBeenCalledTimes(1);
+    expect(inProgress)
+      .toHaveBeenCalledWith(octokit, pr, checkId);
   });
 
   test('sendRequest updates the check with the error if Maracas answers != 202', async () => {
@@ -69,9 +69,12 @@ describe('Test interractions with Maracas', () => {
 
     await sendRequest(octokit, pr, checkId);
 
-    expect(scope.isDone()).toBe(true);
-    expect(failed).toHaveBeenCalledTimes(1);
-    expect(failed).toHaveBeenCalledWith(octokit, pr, checkId, 'unlucky');
+    expect(scope.isDone())
+      .toBe(true);
+    expect(failed)
+      .toHaveBeenCalledTimes(1);
+    expect(failed)
+      .toHaveBeenCalledWith(octokit, pr, checkId, 'unlucky');
   });
 
   afterEach(() => {

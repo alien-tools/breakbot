@@ -16,11 +16,14 @@ jest.mock('@octokit/core', () => ({
       if (req === 'GET /repos/alien-tools/comp-changes/pulls/2') {
         console.log(`[mockRequest] Req received from a Get pull: ${req}`);
         return payloadGetPull;
-      } if (req === 'GET /repos/alien-tools/comp-changes/commits/sha123456789/check-runs') {
+      }
+      if (req === 'GET /repos/alien-tools/comp-changes/commits/sha123456789/check-runs') {
         return payloadGetChecks;
-      } if (req === 'GET /repos/alien-tools/comp-changes/pulls') {
+      }
+      if (req === 'GET /repos/alien-tools/comp-changes/pulls') {
         return payloadGetPulls;
-      } if (req === 'POST /repos/alien-tools/comp-changes/check-runs') {
+      }
+      if (req === 'POST /repos/alien-tools/comp-changes/check-runs') {
         return payloadPostCheck;
       }
       return undefined;
@@ -46,13 +49,15 @@ describe('Testing check management in normal conditions', () => {
   test('createCheck', async () => {
     const checkId = await createCheck(new Octokit(), testPR);
 
-    expect(checkId).toBe(30);
+    expect(checkId)
+      .toBe(30);
   });
 
   test('createCheck2', async () => {
     const checkId = await createCheck(new Octokit(), testPR);
 
-    expect(checkId).toBe(30);
+    expect(checkId)
+      .toBe(30);
   });
 
   afterEach(() => {

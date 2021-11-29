@@ -19,7 +19,8 @@ describe('Checks that the Json received from Maracas is correctly parsed', () =>
       readFileSync('./test/fixtures/reports/V1-message.md', 'utf-8'),
     ];
 
-    expect(myReport).toStrictEqual(mockReportv1);
+    expect(myReport)
+      .toStrictEqual(mockReportv1);
   });
 
   test('parsing the new Json, with 1 client in error', async () => {
@@ -31,7 +32,8 @@ describe('Checks that the Json received from Maracas is correctly parsed', () =>
       readFileSync('./test/fixtures/reports/V2-message.md', 'utf-8'),
     ];
 
-    expect(myReport).toStrictEqual(mockReportv2);
+    expect(myReport)
+      .toStrictEqual(mockReportv2);
   });
 
   test('parsing the new Json, with 1 client', async () => {
@@ -43,7 +45,8 @@ describe('Checks that the Json received from Maracas is correctly parsed', () =>
       readFileSync('./test/fixtures/reports/V3-message.md', 'utf-8'),
     ];
 
-    expect(myReport).toStrictEqual(mockReportv3);
+    expect(myReport)
+      .toStrictEqual(mockReportv3);
   });
 
   test('parsing the new Json, with several clients', async () => {
@@ -55,7 +58,8 @@ describe('Checks that the Json received from Maracas is correctly parsed', () =>
       readFileSync('./test/fixtures/reports/V4-message.md', 'utf-8'),
     ];
 
-    expect(myReport).toStrictEqual(mockReportv4);
+    expect(myReport)
+      .toStrictEqual(mockReportv4);
   });
 
   test('parsing the new Json, with no clients', async () => {
@@ -67,7 +71,8 @@ describe('Checks that the Json received from Maracas is correctly parsed', () =>
       readFileSync('./test/fixtures/reports/V5-message.md', 'utf-8'),
     ];
 
-    expect(myReport).toStrictEqual(mockReportv5);
+    expect(myReport)
+      .toStrictEqual(mockReportv5);
   });
 
   test('parsing the new Json, with too many BCs and detections', async () => {
@@ -79,6 +84,7 @@ describe('Checks that the Json received from Maracas is correctly parsed', () =>
       readFileSync('./test/fixtures/reports/V6-message.md', 'utf-8'),
     ];
 
-    expect(myReport).toStrictEqual(mockReportv6);
+    expect(myReport)
+      .toStrictEqual(mockReportv6);
   });
 });

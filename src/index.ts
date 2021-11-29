@@ -1,9 +1,5 @@
 import { Probot } from 'probot';
-import {
-  handleCheckWebhook,
-  handlePullRequestWebhook,
-  handleMaracasPost,
-} from './handlers';
+import { handleCheckWebhook, handleMaracasPost, handlePullRequestWebhook } from './handlers';
 
 const bodyParser = require('body-parser');
 

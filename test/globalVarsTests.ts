@@ -39,6 +39,23 @@ export default class GlobalVars {
   clMax: number;
 
   dMax: number;
+  mockRequest = jest.fn((req: string) => {
+    if (req === `GET /repos/${this.baseRepo}/pulls/${this.prNb}`) {
+      console.log(`[mockRequest] Req received from a Get pull: ${req}`);
+      return payloadGetPull;
+    }
+    if (req === `GET /repos/${this.baseRepo}/commits/${this.branchSHA}/check-runs`) {
+      return payloadGetChecks;
+    }
+    if (req === `GET /repos/${this.baseRepo}/pulls`) {
+      return payloadGetPulls;
+    }
+    if (req === `POST /repos/${this.baseRepo}/check-runs`) {
+      return payloadPostCheck;
+    }
+    console.log(`[mockRequest] Req received: ${req}`);
+    return undefined;
+  });
 
   constructor() {
     this.baseRepo = 'alien-tools/comp-changes';
@@ -60,19 +77,4 @@ export default class GlobalVars {
     this.clMax = this.defaultMax;
     this.dMax = this.defaultMax;
   }
-
-  mockRequest = jest.fn((req: string) => {
-    if (req === `GET /repos/${this.baseRepo}/pulls/${this.prNb}`) {
-      console.log(`[mockRequest] Req received from a Get pull: ${req}`);
-      return payloadGetPull;
-    } if (req === `GET /repos/${this.baseRepo}/commits/${this.branchSHA}/check-runs`) {
-      return payloadGetChecks;
-    } if (req === `GET /repos/${this.baseRepo}/pulls`) {
-      return payloadGetPulls;
-    } if (req === `POST /repos/${this.baseRepo}/check-runs`) {
-      return payloadPostCheck;
-    }
-    console.log(`[mockRequest] Req received: ${req}`);
-    return undefined;
-  });
 }

@@ -15,11 +15,13 @@ export async function readConfigFile(repository: string, octokit: Octokit) {
   console.log('[handlers] Reading .breakbot.yml');
 
   const addressSplit = repository.split('/');
-  const configFile = await config(octokit).config.get({
-    owner: addressSplit[0],
-    repo: addressSplit[1],
-    path: '.breakbot.yml',
-  });
+  const configFile = await config(octokit)
+    .config
+    .get({
+      owner: addressSplit[0],
+      repo: addressSplit[1],
+      path: '.breakbot.yml',
+    });
 
   console.log(`[handlers] Got ${configFile}`);
 

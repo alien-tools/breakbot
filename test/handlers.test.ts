@@ -2,11 +2,7 @@ import nock from 'nock';
 import { Octokit } from '@octokit/core';
 import { mocked } from 'ts-jest/utils';
 
-import {
-  handleCheckWebhook,
-  handlePullRequestWebhook,
-  handleMaracasPost,
-} from '../src/handlers';
+import { handleCheckWebhook, handleMaracasPost, handlePullRequestWebhook, } from '../src/handlers';
 import sendRequest from '../src/maracas';
 import GlobalVars from './globalVarsTests';
 import PullRequest from '../src/pullRequest';
@@ -30,11 +26,14 @@ jest.mock('@octokit/core', () => ({
       if (req === 'GET /repos/alien-tools/comp-changes/pulls/2') {
         console.log(`[mockRequest] Req received from a Get pull: ${req}`);
         return payloadGetPull;
-      } if (req === 'GET /repos/alien-tools/comp-changes/commits/sha123456789/check-runs') {
+      }
+      if (req === 'GET /repos/alien-tools/comp-changes/commits/sha123456789/check-runs') {
         return payloadGetChecks;
-      } if (req === 'GET /repos/alien-tools/comp-changes/pulls') {
+      }
+      if (req === 'GET /repos/alien-tools/comp-changes/pulls') {
         return payloadGetPulls;
-      } if (req === 'POST /repos/alien-tools/comp-changes/check-runs') {
+      }
+      if (req === 'POST /repos/alien-tools/comp-changes/check-runs') {
         return payloadPostCheck;
       }
       return undefined;
@@ -89,7 +88,8 @@ describe('Testing handlers', () => {
 
     await handlePullRequestWebhook(mockContext);
 
-    expect(sendRequest).toHaveBeenCalledWith(octokit, pr, checkId);
+    expect(sendRequest)
+      .toHaveBeenCalledWith(octokit, pr, checkId);
   });
 
   test('Rerequested test, no error', async () => {
@@ -111,7 +111,8 @@ describe('Testing handlers', () => {
 
     await handleCheckWebhook(mockContext);
 
-    expect(sendRequest).toHaveBeenCalledWith(octokit, pr, checkId);
+    expect(sendRequest)
+      .toHaveBeenCalledWith(octokit, pr, checkId);
   });
 
   afterEach(() => {
