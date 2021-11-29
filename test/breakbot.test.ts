@@ -31,7 +31,7 @@ describe('BreakBot tests', () => {
             summary: '',
             title: 'Sending request to the api...',
           },
-          status: 'opened',
+          status: 'queued',
         });
         return true;
       })
@@ -44,9 +44,8 @@ describe('BreakBot tests', () => {
       })
       .reply(200);
 
-    nock('http://fakeurl.com/')
-      .post('/github/pr/alien-tools/comp-changes/2?callback=https://testapp.com/breakbot/pr/alien-tools/comp-changes/2', (body) => {
-        expect(body).toMatchObject({});
+    nock('http://maracas-server.org')
+      .post('/github/pr/alien-tools/comp-changes/2?callback=http://webhook-server.org/breakbot/pr/alien-tools/comp-changes/2', () => {
         return true;
       })
       .reply(202);

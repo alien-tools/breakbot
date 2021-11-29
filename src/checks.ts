@@ -6,29 +6,24 @@ import BreakbotConfig from './config';
 import { Context } from 'probot';
 
 export async function createCheck(context: Context, pr: PullRequest): Promise<number> {
-  console.log('[createCheck] Starting...');
+  context.log('Creating a new check');
 
   const output = {
     title: 'Sending request to the api...',
     summary: '',
   };
 
-  try {
-    const resNewCheck = await context.octokit.checks.create({
-      owner: context.repo().owner,
-      repo: context.repo().repo,
-      name: 'Breakbot report',
-      head_sha: pr.headSHA,
-      status: 'queued',
-      output,
-    });
-    const checkId = resNewCheck.data.id;
-    console.log(`[createCheck] Check ID = ${checkId}`);
-    return checkId;
-  } catch (err) {
-    console.error(err);
-    return -1;
-  }
+  const resNewCheck = await context.octokit.checks.create({
+    owner: context.repo().owner,
+    repo: context.repo().repo,
+    name: 'BreakBot report',
+    head_sha: pr.headSHA,
+    status: 'queued',
+    output,
+  });
+  const checkId = resNewCheck.data.id;
+  context.log(`New check created; ID: ${checkId}`);
+  return checkId;
 }
 
 export async function inProgress(context: Context, pr: PullRequest, checkId: number) {
@@ -39,11 +34,8 @@ export async function inProgress(context: Context, pr: PullRequest, checkId: num
       summary: '',
     },
   };
-  try {
-    await context.octokit.request(`PATCH /repos/${pr.repository}/check-runs/${checkId}`, check);
-  } catch (err) {
-    console.error(err);
-  }
+
+  await context.octokit.request(`PATCH /repos/${pr.repository}/check-runs/${checkId}`, check);
 }
 
 export async function finalUpdate(
@@ -53,7 +45,7 @@ export async function finalUpdate(
   config: BreakbotConfig,
   report: any,
 ) {
-  console.log(`[finalUpdate] Report received from Maracas: ${report.message}`);
+  octokit.log.info('Generating a nice Markdown report');
 
   const myActions = [{
     label: 'Re-analyze pull request',
@@ -76,11 +68,8 @@ export async function finalUpdate(
     actions: myActions,
   };
 
-  try {
-    await octokit.request(`PATCH /repos/${pr.repository}/check-runs/${checkId}`, newCheck);
-  } catch (err) {
-    console.error(err);
-  }
+  octokit.log.info(`Updating check #${checkId} for ${pr.repository}/${pr.prNb}`);
+  await octokit.request(`PATCH /repos/${pr.repository}/check-runs/${checkId}`, newCheck);
 }
 
 export async function failed(context: Context, pr: PullRequest, checkId: number, message: string) {
@@ -93,9 +82,5 @@ export async function failed(context: Context, pr: PullRequest, checkId: number,
     },
   };
 
-  try {
-    await context.octokit.request(`PATCH /repos/${pr.repository}/check-runs/${checkId}`, check);
-  } catch (err) {
-    console.error(err);
-  }
+  await context.octokit.request(`PATCH /repos/${pr.repository}/check-runs/${checkId}`, check);
 }

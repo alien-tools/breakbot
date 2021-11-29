@@ -4,31 +4,28 @@ import { handleCheckWebhook, handleMaracasPost, handlePullRequestWebhook } from 
 
 const bodyParser = require('body-parser');
 
-export default function breakBot(app: Probot, option: any) {
-  app.log('[index] Options:');
-  app.log(option);
+export default function breakBot(app: Probot, options: any) {
+  app.log(options, 'Welcome to BreakBot!');
 
-  const router = option.getRouter('/breakbot');
-
+  const router = options.getRouter('/breakbot');
   router.use(bodyParser.json({ limit: '5mb' }));
-
   router.post('/pr/:owner/:repo/:prNb', async (req: Request, res: Response) => {
-    app.log('[router] Final report received from Maracas');
+    app.log(req.body.message, 'Maracas sent his report back');
 
-    await handleMaracasPost(req);
+    await handleMaracasPost(req, app.log);
 
     res.status(200);
     res.send('Received');
   });
 
   app.on(['pull_request.opened', 'pull_request.synchronize'], async (context: Context) => {
-    app.log.info('[index] Starting a new check');
+    app.log.info('Pull request opened or updated: starting a new check');
 
     await handlePullRequestWebhook(context);
   });
 
   app.on(['check_run.requested_action'], async (context: Context) => {
-    app.log.info('[index] Starting a new check');
+    app.log.info('Requested action: starting a new check');
 
     await handleCheckWebhook(context);
   });

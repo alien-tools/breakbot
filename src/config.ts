@@ -12,8 +12,6 @@ export default class BreakbotConfig {
 }
 
 export async function readConfigFile(repository: string, octokit: Octokit) {
-  console.log('[handlers] Reading .breakbot.yml');
-
   const addressSplit = repository.split('/');
   const configFile = await config(octokit)
     .config
@@ -23,7 +21,7 @@ export async function readConfigFile(repository: string, octokit: Octokit) {
       path: '.breakbot.yml',
     });
 
-  console.log(`[handlers] Got ${configFile}`);
+  octokit.log.info('Reading .breakbot.yml', configFile);
 
   const configData = new BreakbotConfig();
 
