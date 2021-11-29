@@ -21,6 +21,7 @@ export async function createCheck(octokit: Octokit, pr: PullRequest) {
 
   try {
     const resNewCheck = await octokit.request(`POST /repos/${pr.repository}/check-runs`, check);
+    console.log("resNewCheck="+resNewCheck);
     const checkId = resNewCheck.data.id;
     console.log(`[createCheck] Check ID = ${checkId}`);
     return checkId;

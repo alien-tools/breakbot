@@ -10,7 +10,7 @@ import payloadv6 from './fixtures/maracas.v6.json';
 import writeReport from '../src/report';
 
 describe('Checks that the Json received from Maracas is correctly parsed', () => {
-  test('parsing the new Json, with a root error', async (done) => {
+  test('parsing the new Json, with a root error', async () => {
     const myReport = writeReport(payloadv1, 10, 10, 10);
 
     const mockReportv1 = [
@@ -19,10 +19,10 @@ describe('Checks that the Json received from Maracas is correctly parsed', () =>
       readFileSync('./test/fixtures/reports/V1-message.md', 'utf-8'),
     ];
 
-    done(expect(myReport).toStrictEqual(mockReportv1));
+    expect(myReport).toStrictEqual(mockReportv1);
   });
 
-  test('parsing the new Json, with 1 client in error', async (done) => {
+  test('parsing the new Json, with 1 client in error', async () => {
     const myReport = writeReport(payloadv2, 10, 10, 10);
 
     const mockReportv2 = [
@@ -31,10 +31,10 @@ describe('Checks that the Json received from Maracas is correctly parsed', () =>
       readFileSync('./test/fixtures/reports/V2-message.md', 'utf-8'),
     ];
 
-    done(expect(myReport).toStrictEqual(mockReportv2));
+    expect(myReport).toStrictEqual(mockReportv2);
   });
 
-  test('parsing the new Json, with 1 client', async (done) => {
+  test('parsing the new Json, with 1 client', async () => {
     const myReport = writeReport(payloadv3, 10, 10, 10);
 
     const mockReportv3 = [
@@ -43,10 +43,10 @@ describe('Checks that the Json received from Maracas is correctly parsed', () =>
       readFileSync('./test/fixtures/reports/V3-message.md', 'utf-8'),
     ];
 
-    done(expect(myReport).toStrictEqual(mockReportv3));
+    expect(myReport).toStrictEqual(mockReportv3);
   });
 
-  test('parsing the new Json, with several clients', async (done) => {
+  test('parsing the new Json, with several clients', async () => {
     const myReport = writeReport(payloadv4, 10, 10, 10);
 
     const mockReportv4 = [
@@ -55,10 +55,10 @@ describe('Checks that the Json received from Maracas is correctly parsed', () =>
       readFileSync('./test/fixtures/reports/V4-message.md', 'utf-8'),
     ];
 
-    done(expect(myReport).toStrictEqual(mockReportv4));
+    expect(myReport).toStrictEqual(mockReportv4);
   });
 
-  test('parsing the new Json, with no clients', async (done) => {
+  test('parsing the new Json, with no clients', async () => {
     const myReport = writeReport(payloadv5, 10, 10, 10);
 
     const mockReportv5 = [
@@ -67,10 +67,10 @@ describe('Checks that the Json received from Maracas is correctly parsed', () =>
       readFileSync('./test/fixtures/reports/V5-message.md', 'utf-8'),
     ];
 
-    done(expect(myReport).toStrictEqual(mockReportv5));
+    expect(myReport).toStrictEqual(mockReportv5);
   });
 
-  test('parsing the new Json, with too many BCs and detections', async (done) => {
+  test('parsing the new Json, with too many BCs and detections', async () => {
     const myReport = writeReport(payloadv6, 1, 1, 1);
 
     const mockReportv6 = [
@@ -79,6 +79,6 @@ describe('Checks that the Json received from Maracas is correctly parsed', () =>
       readFileSync('./test/fixtures/reports/V6-message.md', 'utf-8'),
     ];
 
-    done(expect(myReport).toStrictEqual(mockReportv6));
+    expect(myReport).toStrictEqual(mockReportv6);
   });
 });

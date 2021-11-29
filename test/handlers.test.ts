@@ -9,6 +9,7 @@ import {
 } from '../src/handlers';
 import sendRequest from '../src/maracas';
 import GlobalVars from './globalVarsTests';
+import PullRequest from '../src/pullRequest';
 
 import payloadNewPr from './fixtures/pull_request.opened.json';
 import payloadNewCheck from './fixtures/check_run.requested_action.json';
@@ -70,28 +71,47 @@ describe('Testing handlers', () => {
     jest.clearAllMocks();
   });
 
-  test('Opened pull request, no error', async (done) => {
+  test('Opened pull request, no error', async () => {
+    const octokit = new Octokit();
     const mockContext = {
       name: 'pull_request',
-      octokit: new Octokit(),
+      octokit,
       payload: payloadNewPr,
     };
 
+    const pr = new PullRequest(
+      'alien-tools/comp-changes',
+      123456789,
+      2,
+      'sha123456789',
+    );
+    const checkId = 30;
+
     await handlePullRequestWebhook(mockContext);
 
-    done(expect(sendRequest).toHaveBeenCalledWith(undefined, undefined));
+    expect(sendRequest).toHaveBeenCalledWith(octokit, pr, checkId);
   });
 
-  test('Rerequested test, no error', async (done) => {
+  test('Rerequested test, no error', async () => {
+    const octokit = new Octokit();
+
     const mockContext = {
       name: 'check_run',
-      octokit: new Octokit(),
+      octokit,
       payload: payloadNewCheck,
     };
 
+    const pr = new PullRequest(
+      'alien-tools/comp-changes',
+      123456789,
+      2,
+      'sha123456789',
+    );
+    const checkId = 30;
+
     await handleCheckWebhook(mockContext);
 
-    done(expect(sendRequest).toHaveBeenCalledWith(undefined));
+    expect(sendRequest).toHaveBeenCalledWith(octokit, pr, checkId);
   });
 
   afterEach(() => {
@@ -101,7 +121,7 @@ describe('Testing handlers', () => {
 });
 
 describe.skip('Testing reportHandler', () => {
-  test('Maracas reply 200', async (done: any) => {
+  test('Maracas reply 200', async () => {
     const addressSplit = myVars.baseRepo.split('/');
 
     const mockReq = {

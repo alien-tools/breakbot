@@ -1,7 +1,6 @@
 import nock from 'nock';
 import { Octokit } from '@octokit/core';
 import { mocked } from 'ts-jest/utils';
-import DoneCallback = jest.DoneCallback;
 import { createCheck } from '../src/checks';
 import PullRequest from '../src/pullRequest';
 
@@ -44,16 +43,16 @@ describe('Testing check management in normal conditions', () => {
     nock.disableNetConnect();
   });
 
-  test('createCheck', async (done: DoneCallback) => {
+  test('createCheck', async () => {
     const checkId = await createCheck(new Octokit(), testPR);
 
-    done(expect(checkId).toBe(30));
+    expect(checkId).toBe(30);
   });
 
-  test('createCheck2', async (done: DoneCallback) => {
+  test('createCheck2', async () => {
     const checkId = await createCheck(new Octokit(), testPR);
 
-    done(expect(checkId).toBe(30));
+    expect(checkId).toBe(30);
   });
 
   afterEach(() => {
