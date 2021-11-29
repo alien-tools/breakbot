@@ -1,8 +1,4 @@
-import { Octokit } from '@octokit/core';
-
 export default class PullRequest {
-  octokit: Octokit;
-
   repository: string;
 
   installationId: number;
@@ -11,8 +7,7 @@ export default class PullRequest {
 
   headSHA: string;
 
-  constructor(octokit: Octokit, repository: string, installationId: number, prNb: number, headSHA: string) {
-    this.octokit = octokit;
+  constructor(repository: string, installationId: number, prNb: number, headSHA: string) {
     this.repository = repository;
     this.installationId = installationId;
     this.prNb = prNb;

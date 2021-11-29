@@ -62,7 +62,7 @@ jest.mock('@probot/octokit-plugin-config', () => ({
   })),
 }));
 
-describe('Testing webhookhandler', () => {
+describe('Testing handlers', () => {
   const OctokitMock = mocked(Octokit, true);
 
   beforeEach(() => {

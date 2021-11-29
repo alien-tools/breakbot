@@ -36,14 +36,13 @@ export async function handleMaracasPost(req: any) {
   if (bbCheck) {
     console.log(`[handlers] Found check ID ${bbCheck.id}`);
     const pr = new PullRequest(
-      octokit,
       repository,
       req.headers.installationId,
       prNb,
       headSHA,
     );
 
-    await finalUpdate(pr, bbCheck.id, config, req.body);
+    await finalUpdate(octokit, pr, bbCheck.id, config, req.body);
   } else {
     console.log('[handlers] No check found.');
   }
@@ -54,15 +53,14 @@ export async function handlePullRequestWebhook(context: any) {
 
   const repository = context.payload.pull_request.base.repo.full_name;
   const pr = new PullRequest(
-    context.octokit,
     repository,
     context.payload.installation.id,
     context.payload.number,
     context.payload.pull_request.head.sha,
   );
 
-  const checkId = await createCheck(pr);
-  await sendRequest(pr, checkId);
+  const checkId = await createCheck(context.octokit, pr);
+  await sendRequest(context.octokit, pr, checkId);
 }
 
 export async function handleCheckWebhook(context: any) {
@@ -74,13 +72,12 @@ export async function handleCheckWebhook(context: any) {
   const thisPR = repoPRs.data.find((p: any) => p.head.sha === headSHA);
 
   const pr = new PullRequest(
-    context.octokit,
     repository,
     context.payload.installation.id,
     thisPR.number,
     headSHA,
   );
 
-  const checkId = await createCheck(pr);
-  await sendRequest(pr, checkId);
+  const checkId = await createCheck(context.octokit, pr);
+  await sendRequest(context.octokit, pr, checkId);
 }

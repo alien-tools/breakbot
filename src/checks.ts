@@ -1,8 +1,10 @@
+import { Octokit } from '@octokit/core';
+
 import writeReport from './report';
 import PullRequest from './pullRequest';
 import BreakbotConfig from './config';
 
-export async function createCheck(pr: PullRequest) {
+export async function createCheck(octokit: Octokit, pr: PullRequest) {
   console.log('[createCheck] Starting...');
 
   const output = {
@@ -18,7 +20,7 @@ export async function createCheck(pr: PullRequest) {
   };
 
   try {
-    const resNewCheck = await pr.octokit.request(`POST /repos/${pr.repository}/check-runs`, check);
+    const resNewCheck = await octokit.request(`POST /repos/${pr.repository}/check-runs`, check);
     const checkId = resNewCheck.data.id;
     console.log(`[createCheck] Check ID = ${checkId}`);
     return checkId;
@@ -28,7 +30,7 @@ export async function createCheck(pr: PullRequest) {
   }
 }
 
-export async function inProgress(pr: PullRequest, checkId: number) {
+export async function inProgress(octokit: Octokit, pr: PullRequest, checkId: number) {
   const check = {
     status: 'in_progress',
     output: {
@@ -37,13 +39,13 @@ export async function inProgress(pr: PullRequest, checkId: number) {
     },
   };
   try {
-    await pr.octokit.request(`PATCH /repos/${pr.repository}/check-runs/${checkId}`, check);
+    await octokit.request(`PATCH /repos/${pr.repository}/check-runs/${checkId}`, check);
   } catch (err) {
     console.error(err);
   }
 }
 
-export async function finalUpdate(pr: PullRequest, checkId: number, config: BreakbotConfig, report: any) {
+export async function finalUpdate(octokit: Octokit, pr: PullRequest, checkId: number, config: BreakbotConfig, report: any) {
   console.log(`[finalUpdate] Report received from Maracas: ${report.message}`);
 
   const myActions = [{
@@ -68,13 +70,13 @@ export async function finalUpdate(pr: PullRequest, checkId: number, config: Brea
   };
 
   try {
-    await pr.octokit.request(`PATCH /repos/${pr.repository}/check-runs/${checkId}`, newCheck);
+    await octokit.request(`PATCH /repos/${pr.repository}/check-runs/${checkId}`, newCheck);
   } catch (err) {
     console.error(err);
   }
 }
 
-export async function failed(pr: PullRequest, checkId: number, message: string) {
+export async function failed(octokit: Octokit, pr: PullRequest, checkId: number, message: string) {
   const check = {
     status: 'completed',
     conclusion: 'cancelled',
@@ -85,7 +87,7 @@ export async function failed(pr: PullRequest, checkId: number, message: string) 
   };
 
   try {
-    await pr.octokit.request(`PATCH /repos/${pr.repository}/check-runs/${checkId}`, check);
+    await octokit.request(`PATCH /repos/${pr.repository}/check-runs/${checkId}`, check);
   } catch (err) {
     console.error(err);
   }

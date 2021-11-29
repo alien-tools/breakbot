@@ -3,7 +3,7 @@
         "total_count": 2, 
         "check_runs": [{
             "id": 30,
-            "head_sha": "headsha1",
+            "head_sha": "sha123456789",
             "external_id": "",
             "status": "queued",
             "conclusion": null,
@@ -22,7 +22,7 @@
         },
         {
             "id": 33,
-            "head_sha": "headsha2",
+            "head_sha": "sha987654321",
             "external_id": "",
             "status": "queued",
             "conclusion": null,

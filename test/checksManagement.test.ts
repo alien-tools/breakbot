@@ -34,7 +34,6 @@ jest.mock('../src/report.ts', () => jest.fn((report: any, maxBCs: number, maxCli
 describe('Testing check management in normal conditions', () => {
   const OctokitMock = mocked(Octokit, true);
   const testPR = new PullRequest(
-    new Octokit(),
     'alien-tools/comp-changes',
     123456789,
     2,
@@ -46,13 +45,13 @@ describe('Testing check management in normal conditions', () => {
   });
 
   test('createCheck', async (done: DoneCallback) => {
-    const checkId = await createCheck(testPR);
+    const checkId = await createCheck(new Octokit(), testPR);
 
     done(expect(checkId).toBe(30));
   });
 
   test('createCheck2', async (done: DoneCallback) => {
-    const checkId = await createCheck(testPR);
+    const checkId = await createCheck(new Octokit(), testPR);
 
     done(expect(checkId).toBe(30));
   });
