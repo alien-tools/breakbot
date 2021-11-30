@@ -109,11 +109,6 @@ export async function completeCheck(
       summary,
       text,
     },
-    actions: [{
-      label: 'Re-analyze pull request',
-      description: 'Re-analyze pull request',
-      identifier: 'rerun',
-    }],
   };
 
   await octokit.request(`PATCH /repos/${owner}/${repo}/check-runs/${checkId}`, check);
