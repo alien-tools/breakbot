@@ -1,6 +1,5 @@
 import { Octokit } from '@octokit/core';
 import { ProbotOctokit } from 'probot/lib/octokit/probot-octokit';
-import { restEndpointMethods } from '@octokit/plugin-rest-endpoint-methods';
 
 import writeReport from './report';
 import BreakbotConfig from './config';
@@ -62,6 +61,11 @@ export async function failedCheck(
       title: 'Maracas returned an error',
       summary: message,
     },
+    actions: [{
+      label: 'Re-analyze pull request',
+      description: 'Re-analyze pull request',
+      identifier: 'rerun',
+    }],
   });
 }
 
@@ -79,7 +83,7 @@ export async function completeCheck(
     text,
   ] = writeReport(report, config.maxBCs, config.maxClients, config.maxDetections);
 
-  await restEndpointMethods(octokit).rest.checks.update({
+  /* await restEndpointMethods(octokit).rest.checks.update({
     owner,
     repo,
     check_run_id: checkId,
@@ -95,5 +99,22 @@ export async function completeCheck(
       description: 'Re-analyze pull request',
       identifier: 'rerun',
     }],
-  });
+  }); */
+
+  const check = {
+    status: 'completed',
+    conclusion: 'neutral',
+    output: {
+      title,
+      summary,
+      text,
+    },
+    actions: [{
+      label: 'Re-analyze pull request',
+      description: 'Re-analyze pull request',
+      identifier: 'rerun',
+    }],
+  };
+
+  await octokit.request(`PATCH /repos/${owner}/${repo}/check_runs/${checkId}`, check);
 }
