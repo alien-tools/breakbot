@@ -6,14 +6,13 @@ import maracasRoute from '../src/routes';
 
 import maracasReport from './fixtures/maracas.report.success.json';
 
-
 describe('Maracas router', () => {
   let probot: Probot;
   let req: Partial<Request>;
   let res: Partial<Response>;
 
   beforeEach(() => {
-    nock.disableNetConnect()
+    nock.disableNetConnect();
     req = {};
     res = {
       status: jest.fn(),
@@ -45,7 +44,7 @@ describe('Maracas router', () => {
 
     nock('https://api.github.com')
       .get('/repos/break-bot/spoon/pulls/3')
-      .reply(200, { number: 1, head: { sha: '272982e2c950814b6976dc144356b10cd5c8bed1'} });
+      .reply(200, { number: 1, head: { sha: '272982e2c950814b6976dc144356b10cd5c8bed1' } });
 
     nock('https://api.github.com')
       .get('/repos/break-bot/spoon/commits/272982e2c950814b6976dc144356b10cd5c8bed1/check-runs')

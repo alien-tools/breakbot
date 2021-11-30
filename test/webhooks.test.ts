@@ -1,8 +1,8 @@
 import nock from 'nock';
 import express from 'express';
 import { Probot, ProbotOctokit } from 'probot';
-import breakBot from '../src/index';
 import { CheckRunEvent, PullRequestEvent } from '@octokit/webhooks-types';
+import breakBot from '../src/index';
 
 const prSyncPayload : PullRequestEvent = require('./fixtures/pull_request.synchronized.json');
 const prOpenedPayload : PullRequestEvent = require('./fixtures/pull_request.opened.json');
@@ -46,7 +46,7 @@ describe('BreakBot tests', () => {
         });
         return true;
       })
-      .reply(201, {id: 1});
+      .reply(201, { id: 1 });
 
     nock('https://api.github.com')
       .patch('/repos/break-bot/spoon/check-runs/1', (body) => {
@@ -83,7 +83,7 @@ describe('BreakBot tests', () => {
         });
         return true;
       })
-      .reply(201, {id: 1});
+      .reply(201, { id: 1 });
 
     nock('https://api.github.com')
       .patch('/repos/break-bot/spoon/check-runs/1', (body) => {
@@ -101,7 +101,7 @@ describe('BreakBot tests', () => {
     nock('http://maracas-server.org')
       .post('/github/pr/break-bot/spoon/4')
       .query({ callback: 'http://webhook-server.org/breakbot/pr/break-bot/spoon/4' })
-      .reply(202, {message: 'processing'});
+      .reply(202, { message: 'processing' });
 
     await probot.receive({ id: 'opened', name: 'pull_request', payload: prOpenedPayload });
   });
@@ -109,7 +109,7 @@ describe('BreakBot tests', () => {
   test('Re-running a check updates the check run', async () => {
     nock('https://api.github.com')
       .get('/repos/break-bot/spoon/pulls')
-      .reply(200, [{ number: 1, head: { sha: '272982e2c950814b6976dc144356b10cd5c8bed1'} }]);
+      .reply(200, [{ number: 1, head: { sha: '272982e2c950814b6976dc144356b10cd5c8bed1' } }]);
 
     nock('https://api.github.com')
       .patch('/repos/break-bot/spoon/check-runs/4342888321', (body) => {
@@ -127,7 +127,7 @@ describe('BreakBot tests', () => {
     nock('http://maracas-server.org')
       .post('/github/pr/break-bot/spoon/1')
       .query({ callback: 'http://webhook-server.org/breakbot/pr/break-bot/spoon/1' })
-      .reply(202, {message: 'processing'});
+      .reply(202, { message: 'processing' });
 
     await probot.receive({ id: 're-run', name: 'check_run', payload: checkReRunPayload });
   });
