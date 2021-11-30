@@ -6,18 +6,6 @@
 
 [Pull request](https://github.com/tdegueul/comp-changes/pull/5) opened on Jun 22 by tdegueul (5 commits)
 
-
-
-<blockquote style="padding: 10px; background-color: #eee;"> 
-	<p>I noticed the CI configuration was repeated three times, so I refactored it to use the <a href="https://docs.github.com/en/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix">build matrix</a>.</p>
-	<p>Relevant changes:</p>
-	<ul>
-		<li>Removed Java 15 <a href="https://en.wikipedia.org/wiki/Java_version_history" rel="nofollow">being EOL</a></li>
-		<li>Added Java 16, 17-ea and 18-ea</li>
-		<li>Upgraded <code>actions/setup-java</code> to version 2 and enabled the <a href="https://github.com/actions/setup-java#caching-packages-dependencies">built-in Maven cache</a></li>
-	</ul>
-</blockquote>
-
 ---
 ## Summary
 

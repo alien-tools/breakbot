@@ -4,7 +4,7 @@ import nock from 'nock';
 
 import maracasRoute from '../src/routes';
 
-import maracasReport from './fixtures/maracas.report.success.json';
+import maracasReport from './fixtures/maracas/maracas.success.json';
 
 describe('Maracas router', () => {
   let probot: Probot;

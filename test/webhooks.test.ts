@@ -4,12 +4,12 @@ import { Probot, ProbotOctokit } from 'probot';
 import { CheckRunEvent, PullRequestEvent } from '@octokit/webhooks-types';
 import breakBot from '../src/index';
 
-const prSyncPayload : PullRequestEvent = require('./fixtures/pull_request.synchronized.json');
-const prOpenedPayload : PullRequestEvent = require('./fixtures/pull_request.opened.json');
-const prOpenedWithoutInstallationIdPayload : PullRequestEvent = require('./fixtures/pull_request.opened.no_installationId.json');
-const checkRunPayload : CheckRunEvent = require('./fixtures/check_run.requested_action.json');
-const checkRunWithoutInstallationIdPayload : CheckRunEvent = require('./fixtures/check_run.requested_action.no_installationId.json');
-const checkRunWithWrongSha : CheckRunEvent = require('./fixtures/check_run.requested_action.wrong_sha.json');
+const prSyncPayload : PullRequestEvent = require('./fixtures/github/pull_request.synchronized.json');
+const prOpenedPayload : PullRequestEvent = require('./fixtures/github/pull_request.opened.json');
+const prOpenedWithoutInstallationIdPayload : PullRequestEvent = require('./fixtures/github/pull_request.opened.no_installationId.json');
+const checkRunPayload : CheckRunEvent = require('./fixtures/github/check_run.requested_action.json');
+const checkRunWithoutInstallationIdPayload : CheckRunEvent = require('./fixtures/github/check_run.requested_action.no_installationId.json');
+const checkRunWithWrongSha : CheckRunEvent = require('./fixtures/github/check_run.requested_action.wrong_sha.json');
 
 describe('BreakBot tests', () => {
   let probot: Probot;
