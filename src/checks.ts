@@ -63,8 +63,8 @@ export async function failedCheck(
       summary: message,
     },
     actions: [{
-      label: 'Re-analyze pull request',
-      description: 'Re-analyze pull request',
+      label: 'Retry the analysis',
+      description: '',
       identifier: 'rerun',
     }],
   });
