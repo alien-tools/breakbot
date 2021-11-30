@@ -17,5 +17,5 @@ export default async function requestPRAnalysis(
     },
   });
 
-  return [result.status, result.json()];
+  return [result.status, await result.json()];
 }
