@@ -95,5 +95,10 @@ export async function completeCheck(
       summary,
       text,
     },
+    actions: [{
+      label: 'Re-run the analysis',
+      description: '',
+      identifier: 'rerun',
+    }],
   });
 }
