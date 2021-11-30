@@ -38,8 +38,12 @@ export default function writeReport(
 
   bcs.slice(0, maxBCs)
     .forEach((bc: any) => {
-      const impactedClients = clients.filter((c: any) => c.detections.filter((d: any) => d.src === bc.declaration).length > 0);
-      const impactedDetections = clients.flatMap((c: any) => c.detections.filter((d: any) => d.src === bc.declaration));
+      const impactedClients = clients.filter(
+        (c: any) => c.detections.some((d: any) => d.src === bc.declaration),
+      );
+      const impactedDetections = clients.flatMap(
+        (c: any) => c.detections.filter((d: any) => d.src === bc.declaration),
+      );
       const impactedClientsText = impactedClients.length > 0 ? `${impactedClients.length} (${impactedClients.map((c: any) => `[${c.url}](https://github.com/${c.url})`)
         .join(', ')})` : 'None';
       const impactedDetectionsText = impactedDetections.length > 0 ? impactedDetections.length : 'None';

@@ -1,23 +1,26 @@
 import { Octokit } from '@octokit/core';
-import { Context } from 'probot';
 import { ProbotOctokit } from 'probot/lib/octokit/probot-octokit';
+import { restEndpointMethods } from '@octokit/plugin-rest-endpoint-methods';
 
 import writeReport from './report';
 import BreakbotConfig from './config';
-import { restEndpointMethods } from '@octokit/plugin-rest-endpoint-methods';
+import BreakBotConstants from './settings';
 
 export async function createCheck(
-  context: Context<'pull_request'>,
+  octokit: InstanceType<typeof ProbotOctokit>,
+  owner: string,
+  repo: string,
+  sha: string,
 ): Promise<number> {
-  const res = await context.octokit.checks.create({
-    owner: context.payload.pull_request.base.repo.owner.login,
-    repo: context.payload.pull_request.base.repo.name,
-    name: 'BreakBot report',
-    head_sha: context.payload.pull_request.head.sha,
+  const res = await octokit.checks.create({
+    owner,
+    repo,
+    name: BreakBotConstants.REPORT_NAME,
+    head_sha: sha,
     status: 'queued',
     output: {
-      title: 'Sending analysis request to Maracas...',
-      summary: '',
+      title: BreakBotConstants.REPORT_QUEUED_TITLE,
+      summary: BreakBotConstants.REPORT_QUEUED_SUMMARY,
     },
   });
 
@@ -36,8 +39,8 @@ export async function updateCheck(
     check_run_id: checkId,
     status: 'in_progress',
     output: {
-      title: 'Analyzing the PR with Maracas...',
-      summary: '',
+      title: BreakBotConstants.REPORT_INPROGRESS_TITLE,
+      summary: BreakBotConstants.REPORT_INPROGRESS_SUMMARY,
     },
   });
 }

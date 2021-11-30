@@ -2,9 +2,9 @@ import { Request, Response } from 'express';
 import { DeprecatedLogger } from 'probot/lib/types';
 import { Octokit } from '@octokit/core';
 import { createAppAuth } from '@octokit/auth-app';
+import { restEndpointMethods } from '@octokit/plugin-rest-endpoint-methods';
 import { readConfigFile } from './config';
 import { completeCheck } from './checks';
-import { restEndpointMethods } from '@octokit/plugin-rest-endpoint-methods';
 
 export default async function maracasRoute(req: Request, res: Response, logger: DeprecatedLogger) {
   if (process.env.APP_ID === undefined) {
@@ -12,10 +12,9 @@ export default async function maracasRoute(req: Request, res: Response, logger: 
     return;
   }
 
-  const owner = req.params.owner;
-  const repo = req.params.repo;
-  const prNb = parseInt(req.params.prNb);
-  const appId = parseInt(process.env.APP_ID);
+  const { owner, repo } = req.params;
+  const prNb = Number(req.params.prNb);
+  const appId = Number(process.env.APP_ID);
 
   logger.info(`Maracas sent his report back for ${owner}/${repo}: ${req.body.message}`);
   logger.info('Attempting to authenticate with Octokit');
@@ -27,7 +26,7 @@ export default async function maracasRoute(req: Request, res: Response, logger: 
       installationId: req.headers.installationId,
     },
   });
-  const rest = restEndpointMethods(octokit).rest;
+  const { rest } = restEndpointMethods(octokit);
 
   logger.info(`Retrieving headSHA for ${owner}/${repo}#${prNb}`);
   const prData = await rest.pulls.get({ owner, repo, pull_number: prNb });
@@ -43,7 +42,7 @@ export default async function maracasRoute(req: Request, res: Response, logger: 
   const checkId = check.data.check_runs[0].id;
   logger.info(`Found check#${checkId}`);
 
-  logger.info(`Reading .breakbot.yml file`);
+  logger.info('Reading .breakbot.yml file');
   const config = await readConfigFile(octokit, owner, repo, '.breakbot.yml');
 
   logger.info(`Updating check#${checkId} with the final Maracas report`);

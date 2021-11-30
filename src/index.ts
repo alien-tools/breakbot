@@ -21,7 +21,7 @@ export default function breakBot(app: Probot, options: any) {
   });
 
   app.on('check_run.requested_action', async (context: Context<'check_run.requested_action'>) => {
-    app.log.info('Requested action: starting a new check');
+    app.log.info('Requested action on check: starting a new check');
 
     await handleCheckWebhook(context);
   });
