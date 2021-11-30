@@ -1,0 +1,741 @@
+{
+  "message": "ok",
+  "report": {
+    "delta": {
+      "jarV1": "file:///./data/clones/430120521/85233847d3a79fd5cbe8a16248bca4d038f44489/target/spoon-core-10.0.1-SNAPSHOT.jar",
+      "jarV2": "file:///./data/clones/430120521/272982e2c950814b6976dc144356b10cd5c8bed1/target/spoon-core-10.0.1-SNAPSHOT.jar",
+      "brokenDeclarations": [
+        {
+          "declaration": "spoon.reflect.code.CtBodyHolder.getBody()",
+          "change": "METHOD_REMOVED",
+          "path": "src/main/java/spoon/reflect/code/CtBodyHolder.java",
+          "startLine": 25,
+          "endLine": 25,
+          "fileUrl": "https://github.com/break-bot/spoon/blob/master/src/main/java/spoon/reflect/code/CtBodyHolder.java#L25-L25",
+          "diffUrl": "https://github.com/break-bot/spoon/pull/3/files#diff-58a414bf957235a967184b5d6f8b5236ddc27476493aa4614a26f8ce02aa7968L25"
+        },
+        {
+          "declaration": "spoon.reflect.code.CtCatch.getBody()",
+          "change": "METHOD_REMOVED",
+          "path": "src/main/java/spoon/reflect/code/CtCatch.java",
+          "startLine": 41,
+          "endLine": 41,
+          "fileUrl": "https://github.com/break-bot/spoon/blob/master/src/main/java/spoon/reflect/code/CtCatch.java#L41-L41",
+          "diffUrl": "https://github.com/break-bot/spoon/pull/3/files#diff-42b90a89cf51293282da6fff189f75e7e72c8c35d8b33286aacfae97637c557aL41"
+        },
+        {
+          "declaration": "spoon.reflect.code.CtCatch",
+          "change": "METHOD_ABSTRACT_ADDED_IN_IMPLEMENTED_INTERFACE",
+          "path": "src/main/java/spoon/reflect/code/CtCatch.java",
+          "startLine": 22,
+          "endLine": 45,
+          "fileUrl": "https://github.com/break-bot/spoon/blob/master/src/main/java/spoon/reflect/code/CtCatch.java#L22-L45",
+          "diffUrl": "https://github.com/break-bot/spoon/pull/3/files#diff-42b90a89cf51293282da6fff189f75e7e72c8c35d8b33286aacfae97637c557aL22"
+        },
+        {
+          "declaration": "spoon.reflect.code.CtDo",
+          "change": "METHOD_ABSTRACT_ADDED_IN_IMPLEMENTED_INTERFACE",
+          "path": "src/main/java/spoon/reflect/code/CtDo.java",
+          "startLine": 27,
+          "endLine": 42,
+          "fileUrl": "https://github.com/break-bot/spoon/blob/master/src/main/java/spoon/reflect/code/CtDo.java#L27-L42",
+          "diffUrl": "https://github.com/break-bot/spoon/pull/3/files#diff-3c781f04a7281c41abaa634b8e577390bc4d9d7854292f8f24b4f7fb874f8120L27"
+        },
+        {
+          "declaration": "spoon.reflect.code.CtFor",
+          "change": "METHOD_ABSTRACT_ADDED_IN_IMPLEMENTED_INTERFACE",
+          "path": "src/main/java/spoon/reflect/code/CtFor.java",
+          "startLine": 29,
+          "endLine": 93,
+          "fileUrl": "https://github.com/break-bot/spoon/blob/master/src/main/java/spoon/reflect/code/CtFor.java#L29-L93",
+          "diffUrl": "https://github.com/break-bot/spoon/pull/3/files#diff-1b0ce1bd5047455efa507472dde314bd72db2d1f4f3c28ff2624da4a3904c4f8L29"
+        },
+        {
+          "declaration": "spoon.reflect.code.CtForEach",
+          "change": "METHOD_ABSTRACT_ADDED_IN_IMPLEMENTED_INTERFACE",
+          "path": "src/main/java/spoon/reflect/code/CtForEach.java",
+          "startLine": 27,
+          "endLine": 54,
+          "fileUrl": "https://github.com/break-bot/spoon/blob/master/src/main/java/spoon/reflect/code/CtForEach.java#L27-L54",
+          "diffUrl": "https://github.com/break-bot/spoon/pull/3/files#diff-7a87a4dfde11902b8bacb82c52911defc12019e2c6b62135bf6bc0572b6b7c73L27"
+        },
+        {
+          "declaration": "spoon.reflect.code.CtLambda",
+          "change": "METHOD_ABSTRACT_ADDED_IN_IMPLEMENTED_INTERFACE",
+          "path": "src/main/java/spoon/reflect/code/CtLambda.java",
+          "startLine": 52,
+          "endLine": 80,
+          "fileUrl": "https://github.com/break-bot/spoon/blob/master/src/main/java/spoon/reflect/code/CtLambda.java#L52-L80",
+          "diffUrl": "https://github.com/break-bot/spoon/pull/3/files#diff-14c919a1049fc001bf6163699aab05882e0e674ce3d7fc23727ed19bc934c470L52"
+        },
+        {
+          "declaration": "spoon.reflect.code.CtLambda",
+          "change": "METHOD_DEFAULT_ADDED_IN_IMPLEMENTED_INTERFACE",
+          "path": "src/main/java/spoon/reflect/code/CtLambda.java",
+          "startLine": 52,
+          "endLine": 80,
+          "fileUrl": "https://github.com/break-bot/spoon/blob/master/src/main/java/spoon/reflect/code/CtLambda.java#L52-L80",
+          "diffUrl": "https://github.com/break-bot/spoon/pull/3/files#diff-14c919a1049fc001bf6163699aab05882e0e674ce3d7fc23727ed19bc934c470L52"
+        },
+        {
+          "declaration": "spoon.reflect.code.CtLoop",
+          "change": "METHOD_ABSTRACT_ADDED_IN_IMPLEMENTED_INTERFACE",
+          "path": "src/main/java/spoon/reflect/code/CtLoop.java",
+          "startLine": 18,
+          "endLine": 29,
+          "fileUrl": "https://github.com/break-bot/spoon/blob/master/src/main/java/spoon/reflect/code/CtLoop.java#L18-L29",
+          "diffUrl": "https://github.com/break-bot/spoon/pull/3/files#diff-e29f92c14e53756ae87bb81f5f6f8af872e5c48e5aa3ee357e667070c8bd5daeL18"
+        },
+        {
+          "declaration": "spoon.reflect.code.CtTry.getBody()",
+          "change": "METHOD_REMOVED",
+          "path": "src/main/java/spoon/reflect/code/CtTry.java",
+          "startLine": 61,
+          "endLine": 61,
+          "fileUrl": "https://github.com/break-bot/spoon/blob/master/src/main/java/spoon/reflect/code/CtTry.java#L61-L61",
+          "diffUrl": "https://github.com/break-bot/spoon/pull/3/files#diff-f4f53f8440be6eafe65f44bb8a771253d0518ee92dd8cc9777b3eea70cb040e6L61"
+        },
+        {
+          "declaration": "spoon.reflect.code.CtTry",
+          "change": "METHOD_ABSTRACT_ADDED_IN_IMPLEMENTED_INTERFACE",
+          "path": "src/main/java/spoon/reflect/code/CtTry.java",
+          "startLine": 30,
+          "endLine": 79,
+          "fileUrl": "https://github.com/break-bot/spoon/blob/master/src/main/java/spoon/reflect/code/CtTry.java#L30-L79",
+          "diffUrl": "https://github.com/break-bot/spoon/pull/3/files#diff-f4f53f8440be6eafe65f44bb8a771253d0518ee92dd8cc9777b3eea70cb040e6L30"
+        },
+        {
+          "declaration": "spoon.reflect.code.CtTryWithResource",
+          "change": "METHOD_ABSTRACT_ADDED_IN_IMPLEMENTED_INTERFACE",
+          "path": "src/main/java/spoon/reflect/code/CtTryWithResource.java",
+          "startLine": 28,
+          "endLine": 58,
+          "fileUrl": "https://github.com/break-bot/spoon/blob/master/src/main/java/spoon/reflect/code/CtTryWithResource.java#L28-L58",
+          "diffUrl": "https://github.com/break-bot/spoon/pull/3/files#diff-d01d3db39d4e5530718707ff14c33f9cf53706179b36d400b257547ac65af6b2L28"
+        },
+        {
+          "declaration": "spoon.reflect.code.CtTryWithResource",
+          "change": "METHOD_DEFAULT_ADDED_IN_IMPLEMENTED_INTERFACE",
+          "path": "src/main/java/spoon/reflect/code/CtTryWithResource.java",
+          "startLine": 28,
+          "endLine": 58,
+          "fileUrl": "https://github.com/break-bot/spoon/blob/master/src/main/java/spoon/reflect/code/CtTryWithResource.java#L28-L58",
+          "diffUrl": "https://github.com/break-bot/spoon/pull/3/files#diff-d01d3db39d4e5530718707ff14c33f9cf53706179b36d400b257547ac65af6b2L28"
+        },
+        {
+          "declaration": "spoon.reflect.code.CtWhile",
+          "change": "METHOD_ABSTRACT_ADDED_IN_IMPLEMENTED_INTERFACE",
+          "path": "src/main/java/spoon/reflect/code/CtWhile.java",
+          "startLine": 27,
+          "endLine": 42,
+          "fileUrl": "https://github.com/break-bot/spoon/blob/master/src/main/java/spoon/reflect/code/CtWhile.java#L27-L42",
+          "diffUrl": "https://github.com/break-bot/spoon/pull/3/files#diff-906534a1b2039a61df64580ac4dc821050b507b4da229cf5aa4d50d8118b4cd2L27"
+        },
+        {
+          "declaration": "spoon.reflect.declaration.CtAnnotationMethod",
+          "change": "METHOD_ABSTRACT_ADDED_IN_IMPLEMENTED_INTERFACE",
+          "path": "src/main/java/spoon/reflect/declaration/CtAnnotationMethod.java",
+          "startLine": 26,
+          "endLine": 57,
+          "fileUrl": "https://github.com/break-bot/spoon/blob/master/src/main/java/spoon/reflect/declaration/CtAnnotationMethod.java#L26-L57",
+          "diffUrl": "https://github.com/break-bot/spoon/pull/3/files#diff-015bfc20d19b7fb7c8ad090fd22c8431e5469c8c2a1eaed7c03271a9099de664L26"
+        },
+        {
+          "declaration": "spoon.reflect.declaration.CtAnnotationMethod",
+          "change": "METHOD_DEFAULT_ADDED_IN_IMPLEMENTED_INTERFACE",
+          "path": "src/main/java/spoon/reflect/declaration/CtAnnotationMethod.java",
+          "startLine": 26,
+          "endLine": 57,
+          "fileUrl": "https://github.com/break-bot/spoon/blob/master/src/main/java/spoon/reflect/declaration/CtAnnotationMethod.java#L26-L57",
+          "diffUrl": "https://github.com/break-bot/spoon/pull/3/files#diff-015bfc20d19b7fb7c8ad090fd22c8431e5469c8c2a1eaed7c03271a9099de664L26"
+        },
+        {
+          "declaration": "spoon.reflect.declaration.CtAnonymousExecutable",
+          "change": "METHOD_ABSTRACT_ADDED_IN_IMPLEMENTED_INTERFACE",
+          "path": "src/main/java/spoon/reflect/declaration/CtAnonymousExecutable.java",
+          "startLine": 21,
+          "endLine": 53,
+          "fileUrl": "https://github.com/break-bot/spoon/blob/master/src/main/java/spoon/reflect/declaration/CtAnonymousExecutable.java#L21-L53",
+          "diffUrl": "https://github.com/break-bot/spoon/pull/3/files#diff-2910942f123d56f788c22fdc6d758821b0b6190d65ac900319e97bd1d5ec9694L21"
+        },
+        {
+          "declaration": "spoon.reflect.declaration.CtAnonymousExecutable",
+          "change": "METHOD_DEFAULT_ADDED_IN_IMPLEMENTED_INTERFACE",
+          "path": "src/main/java/spoon/reflect/declaration/CtAnonymousExecutable.java",
+          "startLine": 21,
+          "endLine": 53,
+          "fileUrl": "https://github.com/break-bot/spoon/blob/master/src/main/java/spoon/reflect/declaration/CtAnonymousExecutable.java#L21-L53",
+          "diffUrl": "https://github.com/break-bot/spoon/pull/3/files#diff-2910942f123d56f788c22fdc6d758821b0b6190d65ac900319e97bd1d5ec9694L21"
+        },
+        {
+          "declaration": "spoon.reflect.declaration.CtConstructor",
+          "change": "METHOD_ABSTRACT_ADDED_IN_IMPLEMENTED_INTERFACE",
+          "path": "src/main/java/spoon/reflect/declaration/CtConstructor.java",
+          "startLine": 20,
+          "endLine": 52,
+          "fileUrl": "https://github.com/break-bot/spoon/blob/master/src/main/java/spoon/reflect/declaration/CtConstructor.java#L20-L52",
+          "diffUrl": "https://github.com/break-bot/spoon/pull/3/files#diff-6ff5c9c9ae77320b12779ee99a7195f8e10e64b5785ef7336bd51c26e1c0a467L20"
+        },
+        {
+          "declaration": "spoon.reflect.declaration.CtConstructor",
+          "change": "METHOD_DEFAULT_ADDED_IN_IMPLEMENTED_INTERFACE",
+          "path": "src/main/java/spoon/reflect/declaration/CtConstructor.java",
+          "startLine": 20,
+          "endLine": 52,
+          "fileUrl": "https://github.com/break-bot/spoon/blob/master/src/main/java/spoon/reflect/declaration/CtConstructor.java#L20-L52",
+          "diffUrl": "https://github.com/break-bot/spoon/pull/3/files#diff-6ff5c9c9ae77320b12779ee99a7195f8e10e64b5785ef7336bd51c26e1c0a467L20"
+        },
+        {
+          "declaration": "spoon.reflect.declaration.CtExecutable.getBody()",
+          "change": "METHOD_REMOVED",
+          "path": "src/main/java/spoon/reflect/declaration/CtExecutable.java",
+          "startLine": 48,
+          "endLine": 48,
+          "fileUrl": "https://github.com/break-bot/spoon/blob/master/src/main/java/spoon/reflect/declaration/CtExecutable.java#L48-L48",
+          "diffUrl": "https://github.com/break-bot/spoon/pull/3/files#diff-c27cd73deb733d125f6c78c1e149c2f7cd25ab826855b6e756e3875e79476cd2L48"
+        },
+        {
+          "declaration": "spoon.reflect.declaration.CtExecutable",
+          "change": "METHOD_ABSTRACT_ADDED_IN_IMPLEMENTED_INTERFACE",
+          "path": "src/main/java/spoon/reflect/declaration/CtExecutable.java",
+          "startLine": 28,
+          "endLine": 137,
+          "fileUrl": "https://github.com/break-bot/spoon/blob/master/src/main/java/spoon/reflect/declaration/CtExecutable.java#L28-L137",
+          "diffUrl": "https://github.com/break-bot/spoon/pull/3/files#diff-c27cd73deb733d125f6c78c1e149c2f7cd25ab826855b6e756e3875e79476cd2L28"
+        },
+        {
+          "declaration": "spoon.reflect.declaration.CtMethod",
+          "change": "METHOD_ABSTRACT_ADDED_IN_IMPLEMENTED_INTERFACE",
+          "path": "src/main/java/spoon/reflect/declaration/CtMethod.java",
+          "startLine": 22,
+          "endLine": 65,
+          "fileUrl": "https://github.com/break-bot/spoon/blob/master/src/main/java/spoon/reflect/declaration/CtMethod.java#L22-L65",
+          "diffUrl": "https://github.com/break-bot/spoon/pull/3/files#diff-538d1e5f10749bcb8fd0e89f7016a0c6a958a408dd4a9358b39048165761ccd9L22"
+        },
+        {
+          "declaration": "spoon.reflect.declaration.CtMethod",
+          "change": "METHOD_DEFAULT_ADDED_IN_IMPLEMENTED_INTERFACE",
+          "path": "src/main/java/spoon/reflect/declaration/CtMethod.java",
+          "startLine": 22,
+          "endLine": 65,
+          "fileUrl": "https://github.com/break-bot/spoon/blob/master/src/main/java/spoon/reflect/declaration/CtMethod.java#L22-L65",
+          "diffUrl": "https://github.com/break-bot/spoon/pull/3/files#diff-538d1e5f10749bcb8fd0e89f7016a0c6a958a408dd4a9358b39048165761ccd9L22"
+        },
+        {
+          "declaration": "spoon.support.reflect.code.CtDoImpl",
+          "change": "METHOD_REMOVED_IN_SUPERCLASS",
+          "path": "src/main/java/spoon/support/reflect/code/CtDoImpl.java",
+          "startLine": 17,
+          "endLine": 47,
+          "fileUrl": "https://github.com/break-bot/spoon/blob/master/src/main/java/spoon/support/reflect/code/CtDoImpl.java#L17-L47",
+          "diffUrl": "https://github.com/break-bot/spoon/pull/3/files#diff-fe1f30a528806a8d4edb14c1d8e6ef8a919e99ebb4511e9c1d27183d114ff131L17"
+        },
+        {
+          "declaration": "spoon.support.reflect.code.CtForEachImpl",
+          "change": "METHOD_REMOVED_IN_SUPERCLASS",
+          "path": "src/main/java/spoon/support/reflect/code/CtForEachImpl.java",
+          "startLine": 19,
+          "endLine": 67,
+          "fileUrl": "https://github.com/break-bot/spoon/blob/master/src/main/java/spoon/support/reflect/code/CtForEachImpl.java#L19-L67",
+          "diffUrl": "https://github.com/break-bot/spoon/pull/3/files#diff-afc0e1c1537d4977228514c2ff527c64181856212ed7a0cf05a7dfb49006e63bL19"
+        },
+        {
+          "declaration": "spoon.support.reflect.code.CtForImpl",
+          "change": "METHOD_REMOVED_IN_SUPERCLASS",
+          "path": "src/main/java/spoon/support/reflect/code/CtForImpl.java",
+          "startLine": 26,
+          "endLine": 146,
+          "fileUrl": "https://github.com/break-bot/spoon/blob/master/src/main/java/spoon/support/reflect/code/CtForImpl.java#L26-L146",
+          "diffUrl": "https://github.com/break-bot/spoon/pull/3/files#diff-cf3a367e85b58be1ee49c0d4c4652e6a553992aad6a82e6da7843dab2d7a31e7L26"
+        },
+        {
+          "declaration": "spoon.support.reflect.code.CtTryWithResourceImpl",
+          "change": "METHOD_REMOVED_IN_SUPERCLASS",
+          "path": "src/main/java/spoon/support/reflect/code/CtTryWithResourceImpl.java",
+          "startLine": 22,
+          "endLine": 79,
+          "fileUrl": "https://github.com/break-bot/spoon/blob/master/src/main/java/spoon/support/reflect/code/CtTryWithResourceImpl.java#L22-L79",
+          "diffUrl": "https://github.com/break-bot/spoon/pull/3/files#diff-2fdf734156c1ed20b89f39424195c2b2a259087fc48a9dc840b325519a5f80caL22"
+        },
+        {
+          "declaration": "spoon.support.reflect.code.CtWhileImpl",
+          "change": "METHOD_REMOVED_IN_SUPERCLASS",
+          "path": "src/main/java/spoon/support/reflect/code/CtWhileImpl.java",
+          "startLine": 17,
+          "endLine": 47,
+          "fileUrl": "https://github.com/break-bot/spoon/blob/master/src/main/java/spoon/support/reflect/code/CtWhileImpl.java#L17-L47",
+          "diffUrl": "https://github.com/break-bot/spoon/pull/3/files#diff-1c89a2e0f13c35a79fc51e5bc3379eb784ec4887444b50ed03fb360fa2bec84cL17"
+        },
+        {
+          "declaration": "spoon.support.reflect.declaration.CtAnnotationMethodImpl",
+          "change": "METHOD_REMOVED_IN_SUPERCLASS",
+          "path": "src/main/java/spoon/support/reflect/declaration/CtAnnotationMethodImpl.java",
+          "startLine": 33,
+          "endLine": 109,
+          "fileUrl": "https://github.com/break-bot/spoon/blob/master/src/main/java/spoon/support/reflect/declaration/CtAnnotationMethodImpl.java#L33-L109",
+          "diffUrl": "https://github.com/break-bot/spoon/pull/3/files#diff-dc2a6c472f1d1aeebaf9e9e742909b6675b156f50d43a4847762009014898d30L33"
+        },
+        {
+          "declaration": "spoon.support.reflect.declaration.CtAnonymousExecutableImpl",
+          "change": "METHOD_REMOVED_IN_SUPERCLASS",
+          "path": "src/main/java/spoon/support/reflect/declaration/CtAnonymousExecutableImpl.java",
+          "startLine": 29,
+          "endLine": 243,
+          "fileUrl": "https://github.com/break-bot/spoon/blob/master/src/main/java/spoon/support/reflect/declaration/CtAnonymousExecutableImpl.java#L29-L243",
+          "diffUrl": "https://github.com/break-bot/spoon/pull/3/files#diff-aa6cb756738738a677d295c218a757379b46fb47662b34e20eb46c3bb4934454L29"
+        },
+        {
+          "declaration": "spoon.support.reflect.declaration.CtConstructorImpl",
+          "change": "METHOD_REMOVED_IN_SUPERCLASS",
+          "path": "src/main/java/spoon/support/reflect/declaration/CtConstructorImpl.java",
+          "startLine": 35,
+          "endLine": 271,
+          "fileUrl": "https://github.com/break-bot/spoon/blob/master/src/main/java/spoon/support/reflect/declaration/CtConstructorImpl.java#L35-L271",
+          "diffUrl": "https://github.com/break-bot/spoon/pull/3/files#diff-776b335371f52e0a79a82a23b74388cc08acde864457bb4ea5bf3f380fffc6ffL35"
+        },
+        {
+          "declaration": "spoon.support.reflect.declaration.CtMethodImpl",
+          "change": "METHOD_REMOVED_IN_SUPERCLASS",
+          "path": "src/main/java/spoon/support/reflect/declaration/CtMethodImpl.java",
+          "startLine": 38,
+          "endLine": 300,
+          "fileUrl": "https://github.com/break-bot/spoon/blob/master/src/main/java/spoon/support/reflect/declaration/CtMethodImpl.java#L38-L300",
+          "diffUrl": "https://github.com/break-bot/spoon/pull/3/files#diff-de3b4123eb935feeba073d0a2a1bfe6a55a077e699aeb6a3d8b9102a98914202L38"
+        },
+        {
+          "declaration": "spoon.support.reflect.declaration.InvisibleArrayConstructorImpl",
+          "change": "METHOD_REMOVED_IN_SUPERCLASS",
+          "path": "src/main/java/spoon/support/reflect/declaration/InvisibleArrayConstructorImpl.java",
+          "startLine": 26,
+          "endLine": 55,
+          "fileUrl": "https://github.com/break-bot/spoon/blob/master/src/main/java/spoon/support/reflect/declaration/InvisibleArrayConstructorImpl.java#L26-L55",
+          "diffUrl": "https://github.com/break-bot/spoon/pull/3/files#diff-18743ffba01cb1490f94e3e060f8b91a42be270aca79c0fea853b20900cad571L26"
+        }
+      ]
+    },
+    "clientReports": [
+      {
+        "url": "SpoonLabs/spooet",
+        "detections": [
+          {
+            "elem": "ctCatch.getBody()",
+            "used": "getBody()",
+            "src": "spoon.reflect.code.CtCatch.getBody()",
+            "apiUse": "METHOD_INVOCATION",
+            "path": "src/main/java/spoon/reflect/visitor/internal/CodePrinter.java",
+            "startLine": 55,
+            "endLine": 55,
+            "url": "https://github.com/SpoonLabs/spooet/blob/master/src/main/java/spoon/reflect/visitor/internal/CodePrinter.java#L55-L55"
+          },
+          {
+            "elem": "tryBlock.getBody()",
+            "used": "getBody()",
+            "src": "spoon.reflect.code.CtTry.getBody()",
+            "apiUse": "METHOD_INVOCATION",
+            "path": "src/main/java/spoon/reflect/visitor/internal/CodePrinter.java",
+            "startLine": 51,
+            "endLine": 51,
+            "url": "https://github.com/SpoonLabs/spooet/blob/master/src/main/java/spoon/reflect/visitor/internal/CodePrinter.java#L51-L51"
+          }
+        ],
+        "error": null
+      },
+      {
+        "url": "SpoonLabs/flacoco",
+        "detections": [],
+        "error": null
+      },
+      {
+        "url": "Spirals-Team/casper",
+        "detections": [],
+        "error": null
+      },
+      {
+        "url": "KTH/spork",
+        "detections": [],
+        "error": null
+      },
+      {
+        "url": "Spirals-Team/jPerturb",
+        "detections": [],
+        "error": null
+      },
+      {
+        "url": "SpoonLabs/CoCoSpoon",
+        "detections": [
+          {
+            "elem": "ctCatch.getBody()",
+            "used": "getBody()",
+            "src": "spoon.reflect.code.CtCatch.getBody()",
+            "apiUse": "METHOD_INVOCATION",
+            "path": "src/main/java/fil/iagl/opl/cocospoon/insert/impl/CatchInsert.java",
+            "startLine": 19,
+            "endLine": 19,
+            "url": "https://github.com/SpoonLabs/CoCoSpoon/blob/master/src/main/java/fil/iagl/opl/cocospoon/insert/impl/CatchInsert.java#L19-L19"
+          },
+          {
+            "elem": "ctCatch.getBody()",
+            "used": "getBody()",
+            "src": "spoon.reflect.code.CtCatch.getBody()",
+            "apiUse": "METHOD_INVOCATION",
+            "path": "src/main/java/fil/iagl/opl/cocospoon/insert/impl/CatchInsert.java",
+            "startLine": 18,
+            "endLine": 18,
+            "url": "https://github.com/SpoonLabs/CoCoSpoon/blob/master/src/main/java/fil/iagl/opl/cocospoon/insert/impl/CatchInsert.java#L18-L18"
+          }
+        ],
+        "error": null
+      },
+      {
+        "url": "SpoonLabs/npefix",
+        "detections": [
+          {
+            "elem": "catchArg.getBody()",
+            "used": "getBody()",
+            "src": "spoon.reflect.code.CtCatch.getBody()",
+            "apiUse": "METHOD_INVOCATION",
+            "path": "src/main/java/fr/inria/spirals/npefix/transformer/processors/TryRegister.java",
+            "startLine": 66,
+            "endLine": 66,
+            "url": "https://github.com/SpoonLabs/npefix/blob/master/src/main/java/fr/inria/spirals/npefix/transformer/processors/TryRegister.java#L66-L66"
+          },
+          {
+            "elem": "catchArg.getBody()",
+            "used": "getBody()",
+            "src": "spoon.reflect.code.CtCatch.getBody()",
+            "apiUse": "METHOD_INVOCATION",
+            "path": "src/main/java/fr/inria/spirals/npefix/transformer/processors/TryRegister.java",
+            "startLine": 67,
+            "endLine": 67,
+            "url": "https://github.com/SpoonLabs/npefix/blob/master/src/main/java/fr/inria/spirals/npefix/transformer/processors/TryRegister.java#L67-L67"
+          },
+          {
+            "elem": "localCatch.getBody()",
+            "used": "getBody()",
+            "src": "spoon.reflect.code.CtCatch.getBody()",
+            "apiUse": "METHOD_INVOCATION",
+            "path": "src/main/java/fr/inria/spirals/npefix/transformer/processors/ConstructorTryCatchRepair.java",
+            "startLine": 57,
+            "endLine": 57,
+            "url": "https://github.com/SpoonLabs/npefix/blob/master/src/main/java/fr/inria/spirals/npefix/transformer/processors/ConstructorTryCatchRepair.java#L57-L57"
+          },
+          {
+            "elem": "localCatch.getBody()",
+            "used": "getBody()",
+            "src": "spoon.reflect.code.CtCatch.getBody()",
+            "apiUse": "METHOD_INVOCATION",
+            "path": "src/main/java/fr/inria/spirals/npefix/transformer/processors/MethodEncapsulation.java",
+            "startLine": 153,
+            "endLine": 153,
+            "url": "https://github.com/SpoonLabs/npefix/blob/master/src/main/java/fr/inria/spirals/npefix/transformer/processors/MethodEncapsulation.java#L153-L153"
+          },
+          {
+            "elem": "localCatch.getBody()",
+            "used": "getBody()",
+            "src": "spoon.reflect.code.CtCatch.getBody()",
+            "apiUse": "METHOD_INVOCATION",
+            "path": "src/main/java/fr/inria/spirals/npefix/transformer/processors/TryCatchRepair.java",
+            "startLine": 68,
+            "endLine": 68,
+            "url": "https://github.com/SpoonLabs/npefix/blob/master/src/main/java/fr/inria/spirals/npefix/transformer/processors/TryCatchRepair.java#L68-L68"
+          },
+          {
+            "elem": "localCatch.getBody()",
+            "used": "getBody()",
+            "src": "spoon.reflect.code.CtCatch.getBody()",
+            "apiUse": "METHOD_INVOCATION",
+            "path": "src/main/java/fr/inria/spirals/npefix/transformer/processors/MethodEncapsulation.java",
+            "startLine": 145,
+            "endLine": 145,
+            "url": "https://github.com/SpoonLabs/npefix/blob/master/src/main/java/fr/inria/spirals/npefix/transformer/processors/MethodEncapsulation.java#L145-L145"
+          },
+          {
+            "elem": "localCatch.getBody()",
+            "used": "getBody()",
+            "src": "spoon.reflect.code.CtCatch.getBody()",
+            "apiUse": "METHOD_INVOCATION",
+            "path": "src/main/java/fr/inria/spirals/npefix/transformer/processors/TryCatchRepair.java",
+            "startLine": 63,
+            "endLine": 63,
+            "url": "https://github.com/SpoonLabs/npefix/blob/master/src/main/java/fr/inria/spirals/npefix/transformer/processors/TryCatchRepair.java#L63-L63"
+          },
+          {
+            "elem": "ctTry.getBody()",
+            "used": "getBody()",
+            "src": "spoon.reflect.code.CtTry.getBody()",
+            "apiUse": "METHOD_INVOCATION",
+            "path": "src/main/java/fr/inria/spirals/npefix/transformer/processors/RemoveNPECheckProcessor.java",
+            "startLine": 37,
+            "endLine": 37,
+            "url": "https://github.com/SpoonLabs/npefix/blob/master/src/main/java/fr/inria/spirals/npefix/transformer/processors/RemoveNPECheckProcessor.java#L37-L37"
+          },
+          {
+            "elem": "coreTry.getBody()",
+            "used": "getBody()",
+            "src": "spoon.reflect.code.CtTry.getBody()",
+            "apiUse": "METHOD_INVOCATION",
+            "path": "src/main/java/fr/inria/spirals/npefix/transformer/processors/ConstructorEncapsulation.java",
+            "startLine": 83,
+            "endLine": 83,
+            "url": "https://github.com/SpoonLabs/npefix/blob/master/src/main/java/fr/inria/spirals/npefix/transformer/processors/ConstructorEncapsulation.java#L83-L83"
+          }
+        ],
+        "error": null
+      },
+      {
+        "url": "SpoonLabs/npefix",
+        "detections": [
+          {
+            "elem": "catchArg.getBody()",
+            "used": "getBody()",
+            "src": "spoon.reflect.code.CtCatch.getBody()",
+            "apiUse": "METHOD_INVOCATION",
+            "path": "src/main/java/fr/inria/spirals/npefix/transformer/processors/TryRegister.java",
+            "startLine": 66,
+            "endLine": 66,
+            "url": "https://github.com/SpoonLabs/npefix/blob/master/src/main/java/fr/inria/spirals/npefix/transformer/processors/TryRegister.java#L66-L66"
+          },
+          {
+            "elem": "catchArg.getBody()",
+            "used": "getBody()",
+            "src": "spoon.reflect.code.CtCatch.getBody()",
+            "apiUse": "METHOD_INVOCATION",
+            "path": "src/main/java/fr/inria/spirals/npefix/transformer/processors/TryRegister.java",
+            "startLine": 67,
+            "endLine": 67,
+            "url": "https://github.com/SpoonLabs/npefix/blob/master/src/main/java/fr/inria/spirals/npefix/transformer/processors/TryRegister.java#L67-L67"
+          },
+          {
+            "elem": "localCatch.getBody()",
+            "used": "getBody()",
+            "src": "spoon.reflect.code.CtCatch.getBody()",
+            "apiUse": "METHOD_INVOCATION",
+            "path": "src/main/java/fr/inria/spirals/npefix/transformer/processors/ConstructorTryCatchRepair.java",
+            "startLine": 57,
+            "endLine": 57,
+            "url": "https://github.com/SpoonLabs/npefix/blob/master/src/main/java/fr/inria/spirals/npefix/transformer/processors/ConstructorTryCatchRepair.java#L57-L57"
+          },
+          {
+            "elem": "localCatch.getBody()",
+            "used": "getBody()",
+            "src": "spoon.reflect.code.CtCatch.getBody()",
+            "apiUse": "METHOD_INVOCATION",
+            "path": "src/main/java/fr/inria/spirals/npefix/transformer/processors/MethodEncapsulation.java",
+            "startLine": 153,
+            "endLine": 153,
+            "url": "https://github.com/SpoonLabs/npefix/blob/master/src/main/java/fr/inria/spirals/npefix/transformer/processors/MethodEncapsulation.java#L153-L153"
+          },
+          {
+            "elem": "localCatch.getBody()",
+            "used": "getBody()",
+            "src": "spoon.reflect.code.CtCatch.getBody()",
+            "apiUse": "METHOD_INVOCATION",
+            "path": "src/main/java/fr/inria/spirals/npefix/transformer/processors/TryCatchRepair.java",
+            "startLine": 68,
+            "endLine": 68,
+            "url": "https://github.com/SpoonLabs/npefix/blob/master/src/main/java/fr/inria/spirals/npefix/transformer/processors/TryCatchRepair.java#L68-L68"
+          },
+          {
+            "elem": "localCatch.getBody()",
+            "used": "getBody()",
+            "src": "spoon.reflect.code.CtCatch.getBody()",
+            "apiUse": "METHOD_INVOCATION",
+            "path": "src/main/java/fr/inria/spirals/npefix/transformer/processors/MethodEncapsulation.java",
+            "startLine": 145,
+            "endLine": 145,
+            "url": "https://github.com/SpoonLabs/npefix/blob/master/src/main/java/fr/inria/spirals/npefix/transformer/processors/MethodEncapsulation.java#L145-L145"
+          },
+          {
+            "elem": "localCatch.getBody()",
+            "used": "getBody()",
+            "src": "spoon.reflect.code.CtCatch.getBody()",
+            "apiUse": "METHOD_INVOCATION",
+            "path": "src/main/java/fr/inria/spirals/npefix/transformer/processors/TryCatchRepair.java",
+            "startLine": 63,
+            "endLine": 63,
+            "url": "https://github.com/SpoonLabs/npefix/blob/master/src/main/java/fr/inria/spirals/npefix/transformer/processors/TryCatchRepair.java#L63-L63"
+          },
+          {
+            "elem": "ctTry.getBody()",
+            "used": "getBody()",
+            "src": "spoon.reflect.code.CtTry.getBody()",
+            "apiUse": "METHOD_INVOCATION",
+            "path": "src/main/java/fr/inria/spirals/npefix/transformer/processors/RemoveNPECheckProcessor.java",
+            "startLine": 37,
+            "endLine": 37,
+            "url": "https://github.com/SpoonLabs/npefix/blob/master/src/main/java/fr/inria/spirals/npefix/transformer/processors/RemoveNPECheckProcessor.java#L37-L37"
+          },
+          {
+            "elem": "coreTry.getBody()",
+            "used": "getBody()",
+            "src": "spoon.reflect.code.CtTry.getBody()",
+            "apiUse": "METHOD_INVOCATION",
+            "path": "src/main/java/fr/inria/spirals/npefix/transformer/processors/ConstructorEncapsulation.java",
+            "startLine": 83,
+            "endLine": 83,
+            "url": "https://github.com/SpoonLabs/npefix/blob/master/src/main/java/fr/inria/spirals/npefix/transformer/processors/ConstructorEncapsulation.java#L83-L83"
+          }
+        ],
+        "error": null
+      },
+      {
+        "url": "SpoonLabs/metamutator",
+        "detections": [],
+        "error": null
+      },
+      {
+        "url": "STAMP-project/dspot",
+        "detections": [
+          {
+            "elem": "((spoon.reflect.code.CtBlock) (parent.getBody()))",
+            "used": "getBody()",
+            "src": "spoon.reflect.code.CtBodyHolder.getBody()",
+            "apiUse": "METHOD_INVOCATION",
+            "path": "dspot/src/main/java/eu/stamp_project/dspot/amplifier/amplifiers/AmplifierHelper.java",
+            "startLine": 84,
+            "endLine": 84,
+            "url": "https://github.com/STAMP-project/dspot/blob/master/dspot/src/main/java/eu/stamp_project/dspot/amplifier/amplifiers/AmplifierHelper.java#L84-L84"
+          },
+          {
+            "elem": "parent.getBody()",
+            "used": "getBody()",
+            "src": "spoon.reflect.code.CtBodyHolder.getBody()",
+            "apiUse": "METHOD_INVOCATION",
+            "path": "dspot/src/main/java/eu/stamp_project/dspot/amplifier/amplifiers/AmplifierHelper.java",
+            "startLine": 81,
+            "endLine": 81,
+            "url": "https://github.com/STAMP-project/dspot/blob/master/dspot/src/main/java/eu/stamp_project/dspot/amplifier/amplifiers/AmplifierHelper.java#L81-L81"
+          },
+          {
+            "elem": "parent.getBody()",
+            "used": "getBody()",
+            "src": "spoon.reflect.code.CtBodyHolder.getBody()",
+            "apiUse": "METHOD_INVOCATION",
+            "path": "dspot/src/main/java/eu/stamp_project/dspot/amplifier/amplifiers/AmplifierHelper.java",
+            "startLine": 80,
+            "endLine": 80,
+            "url": "https://github.com/STAMP-project/dspot/blob/master/dspot/src/main/java/eu/stamp_project/dspot/amplifier/amplifiers/AmplifierHelper.java#L80-L80"
+          },
+          {
+            "elem": "ctCatch.getBody()",
+            "used": "getBody()",
+            "src": "spoon.reflect.code.CtCatch.getBody()",
+            "apiUse": "METHOD_INVOCATION",
+            "path": "dspot/src/main/java/eu/stamp_project/dspot/common/test_framework/implementations/junit/JUnitSupport.java",
+            "startLine": 188,
+            "endLine": 188,
+            "url": "https://github.com/STAMP-project/dspot/blob/master/dspot/src/main/java/eu/stamp_project/dspot/common/test_framework/implementations/junit/JUnitSupport.java#L188-L188"
+          },
+          {
+            "elem": "ctTry.getBody()",
+            "used": "getBody()",
+            "src": "spoon.reflect.code.CtTry.getBody()",
+            "apiUse": "METHOD_INVOCATION",
+            "path": "dspot/src/main/java/eu/stamp_project/dspot/assertiongenerator/assertiongenerator/AssertionRemover.java",
+            "startLine": 53,
+            "endLine": 53,
+            "url": "https://github.com/STAMP-project/dspot/blob/master/dspot/src/main/java/eu/stamp_project/dspot/assertiongenerator/assertiongenerator/AssertionRemover.java#L53-L53"
+          },
+          {
+            "elem": "tryBlock.getBody()",
+            "used": "getBody()",
+            "src": "spoon.reflect.code.CtTry.getBody()",
+            "apiUse": "METHOD_INVOCATION",
+            "path": "dspot/src/main/java/eu/stamp_project/dspot/common/test_framework/implementations/junit/JUnitSupport.java",
+            "startLine": 154,
+            "endLine": 154,
+            "url": "https://github.com/STAMP-project/dspot/blob/master/dspot/src/main/java/eu/stamp_project/dspot/common/test_framework/implementations/junit/JUnitSupport.java#L154-L154"
+          }
+        ],
+        "error": null
+      },
+      {
+        "url": "STAMP-project/AssertFixer",
+        "detections": [
+          {
+            "elem": "catches.get(0).getBody()",
+            "used": "getBody()",
+            "src": "spoon.reflect.code.CtCatch.getBody()",
+            "apiUse": "METHOD_INVOCATION",
+            "path": "src/main/java/eu/stamp/project/assertfixer/asserts/TryCatchFixer.java",
+            "startLine": 36,
+            "endLine": 36,
+            "url": "https://github.com/STAMP-project/AssertFixer/blob/master/src/main/java/eu/stamp/project/assertfixer/asserts/TryCatchFixer.java#L36-L36"
+          },
+          {
+            "elem": "catches.get(0).getBody()",
+            "used": "getBody()",
+            "src": "spoon.reflect.code.CtCatch.getBody()",
+            "apiUse": "METHOD_INVOCATION",
+            "path": "src/main/java/eu/stamp/project/assertfixer/asserts/TryCatchFixer.java",
+            "startLine": 37,
+            "endLine": 37,
+            "url": "https://github.com/STAMP-project/AssertFixer/blob/master/src/main/java/eu/stamp/project/assertfixer/asserts/TryCatchFixer.java#L37-L37"
+          },
+          {
+            "elem": "ctTry.getBody()",
+            "used": "getBody()",
+            "src": "spoon.reflect.code.CtTry.getBody()",
+            "apiUse": "METHOD_INVOCATION",
+            "path": "src/main/java/eu/stamp/project/assertfixer/asserts/AssertFixer.java",
+            "startLine": 171,
+            "endLine": 171,
+            "url": "https://github.com/STAMP-project/AssertFixer/blob/master/src/main/java/eu/stamp/project/assertfixer/asserts/AssertFixer.java#L171-L171"
+          },
+          {
+            "elem": "aTry.getBody()",
+            "used": "getBody()",
+            "src": "spoon.reflect.code.CtTry.getBody()",
+            "apiUse": "METHOD_INVOCATION",
+            "path": "src/main/java/eu/stamp/project/assertfixer/asserts/TryCatchFixer.java",
+            "startLine": 85,
+            "endLine": 85,
+            "url": "https://github.com/STAMP-project/AssertFixer/blob/master/src/main/java/eu/stamp/project/assertfixer/asserts/TryCatchFixer.java#L85-L85"
+          },
+          {
+            "elem": "aTry.getBody()",
+            "used": "getBody()",
+            "src": "spoon.reflect.code.CtTry.getBody()",
+            "apiUse": "METHOD_INVOCATION",
+            "path": "src/main/java/eu/stamp/project/assertfixer/asserts/TryCatchFixer.java",
+            "startLine": 87,
+            "endLine": 87,
+            "url": "https://github.com/STAMP-project/AssertFixer/blob/master/src/main/java/eu/stamp/project/assertfixer/asserts/TryCatchFixer.java#L87-L87"
+          }
+        ],
+        "error": null
+      },
+      {
+        "url": "SpoonLabs/gumtree-spoon-ast-diff",
+        "detections": [],
+        "error": null
+      },
+      {
+        "url": "SpoonLabs/coming",
+        "detections": [
+          {
+            "elem": "trystatement.getBody()",
+            "used": "getBody()",
+            "src": "spoon.reflect.code.CtTry.getBody()",
+            "apiUse": "METHOD_INVOCATION",
+            "path": "src/main/java/fr/inria/coming/codefeatures/codeanalyze/AbstractCodeAnalyzer.java",
+            "startLine": 1116,
+            "endLine": 1116,
+            "url": "https://github.com/SpoonLabs/coming/blob/master/src/main/java/fr/inria/coming/codefeatures/codeanalyze/AbstractCodeAnalyzer.java#L1116-L1116"
+          }
+        ],
+        "error": null
+      },
+      {
+        "url": "SpoonLabs/nopol",
+        "detections": [],
+        "error": null
+      },
+      {
+        "url": "SpoonLabs/astor",
+        "detections": [],
+        "error": null
+      }
+    ]
+  }
+}
