@@ -9,7 +9,7 @@ export default function writeReport(
   const title = 'Break-bot report';
 
   if (myJson.report == null) {
-    return ([title, `An error occurred: ${myJson.message}`, '']);
+    return ([title, `An error occurred: ${myJson.message}\n`, '']);
   }
 
   const { report } = myJson;
