@@ -2,7 +2,9 @@ import nock from 'nock';
 import express from 'express';
 import { Probot, ProbotOctokit } from 'probot';
 import breakBot from '../src/index';
-import prOpenedPayload from './fixtures/pull_request.opened.json';
+import { PullRequestEvent } from '@octokit/webhooks-types';
+
+const prSyncPayload : PullRequestEvent = require('./fixtures/pull_request.synchronized.json');
 
 describe('BreakBot tests', () => {
   let probot: Probot;
@@ -20,16 +22,15 @@ describe('BreakBot tests', () => {
     breakBot(probot, { getRouter: () => express() });
   });
 
-  test('foo', async () => {
-    // Test that a comment is posted
+  test('Synchronizing a PR creates and updates a new check run', async () => {
     nock('https://api.github.com')
-      .post('/repos/alien-tools/comp-changes/check-runs', (body) => {
+      .post('/repos/break-bot/spoon/check-runs', (body) => {
         expect(body).toMatchObject({
-          head_sha: 'sha123456789',
+          head_sha: '3e9a7ef52d7ab1704d58401819f6815cbc693032',
           name: 'BreakBot report',
           output: {
             summary: '',
-            title: 'Sending request to the api...',
+            title: 'Sending analysis request to Maracas...',
           },
           status: 'queued',
         });
@@ -38,19 +39,22 @@ describe('BreakBot tests', () => {
       .reply(200);
 
     nock('https://api.github.com')
-      .patch('/repos/alien-tools/comp-changes/check-runs/undefined', (body) => {
-        expect(body).toMatchObject({});
+      .patch('/repos/break-bot/spoon/check-runs/', (body) => {
+        expect(body).toMatchObject({
+          output: {
+            summary: '',
+            title: 'Analyzing the PR with Maracas...',
+          },
+          status: 'in_progress',
+        });
         return true;
       })
       .reply(200);
 
     nock('http://maracas-server.org')
-      .post('/github/pr/alien-tools/comp-changes/2?callback=http://webhook-server.org/breakbot/pr/alien-tools/comp-changes/2', () => {
-        return true;
-      })
-      .reply(202);
+      .post('/github/pr/break-bot/spoon/1?callback=http://webhook-server.org/breakbot/pr/break-bot/spoon/1')
+      .reply(202, {message: 'processing'});
 
-    // Receive a webhook event
-    await probot.receive({ id: '', name: 'pull_request.opened', payload: prOpenedPayload });
+    await probot.receive({ id: 'synchronized', name: 'pull_request', payload: prSyncPayload });
   });
 });

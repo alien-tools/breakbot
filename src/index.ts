@@ -18,13 +18,13 @@ export default function breakBot(app: Probot, options: any) {
     res.send('Received');
   });
 
-  app.on(['pull_request.opened', 'pull_request.synchronize'], async (context: Context) => {
+  app.on(['pull_request.opened', 'pull_request.synchronize'], async (context: Context<'pull_request'>) => {
     app.log.info('Pull request opened or updated: starting a new check');
 
     await handlePullRequestWebhook(context);
   });
 
-  app.on(['check_run.requested_action'], async (context: Context) => {
+  app.on('check_run.requested_action', async (context: Context<'check_run'>) => {
     app.log.info('Requested action: starting a new check');
 
     await handleCheckWebhook(context);

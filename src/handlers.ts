@@ -1,12 +1,12 @@
 import { Octokit } from '@octokit/core';
 import { createAppAuth } from '@octokit/auth-app';
-import { createCheck, finalUpdate } from './checks';
+import { createCheck, failedCheck, finalizeCheck, updateCheck } from './checks';
 import requestPRAnalysis from './maracas';
 import PullRequest from './pullRequest';
 import { readConfigFile } from './config';
 import { Request } from 'express';
-import { Context } from 'probot';
 import { DeprecatedLogger } from 'probot/lib/types';
+import { Context } from 'probot';
 
 export async function handleMaracasPost(req: Request, logger: DeprecatedLogger) {
   const repository = `${req.params.owner}/${req.params.repo}`;
@@ -45,38 +45,48 @@ export async function handleMaracasPost(req: Request, logger: DeprecatedLogger) 
       headSHA,
     );
 
-    await finalUpdate(octokit, pr, bbCheck.id, config, req.body);
+    await finalizeCheck(octokit, pr, bbCheck.id, config, req.body);
   } else {
     logger.log('No check found.');
   }
 }
 
-export async function handlePullRequestWebhook(context: Context) {
-  const repository = context.payload.pull_request.base.repo.full_name;
-  const pr = new PullRequest(
-    repository,
-    context.payload.installation.id,
-    context.payload.number,
-    context.payload.pull_request.head.sha,
+export async function handlePullRequestWebhook(context: Context<'pull_request'>) {
+  const checkId = await createCheck(context);
+  const [status, json] = await requestPRAnalysis(
+    context.payload.pull_request.base.repo.owner.login,
+    context.payload.pull_request.base.repo.name,
+    context.payload.pull_request.number,
+    context.payload.installation?.id ?? -1,
   );
 
-  const checkId = await createCheck(context, pr);
-  await requestPRAnalysis(context, pr, checkId);
+  const { owner, repo } = context.repo();
+
+  if (status === 202) {
+    context.log(`Maracas answered with ${json.message} [${status}]`);
+    await updateCheck(context.octokit, owner, repo, checkId);
+  } else {
+    context.log(`Maracas returned an error: ${json.message}`);
+    await failedCheck(context.octokit, owner, repo, checkId, json.message);
+  }
 }
 
-export async function handleCheckWebhook(context: Context) {
-  const repository = context.payload.repository.full_name;
-  const headSHA = context.payload.check_run.head_sha;
-  const repoPRs = await context.octokit.request(`GET /repos/${repository}/pulls`);
-  const thisPR = repoPRs.data.find((p: any) => p.head.sha === headSHA);
-
-  const pr = new PullRequest(
-    repository,
-    context.payload.installation.id,
-    thisPR.number,
-    headSHA,
+export async function handleCheckWebhook(context: Context<'check_run'>) {
+  const [status, json] = await requestPRAnalysis(
+    context.payload.repository.owner.login,
+    context.payload.repository.name,
+    -1,
+    context.payload.installation?.id ?? -1,
   );
 
-  const checkId = await createCheck(context, pr);
-  await requestPRAnalysis(context, pr, checkId);
+  const { owner, repo } = context.repo();
+  const checkId = context.payload.check_run.id;
+
+  if (status === 202) {
+    context.log(`Maracas answered with ${json.message} [${status}]`);
+    await updateCheck(context.octokit, owner, repo, checkId);
+  } else {
+    context.log(`Maracas returned an error: ${json.message}`);
+    await failedCheck(context.octokit, owner, repo, checkId, json.message);
+  }
 }
