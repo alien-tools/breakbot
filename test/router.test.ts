@@ -49,6 +49,7 @@ describe('Maracas router', () => {
 
     nock('https://api.github.com')
       .get('/repos/break-bot/spoon/commits/272982e2c950814b6976dc144356b10cd5c8bed1/check-runs')
+      .query({ app_id: '119017' })
       .reply(200, {
         total_count: 1,
         check_runs: [{

@@ -11,17 +11,14 @@ export default class BreakbotConfig {
   maxDetections: number = 50;
 }
 
-export async function readConfigFile(repository: string, octokit: Octokit) {
-  const addressSplit = repository.split('/');
+export async function readConfigFile(octokit: Octokit, owner: string, repo: string, path: string) {
   const configFile = await config(octokit)
     .config
     .get({
-      owner: addressSplit[0],
-      repo: addressSplit[1],
-      path: '.breakbot.yml',
+      owner,
+      repo,
+      path,
     });
-
-  octokit.log.info('Reading .breakbot.yml', configFile);
 
   const configData = new BreakbotConfig();
 

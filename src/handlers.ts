@@ -1,55 +1,6 @@
-import { Octokit } from '@octokit/core';
-import { createAppAuth } from '@octokit/auth-app';
-import { createCheck, failedCheck, finalizeCheck, updateCheck } from './checks';
+import { createCheck, failedCheck, updateCheck } from './checks';
 import requestPRAnalysis from './maracas';
-import PullRequest from './pullRequest';
-import { readConfigFile } from './config';
-import { Request } from 'express';
-import { DeprecatedLogger } from 'probot/lib/types';
 import { Context } from 'probot';
-
-export async function handleMaracasPost(req: Request, logger: DeprecatedLogger) {
-  const repository = `${req.params.owner}/${req.params.repo}`;
-  const prNb = parseInt(req.params.prNb);
-
-  logger.log('Attempting to authenticate with Octokit');
-  const octokit = new Octokit({
-    authStrategy: createAppAuth,
-    auth: {
-      appId: process.env.APP_ID,
-      privateKey: process.env.PRIVATE_KEY,
-      installationId: req.headers.installationId,
-    },
-  });
-
-  const config = await readConfigFile(repository, octokit);
-
-  logger.log(`Retrieving headSHA for ${repository}#${prNb}`);
-  const prData = await octokit.request(`GET /repos/${repository}/pulls/${prNb}`);
-  const headSHA = prData.data.head.sha;
-
-  const checksData = await octokit.request(`GET /repos/${repository}/commits/${headSHA}/check-runs`);
-  const total = checksData.data.total_count;
-  const checks = checksData.data.check_runs;
-
-  logger.log(`Checks information: total_count=${total} checks=${checks}`);
-
-  const bbCheck = checks.find((check: any) => check.app.id.toString() === process.env.APP_ID);
-
-  if (bbCheck) {
-    logger.log(`Found check ID ${bbCheck.id}`);
-    const pr = new PullRequest(
-      repository,
-      parseInt(req.header('installationId') ?? '-1'),
-      prNb,
-      headSHA,
-    );
-
-    await finalizeCheck(octokit, pr, bbCheck.id, config, req.body);
-  } else {
-    logger.log('No check found.');
-  }
-}
 
 export async function handlePullRequestWebhook(context: Context<'pull_request'>) {
   const checkId = await createCheck(context);

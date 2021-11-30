@@ -3,14 +3,12 @@ import { Context } from 'probot';
 import { ProbotOctokit } from 'probot/lib/octokit/probot-octokit';
 
 import writeReport from './report';
-import PullRequest from './pullRequest';
 import BreakbotConfig from './config';
+import { restEndpointMethods } from '@octokit/plugin-rest-endpoint-methods';
 
 export async function createCheck(
   context: Context<'pull_request'>,
 ): Promise<number> {
-  context.log('Creating a new check');
-
   const res = await context.octokit.checks.create({
     owner: context.payload.pull_request.base.repo.owner.login,
     repo: context.payload.pull_request.base.repo.name,
@@ -23,7 +21,6 @@ export async function createCheck(
     },
   });
 
-  context.log(`New check created; ID: ${res.data.id}`);
   return res.data.id;
 }
 
@@ -65,28 +62,24 @@ export async function failedCheck(
   });
 }
 
-export async function finalizeCheck(
+export async function completeCheck(
   octokit: Octokit,
-  pr: PullRequest,
+  owner: string,
+  repo: string,
   checkId: number,
   config: BreakbotConfig,
   report: any,
 ): Promise<void> {
-  octokit.log.info(`Finalizing report for check #${checkId}`);
-
-  const actions = [{
-    label: 'Re-analyze pull request',
-    description: 'Re-analyze pull request',
-    identifier: 'rerun',
-  }];
-
   const [
     title,
     summary,
     text,
   ] = writeReport(report, config.maxBCs, config.maxClients, config.maxDetections);
 
-  const newCheck = {
+  await restEndpointMethods(octokit).rest.checks.update({
+    owner,
+    repo,
+    check_run_id: checkId,
     status: 'completed',
     conclusion: 'neutral',
     output: {
@@ -94,10 +87,10 @@ export async function finalizeCheck(
       summary,
       text,
     },
-    actions,
-  };
-
-  await octokit.request(`PATCH /repos/${pr.repository}/check-runs/${checkId}`, newCheck);
-
-  octokit.log.info(`Check #${checkId} was successfully completed`);
+    actions: [{
+      label: 'Re-analyze pull request',
+      description: 'Re-analyze pull request',
+      identifier: 'rerun',
+    }],
+  });
 }
