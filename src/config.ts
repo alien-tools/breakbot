@@ -1,7 +1,3 @@
-import { Octokit } from '@octokit/core';
-import { config } from '@probot/octokit-plugin-config';
-import { Configuration } from '@probot/octokit-plugin-config/dist-types/types';
-
 export default class BreakbotConfig {
   maxBCs: number = 50;
 
@@ -9,22 +5,13 @@ export default class BreakbotConfig {
 
   maxDetections: number = 50;
 
-  constructor(conf: Configuration) {
-    if (typeof (conf.maxBCs) === 'number') {
-      this.maxBCs = conf.maxBCs;
-    }
-
-    if (typeof (conf.maxClients) === 'number') {
-      this.maxClients = conf.maxClients;
-    }
-
-    if (typeof (conf.maxDetections) === 'number') {
-      this.maxDetections = conf.maxDetections;
+  constructor(other?: BreakbotConfig) {
+    if (other?.maxBCs) {
+      this.maxBCs = other.maxBCs;
+    } if (other?.maxClients) {
+      this.maxClients = other.maxClients;
+    } if (other?.maxDetections) {
+      this.maxDetections = other.maxDetections;
     }
   }
-}
-
-export async function readConfigFile(octokit: Octokit, owner: string, repo: string, path: string) {
-  const configFile = await config(octokit).config.get({ owner, repo, path });
-  return new BreakbotConfig(configFile.config);
 }

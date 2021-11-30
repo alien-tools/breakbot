@@ -1,7 +1,7 @@
 import { Context, Probot } from 'probot';
 import { Request, Response } from 'express';
 import { handleCheckWebhook, handlePullRequestWebhook } from './handlers';
-import maracasRoute from './routes';
+import handleMaracasRoute from './routes';
 
 const bodyParser = require('body-parser');
 
@@ -11,7 +11,7 @@ export default function breakBot(app: Probot, options: any) {
   const router = options.getRouter('/breakbot');
   router.use(bodyParser.json({ limit: '5mb' }));
   router.post('/pr/:owner/:repo/:prNb', async (req: Request, res: Response) => {
-    await maracasRoute(req, res, app.log);
+    await handleMaracasRoute(req, res, app.log);
   });
 
   app.on(['pull_request.opened', 'pull_request.synchronize'], async (context: Context<'pull_request'>) => {

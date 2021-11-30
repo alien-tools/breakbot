@@ -1,17 +1,13 @@
 import { Request, Response } from 'express';
+import YAML from 'yaml';
 import { DeprecatedLogger } from 'probot/lib/types';
 import { Octokit } from '@octokit/core';
 import { createAppAuth } from '@octokit/auth-app';
 import { restEndpointMethods } from '@octokit/plugin-rest-endpoint-methods';
-import { readConfigFile } from './config';
+import BreakbotConfig from './config';
 import { completeCheck } from './checks';
 
 export default async function maracasRoute(req: Request, res: Response, logger: DeprecatedLogger) {
-  if (process.env.APP_ID === undefined) {
-    logger.error('Couldn\'t proceed: APP_ID is undefined');
-    return;
-  }
-
   const { owner, repo } = req.params;
   const prNb = Number(req.params.prNb);
   const appId = Number(process.env.APP_ID);
@@ -43,7 +39,10 @@ export default async function maracasRoute(req: Request, res: Response, logger: 
   logger.info(`Found check#${checkId}`);
 
   logger.info('Reading .breakbot.yml file');
-  const config = await readConfigFile(octokit, owner, repo, '.breakbot.yml');
+  const encoded: any = await rest.repos.getContent({ owner, repo, path: '.breakbot.yml' });
+  const config = encoded.data.content === undefined
+    ? new BreakbotConfig()
+    : new BreakbotConfig(YAML.parse(Buffer.from(encoded.data.content, 'base64').toString('binary')) as BreakbotConfig);
 
   logger.info(`Updating check#${checkId} with the final Maracas report`);
   await completeCheck(octokit, owner, repo, checkId, config, req.body);

@@ -33,7 +33,8 @@
     "node-fetch": "^2.6.6",
     "openssl-nodejs": "^1.0.5",
     "pino": "^6.11.3",
-    "probot": "^12.1.1"
+    "probot": "^12.1.1",
+    "yaml": "^1.10.2"
   },
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "^1.0.1",
