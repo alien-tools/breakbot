@@ -11,15 +11,16 @@ export default async function maracasRoute(req: Request, res: Response, logger: 
   const { owner, repo } = req.params;
   const prNb = Number(req.params.prNb);
   const appId = Number(process.env.APP_ID);
+  const installationId = req.headers.installationid;
 
   logger.info(`Maracas sent his report back for ${owner}/${repo}: ${req.body.message}`);
-  logger.info('Attempting to authenticate with Octokit');
+  logger.info(`Attempting to authenticate with Octokit; installationId=${installationId}`);
   const octokit = new Octokit({
     authStrategy: createAppAuth,
     auth: {
       appId: process.env.APP_ID,
       privateKey: process.env.PRIVATE_KEY,
-      installationId: req.headers.installationId,
+      installationId,
     },
   });
   const { rest } = restEndpointMethods(octokit);

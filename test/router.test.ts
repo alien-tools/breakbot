@@ -76,7 +76,7 @@ describe('Maracas router', () => {
         prNb: '3',
       },
       headers: {
-        installationId: '123456789',
+        installationid: '123456789',
       },
       body: maracasReport,
     };
@@ -136,7 +136,7 @@ describe('Maracas router', () => {
         prNb: '3',
       },
       headers: {
-        installationId: '123456789',
+        installationid: '123456789',
       },
       body: maracasReport,
     };
