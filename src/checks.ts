@@ -116,5 +116,5 @@ export async function completeCheck(
     }],
   };
 
-  await octokit.request(`PATCH /repos/${owner}/${repo}/check_runs/${checkId}`, check);
+  await octokit.request(`PATCH /repos/${owner}/${repo}/check-runs/${checkId}`, check);
 }
