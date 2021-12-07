@@ -1,5 +1,5 @@
 export default class BreakBotConstants {
-  public static REPORT_NAME = 'BreakBot Report';
+  public static REPORT_TITLE = 'BreakBot Report';
 
   public static REPORT_QUEUED_TITLE = 'Sending analysis request to Maracas...';
 

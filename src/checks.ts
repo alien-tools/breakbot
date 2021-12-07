@@ -15,7 +15,7 @@ export async function createCheck(
   const res = await octokit.checks.create({
     owner,
     repo,
-    name: BreakBotConstants.REPORT_NAME,
+    name: BreakBotConstants.REPORT_TITLE,
     head_sha: sha,
     status: 'queued',
     output: {

@@ -1,4 +1,5 @@
 import { stripIndent } from 'common-tags';
+import BreakBotConstants from './settings';
 
 export default function writeReport(
   myJson: any,
@@ -6,7 +7,7 @@ export default function writeReport(
   maxClients: number,
   maxDetections: number,
 ) {
-  const title = 'BreakBot report';
+  const title = BreakBotConstants.REPORT_TITLE;
 
   if (myJson.report == null) {
     return ([title, `An error occurred: ${myJson.message}\n`, '']);

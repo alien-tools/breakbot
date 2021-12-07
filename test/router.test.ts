@@ -39,7 +39,7 @@ describe('Maracas router', () => {
       .reply(201);
 
     nock('https://api.github.com')
-      .get('/repos/break-bot/spoon/contents/.github/breakbot.yml')
+      .get('/repos/break-bot/spoon/contents/.github%2Fbreakbot.yml')
       .reply(200);
 
     nock('https://api.github.com')
@@ -61,7 +61,7 @@ describe('Maracas router', () => {
       .patch('/repos/break-bot/spoon/check-runs/1', (body) => {
         expect(body).toMatchObject({
           output: {
-            title: 'Break-bot report',
+            title: 'BreakBot Report',
           },
           status: 'completed',
         });
@@ -95,7 +95,7 @@ describe('Maracas router', () => {
       .reply(201);
 
     nock('https://api.github.com')
-      .get('/repos/break-bot/spoon/contents/.github/breakbot.yml')
+      .get('/repos/break-bot/spoon/contents/.github%2Fbreakbot.yml')
       .reply(200, {
         content: 'bWF4QkNzOiAxCm1heENsaWVudHM6IDEKbWF4RGV0ZWN0aW9uczogMQ==', // maxBCs: 1 maxClients: 1 maxDetections: 1
         encoding: 'base64',
@@ -120,7 +120,7 @@ describe('Maracas router', () => {
       .patch('/repos/break-bot/spoon/check-runs/1', (body) => {
         expect(body).toMatchObject({
           output: {
-            title: 'Break-bot report',
+            title: 'BreakBot Report',
           },
           status: 'completed',
         });

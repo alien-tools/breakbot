@@ -14,7 +14,7 @@ describe('Checks whether Markdown reports are correctly generated', () => {
     const report = writeReport(maracasError, 10, 10, 10);
 
     const fixtureReport = [
-      readFileSync('./test/fixtures/reports/V1-title.md', 'utf-8'),
+      'BreakBot Report',
       readFileSync('./test/fixtures/reports/V1-summary.md', 'utf-8'),
       readFileSync('./test/fixtures/reports/V1-message.md', 'utf-8'),
     ];
@@ -27,7 +27,7 @@ describe('Checks whether Markdown reports are correctly generated', () => {
     const report = writeReport(maracasClientErrors, 10, 10, 10);
 
     const fixtureReport = [
-      readFileSync('./test/fixtures/reports/V2-title.md', 'utf-8'),
+      'BreakBot Report',
       readFileSync('./test/fixtures/reports/V2-summary.md', 'utf-8'),
       readFileSync('./test/fixtures/reports/V2-message.md', 'utf-8'),
     ];
@@ -40,7 +40,7 @@ describe('Checks whether Markdown reports are correctly generated', () => {
     const report = writeReport(maracasOneClient, 10, 10, 10);
 
     const fixtureReport = [
-      readFileSync('./test/fixtures/reports/V3-title.md', 'utf-8'),
+      'BreakBot Report',
       readFileSync('./test/fixtures/reports/V3-summary.md', 'utf-8'),
       readFileSync('./test/fixtures/reports/V3-message.md', 'utf-8'),
     ];
@@ -53,7 +53,7 @@ describe('Checks whether Markdown reports are correctly generated', () => {
     const report = writeReport(maracasTwoClients, 10, 10, 10);
 
     const fixtureReport = [
-      readFileSync('./test/fixtures/reports/V4-title.md', 'utf-8'),
+      'BreakBot Report',
       readFileSync('./test/fixtures/reports/V4-summary.md', 'utf-8'),
       readFileSync('./test/fixtures/reports/V4-message.md', 'utf-8'),
     ];
@@ -66,7 +66,7 @@ describe('Checks whether Markdown reports are correctly generated', () => {
     const report = writeReport(maracasNoClient, 10, 10, 10);
 
     const fixtureReport = [
-      readFileSync('./test/fixtures/reports/V5-title.md', 'utf-8'),
+      'BreakBot Report',
       readFileSync('./test/fixtures/reports/V5-summary.md', 'utf-8'),
       readFileSync('./test/fixtures/reports/V5-message.md', 'utf-8'),
     ];
@@ -79,7 +79,7 @@ describe('Checks whether Markdown reports are correctly generated', () => {
     const report = writeReport(maracasTooMany, 1, 1, 1);
 
     const fixtureReport = [
-      readFileSync('./test/fixtures/reports/V6-title.md', 'utf-8'),
+      'BreakBot Report',
       readFileSync('./test/fixtures/reports/V6-summary.md', 'utf-8'),
       readFileSync('./test/fixtures/reports/V6-message.md', 'utf-8'),
     ];
