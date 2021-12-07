@@ -6,7 +6,7 @@ export default function writeReport(
   maxClients: number,
   maxDetections: number,
 ) {
-  const title = 'Break-bot report';
+  const title = 'BreakBot report';
 
   if (myJson.report == null) {
     return ([title, `An error occurred: ${myJson.message}\n`, '']);
