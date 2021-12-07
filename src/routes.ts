@@ -40,7 +40,7 @@ export default async function maracasRoute(req: Request, res: Response, logger: 
   logger.info(`Found check#${checkId}`);
 
   logger.info('Reading .breakbot.yml file');
-  const encoded: any = await rest.repos.getContent({ owner, repo, path: '.breakbot.yml' });
+  const encoded: any = await rest.repos.getContent({ owner, repo, path: '.github/breakbot.yml' });
   const config = encoded.data.content === undefined
     ? new BreakbotConfig()
     : new BreakbotConfig(YAML.parse(Buffer.from(encoded.data.content, 'base64').toString('binary')) as BreakbotConfig);

@@ -39,7 +39,7 @@ describe('Maracas router', () => {
       .reply(201);
 
     nock('https://api.github.com')
-      .get('/repos/break-bot/spoon/contents/.breakbot.yml')
+      .get('/repos/break-bot/spoon/contents/.github/breakbot.yml')
       .reply(200);
 
     nock('https://api.github.com')
@@ -95,7 +95,7 @@ describe('Maracas router', () => {
       .reply(201);
 
     nock('https://api.github.com')
-      .get('/repos/break-bot/spoon/contents/.breakbot.yml')
+      .get('/repos/break-bot/spoon/contents/.github/breakbot.yml')
       .reply(200, {
         content: 'bWF4QkNzOiAxCm1heENsaWVudHM6IDEKbWF4RGV0ZWN0aW9uczogMQ==', // maxBCs: 1 maxClients: 1 maxDetections: 1
         encoding: 'base64',
