@@ -28,12 +28,12 @@
         "clientReports": [
             {
                 "url": "ImMeta/testRepo",
-                "detections": [],
+                "brokenUses": [],
                 "error": "Unlucky"
             },
             {
                 "url": "ImMeta/testRepo2",
-                "detections": [],
+                "brokenUses": [],
                 "error": "Unlucky 2"
             }
         ]

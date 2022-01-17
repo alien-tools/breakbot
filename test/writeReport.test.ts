@@ -16,7 +16,7 @@ describe('Checks whether Markdown reports are correctly generated', () => {
     const fixtureReport = [
       'BreakBot Report',
       readFileSync('./test/fixtures/reports/V1-summary.md', 'utf-8'),
-      readFileSync('./test/fixtures/reports/V1-message.md', 'utf-8'),
+      readFileSync('./test/fixtures/reports/V1-message.md', 'utf-8').trim(),
     ];
 
     expect(report)
@@ -28,8 +28,8 @@ describe('Checks whether Markdown reports are correctly generated', () => {
 
     const fixtureReport = [
       'BreakBot Report',
-      readFileSync('./test/fixtures/reports/V2-summary.md', 'utf-8'),
-      readFileSync('./test/fixtures/reports/V2-message.md', 'utf-8'),
+      readFileSync('./test/fixtures/reports/V2-summary.md', 'utf-8').trim(),
+      readFileSync('./test/fixtures/reports/V2-message.md', 'utf-8').trim(),
     ];
 
     expect(report)
@@ -41,8 +41,8 @@ describe('Checks whether Markdown reports are correctly generated', () => {
 
     const fixtureReport = [
       'BreakBot Report',
-      readFileSync('./test/fixtures/reports/V3-summary.md', 'utf-8'),
-      readFileSync('./test/fixtures/reports/V3-message.md', 'utf-8'),
+      readFileSync('./test/fixtures/reports/V3-summary.md', 'utf-8').trim(),
+      readFileSync('./test/fixtures/reports/V3-message.md', 'utf-8').trim(),
     ];
 
     expect(report)
@@ -54,8 +54,8 @@ describe('Checks whether Markdown reports are correctly generated', () => {
 
     const fixtureReport = [
       'BreakBot Report',
-      readFileSync('./test/fixtures/reports/V4-summary.md', 'utf-8'),
-      readFileSync('./test/fixtures/reports/V4-message.md', 'utf-8'),
+      readFileSync('./test/fixtures/reports/V4-summary.md', 'utf-8').trim(),
+      readFileSync('./test/fixtures/reports/V4-message.md', 'utf-8').trim(),
     ];
 
     expect(report)
@@ -67,21 +67,21 @@ describe('Checks whether Markdown reports are correctly generated', () => {
 
     const fixtureReport = [
       'BreakBot Report',
-      readFileSync('./test/fixtures/reports/V5-summary.md', 'utf-8'),
-      readFileSync('./test/fixtures/reports/V5-message.md', 'utf-8'),
+      readFileSync('./test/fixtures/reports/V5-summary.md', 'utf-8').trim(),
+      readFileSync('./test/fixtures/reports/V5-message.md', 'utf-8').trim(),
     ];
 
     expect(report)
       .toStrictEqual(fixtureReport);
   });
 
-  test('Report with too many BCs and detections', async () => {
+  test('Report with too many BCs and broken uses', async () => {
     const report = writeReport(maracasTooMany, 1, 1, 1);
 
     const fixtureReport = [
       'BreakBot Report',
-      readFileSync('./test/fixtures/reports/V6-summary.md', 'utf-8'),
-      readFileSync('./test/fixtures/reports/V6-message.md', 'utf-8'),
+      readFileSync('./test/fixtures/reports/V6-summary.md', 'utf-8').trim(),
+      readFileSync('./test/fixtures/reports/V6-message.md', 'utf-8').trim(),
     ];
 
     expect(report)

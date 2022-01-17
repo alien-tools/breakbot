@@ -82,7 +82,7 @@ export async function completeCheck(
     title,
     summary,
     text,
-  ] = writeReport(report, config.maxBCs, config.maxClients, config.maxDetections);
+  ] = writeReport(report, config.maxBCs, config.maxClients, config.maxBrokenUses);
 
   await restEndpointMethods(octokit).rest.checks.update({
     owner,

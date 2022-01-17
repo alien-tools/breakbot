@@ -28,7 +28,7 @@
         "clientReports": [
             {
                 "url": "ImMeta/testRepo",
-                "detections": [
+                "brokenUses": [
                     {
                         "elem": "trystatement.getBody()",
                         "used": "getBody()",
@@ -54,7 +54,7 @@
             },
             {
                 "url": "ImUser/OtherRepo",
-                "detections": [
+                "brokenUses": [
                     {
                         "elem": "catchstatement.getBody()",
                         "used": "getBody()",

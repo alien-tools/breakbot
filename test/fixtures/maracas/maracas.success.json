@@ -316,7 +316,7 @@
     "clientReports": [
       {
         "url": "SpoonLabs/spooet",
-        "detections": [
+        "brokenUses": [
           {
             "elem": "ctCatch.getBody()",
             "used": "getBody()",
@@ -342,27 +342,27 @@
       },
       {
         "url": "SpoonLabs/flacoco",
-        "detections": [],
+        "brokenUses": [],
         "error": null
       },
       {
         "url": "Spirals-Team/casper",
-        "detections": [],
+        "brokenUses": [],
         "error": null
       },
       {
         "url": "KTH/spork",
-        "detections": [],
+        "brokenUses": [],
         "error": null
       },
       {
         "url": "Spirals-Team/jPerturb",
-        "detections": [],
+        "brokenUses": [],
         "error": null
       },
       {
         "url": "SpoonLabs/CoCoSpoon",
-        "detections": [
+        "brokenUses": [
           {
             "elem": "ctCatch.getBody()",
             "used": "getBody()",
@@ -388,7 +388,7 @@
       },
       {
         "url": "SpoonLabs/npefix",
-        "detections": [
+        "brokenUses": [
           {
             "elem": "catchArg.getBody()",
             "used": "getBody()",
@@ -484,7 +484,7 @@
       },
       {
         "url": "SpoonLabs/npefix",
-        "detections": [
+        "brokenUses": [
           {
             "elem": "catchArg.getBody()",
             "used": "getBody()",
@@ -580,12 +580,12 @@
       },
       {
         "url": "SpoonLabs/metamutator",
-        "detections": [],
+        "brokenUses": [],
         "error": null
       },
       {
         "url": "STAMP-project/dspot",
-        "detections": [
+        "brokenUses": [
           {
             "elem": "((spoon.reflect.code.CtBlock) (parent.getBody()))",
             "used": "getBody()",
@@ -651,7 +651,7 @@
       },
       {
         "url": "STAMP-project/AssertFixer",
-        "detections": [
+        "brokenUses": [
           {
             "elem": "catches.get(0).getBody()",
             "used": "getBody()",
@@ -707,12 +707,12 @@
       },
       {
         "url": "SpoonLabs/gumtree-spoon-ast-diff",
-        "detections": [],
+        "brokenUses": [],
         "error": null
       },
       {
         "url": "SpoonLabs/coming",
-        "detections": [
+        "brokenUses": [
           {
             "elem": "trystatement.getBody()",
             "used": "getBody()",
@@ -728,12 +728,12 @@
       },
       {
         "url": "SpoonLabs/nopol",
-        "detections": [],
+        "brokenUses": [],
         "error": null
       },
       {
         "url": "SpoonLabs/astor",
-        "detections": [],
+        "brokenUses": [],
         "error": null
       }
     ]
