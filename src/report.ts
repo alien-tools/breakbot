@@ -18,7 +18,7 @@ export default function writeReport(
   }
 
   const { report } = myJson;
-  const bcs = report.delta.brokenDeclarations;
+  const bcs = report.delta.breakingChanges;
   const allClients = report.clientReports;
   const clients = allClients.filter((c: any) => c.error == null);
   const clientsError = allClients.filter((c: any) => c.error != null);

@@ -4,7 +4,7 @@
     "delta": {
       "jarV1": "file:///./data/clones/430120521/85233847d3a79fd5cbe8a16248bca4d038f44489/target/spoon-core-10.0.1-SNAPSHOT.jar",
       "jarV2": "file:///./data/clones/430120521/272982e2c950814b6976dc144356b10cd5c8bed1/target/spoon-core-10.0.1-SNAPSHOT.jar",
-      "brokenDeclarations": [
+      "breakingChanges": [
         {
           "declaration": "spoon.reflect.code.CtBodyHolder.getBody()",
           "change": "METHOD_REMOVED",

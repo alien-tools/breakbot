@@ -4,7 +4,7 @@
         "delta": {
             "jarV1": "file:///home/dig/maracas-rest/./clones/381618567/8ebca446de98192d1a993f8bf41cbfc1ffb0924c/target/spoon-core-9.1.0-SNAPSHOT.jar",
             "jarV2": "file:///home/dig/maracas-rest/./clones/381618567/14188a899d1d88edbad36e09e701d3ebdebb607b/target/spoon-core-9.1.0-SNAPSHOT.jar",
-            "brokenDeclarations": [
+            "breakingChanges": [
                 {
                     "declaration": "spoon.reflect.code.CtBodyHolder.getBody()",
                     "change": "METHOD_REMOVED",
