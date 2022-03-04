@@ -1,6 +1,10 @@
 import { stripIndent } from 'common-tags';
 import BreakBotConstants from './settings';
 
+function bcDocumentationUrl(bc: string) {
+  return BreakBotConstants.MARACAS_BCS_DOCUMENTATION + bc.replace('_', '-').toLowerCase();
+}
+
 export default function writeReport(
   myJson: any,
   maxBCs: number,
@@ -50,7 +54,7 @@ export default function writeReport(
       const bcBrokenUsesText = bcBrokenUses.length > 0 ? bcBrokenUses.length : 'None';
 
       message += '\n';
-      message += `[\`${bc.declaration}\`](${bc.fileUrl}) ([diff](${bc.diffUrl})) | [\`${bc.change}\`]() | ${impactedClients.length > 0 ? ':x:' : ':heavy_check_mark:'} | ${impactedClientsText} | ${bcBrokenUsesText}`;
+      message += `[\`${bc.declaration}\`](${bc.fileUrl}) ([diff](${bc.diffUrl})) | [\`${bc.change}\`](${bcDocumentationUrl(bc.change)}) | ${impactedClients.length > 0 ? ':x:' : ':heavy_check_mark:'} | ${impactedClientsText} | ${bcBrokenUsesText}`;
     });
 
   if (bcs.length > maxBCs) {
@@ -91,7 +95,7 @@ export default function writeReport(
       .forEach((d: any) => {
         const kind = bcs.find((bc: any) => bc.declaration === d.src).change;
         message += '\n';
-        message += `[\`${d.elem}\`](${d.url}) | \`${d.src}\` | \`${kind}\` | \`${d.apiUse}\``;
+        message += `[\`${d.elem}\`](${d.url}) | \`${d.src}\` | [\`${kind}\`](${bcDocumentationUrl(kind)}) | \`${d.apiUse}\``;
       });
 
     if (c.brokenUses.length > maxBrokenUses) {
