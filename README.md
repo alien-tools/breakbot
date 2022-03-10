@@ -29,13 +29,17 @@ BreakBot reports consist of a summary that summarizes the list and impact of bre
 
 ![A BreakBot report](./breakbot-report.png)
 
+### Completion Status
+BreakBot ends its analysis with either of these status:
+  - _Success_ when no breaking change is detected
+  - _Neutral_ when breaking changes are detected
+  - _Skipped_ when the analysis is skipped (e.g., no Java files affected by the pull request)
 
 ### Supported Breaking Changes
 
 The underlying analysis is realized using [Maracas](https://github.com/alien-tools/maracas), which in turn relies on [japicmp](https://github.com/siom79/japicmp).
 
 Once installed on a repository, it will publish a report as a check on each new pull request. This report contains a list of the breaking changes created by this PR, compared to the base branch, and a list of the clients impacted for each PR.
-
 
 ## Configuration
 Similar to other GitHub Apps, BreakBot configuration must be hosted in a file `.github/breakbot.yml` directly within the repository.
@@ -107,3 +111,4 @@ For more information, check out the [Contributing guide](CONTRIBUTING.md).
 
   - Automatically discover the clients to analyze, e.g. using Maven's dependency graph or GitHub's dependents list.
   - Build the list of breaking changes between two versions of a library from source code only, avoiding the need for building JARs and using japicmp.
+

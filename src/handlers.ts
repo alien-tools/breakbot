@@ -1,6 +1,11 @@
 import { Context, ProbotOctokit } from 'probot';
 import { DeprecatedLogger } from 'probot/lib/types';
-import { createCheck, failedCheck, updateCheck } from './checks';
+import {
+  createCheck,
+  failedCheck,
+  updateCheck,
+  skippedCheck,
+} from './checks';
 import requestPRAnalysis from './maracas';
 
 async function analyzePR(
@@ -28,14 +33,27 @@ async function analyzePR(
   }
 }
 
+async function shouldSkipPR(
+  octokit: InstanceType<typeof ProbotOctokit>,
+  owner: string,
+  repo: string,
+  prNb: number,
+): Promise<boolean> {
+  const files = await octokit.pulls.listFiles({ owner, repo, pull_number: prNb });
+  return !files.data.some((f) => f.filename.endsWith('.java'));
+}
+
 export async function handlePullRequestWebhook(context: Context<'pull_request'>) {
   const { owner, repo } = context.repo();
   const headSHA = context.payload.pull_request.head.sha;
   const prNb = context.payload.pull_request.number;
   const installationId = context.payload.installation?.id;
   const checkId = await createCheck(context.octokit, owner, repo, headSHA);
+  const skip = await shouldSkipPR(context.octokit, owner, repo, prNb);
 
-  if (installationId === undefined) {
+  if (skip) {
+    await skippedCheck(context.octokit, owner, repo, checkId);
+  } else if (installationId === undefined) {
     const msg = 'No installationId in payload; aborting';
     context.log.error(msg);
     await failedCheck(context.octokit, owner, repo, checkId, msg);

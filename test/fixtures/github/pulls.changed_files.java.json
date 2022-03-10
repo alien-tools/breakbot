@@ -1,0 +1,26 @@
+[
+  {
+    "sha": "c023db3d4abb55c29a4ba6b04170220f4f5d21c5",
+    "filename": "README.md",
+    "status": "modified",
+    "additions": 6,
+    "deletions": 6,
+    "changes": 12,
+    "blob_url": "https://github.com/break-bot/spoon/blob/3e9a7ef52d7ab1704d58401819f6815cbc693032/README.md",
+    "raw_url": "https://github.com/break-bot/spoon/raw/3e9a7ef52d7ab1704d58401819f6815cbc693032/README.md",
+    "contents_url": "https://api.github.com/repos/break-bot/spoon/contents/README.md?ref=3e9a7ef52d7ab1704d58401819f6815cbc693032",
+    "patch": "@@ -46,12 +46,12 @@ import spoon.reflect.code.CtCatch;\n  * Reports warnings when empty catch blocks are found.\n  */\n public class CatchProcessor extends AbstractProcessor<CtCatch> {\n-\tpublic void process(CtCatch element) {\n-\t\t// we get all statements and if there isn't statement, it means the block catch is empty!\n-\t\tif (element.getBody().getStatements().size() == 0) {\n-\t\t\tgetFactory().getEnvironment().report(this, Level.WARN, element, \"empty catch clause\");\n-\t\t}\n-\t}\n+    public void process(CtCatch element) {\n+        // we get all statements and if there isn't statement, it means the block catch is empty!\n+        if (element.getMyBody().getStatements().size() == 0) {\n+            getFactory().getEnvironment().report(this, Level.WARN, element, \"empty catch clause\");\n+        }\n+    }\n }\n ```\n "
+  },
+  {
+    "sha": "701d4ac01256f413547ac5bc51ad5704a4bf6672",
+    "filename": "src/main/java/Main.java",
+    "status": "modified",
+    "additions": 5,
+    "deletions": 5,
+    "changes": 10,
+    "blob_url": "https://github.com/break-bot/spoon/blob/3e9a7ef52d7ab1704d58401819f6815cbc693032/src/main/java/Main.java",
+    "raw_url": "https://github.com/break-bot/spoon/raw/3e9a7ef52d7ab1704d58401819f6815cbc693032/src/main/java/Main.java",
+    "contents_url": "https://api.github.com/repos/break-bot/spoon/contents/src/main/java/Main.java?ref=3e9a7ef52d7ab1704d58401819f6815cbc693032",
+    "patch": "@@ -46,11 +46,11 @@ import spoon.reflect.code.CtCatch;\n  * Reports warnings when empty catch blocks are found.\n  */\n public class CatchProcessor extends AbstractProcessor<CtCatch> {\n-\tpublic void process(CtCatch element) {\n-\t\tif (element.getBody().getStatements().size() == 0) {\n-\t\t\tgetFactory().getEnvironment().report(this, Level.WARN, element, \"empty catch clause\");\n-\t\t}\n-\t}\n+    public void process(CtCatch element) {\n+        if (element.getMyBody().getStatements().size() == 0) {\n+            getFactory().getEnvironment().report(this, Level.WARN, element, \"empty catch clause\");\n+        }\n+    }\n }\n ```\n ### Examples of Analysis Processors"
+  }
+]

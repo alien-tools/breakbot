@@ -102,3 +102,27 @@ export async function completeCheck(
     }],
   });
 }
+
+export async function skippedCheck(
+  octokit: InstanceType<typeof ProbotOctokit>,
+  owner: string,
+  repo: string,
+  checkId: number,
+): Promise<void> {
+  await octokit.checks.update({
+    owner,
+    repo,
+    check_run_id: checkId,
+    status: 'completed',
+    conclusion: 'skipped',
+    output: {
+      title: 'Check skipped',
+      summary: 'Nothing to check in this pull request.',
+    },
+    actions: [{
+      label: 'Retry the analysis',
+      description: '',
+      identifier: 'rerun',
+    }],
+  });
+}

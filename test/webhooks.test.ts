@@ -10,6 +10,8 @@ const prOpenedWithoutInstallationIdPayload : PullRequestEvent = require('./fixtu
 const checkRunPayload : CheckRunEvent = require('./fixtures/github/check_run.requested_action.json');
 const checkRunWithoutInstallationIdPayload : CheckRunEvent = require('./fixtures/github/check_run.requested_action.no_installationId.json');
 const checkRunWithWrongSha : CheckRunEvent = require('./fixtures/github/check_run.requested_action.wrong_sha.json');
+const changedFilesJavaPayload : CheckRunEvent = require('./fixtures/github/pulls.changed_files.java.json');
+const changedFilesNoJavaPayload : CheckRunEvent = require('./fixtures/github/pulls.changed_files.no_java.json');
 
 describe('BreakBot tests', () => {
   let probot: Probot;
@@ -36,6 +38,12 @@ describe('BreakBot tests', () => {
   });
 
   test('Synchronizing a PR creates and updates a new check run', async () => {
+    // Nocking the files changed request
+    nock('https://api.github.com')
+      .get('/repos/break-bot/spoon/pulls/1/files')
+      .reply(200, changedFilesJavaPayload);
+
+    // Nocking the check run queueing
     nock('https://api.github.com')
       .post('/repos/break-bot/spoon/check-runs', (body) => {
         expect(body).toMatchObject({
@@ -50,6 +58,7 @@ describe('BreakBot tests', () => {
       })
       .reply(201, { id: 1 });
 
+    // Nocking the check run initial update
     nock('https://api.github.com')
       .patch('/repos/break-bot/spoon/check-runs/1', (body) => {
         expect(body).toMatchObject({
@@ -62,6 +71,7 @@ describe('BreakBot tests', () => {
       })
       .reply(200);
 
+    // Nocking default Maracas response
     nock('http://maracas-server.org')
       .post('/github/pr/break-bot/spoon/1')
       .query({ callback: 'http://webhook-server.org/breakbot/pr/break-bot/spoon/1' })
@@ -71,6 +81,12 @@ describe('BreakBot tests', () => {
   });
 
   test('Opening a new PR creates and updates a new check run', async () => {
+    // Nocking the files changed request
+    nock('https://api.github.com')
+      .get('/repos/break-bot/spoon/pulls/4/files')
+      .reply(200, changedFilesJavaPayload);
+
+    // Nocking the check run queueing
     nock('https://api.github.com')
       .post('/repos/break-bot/spoon/check-runs', (body) => {
         expect(body).toMatchObject({
@@ -85,6 +101,7 @@ describe('BreakBot tests', () => {
       })
       .reply(201, { id: 1 });
 
+    // Nocking the check run initial update
     nock('https://api.github.com')
       .patch('/repos/break-bot/spoon/check-runs/1', (body) => {
         expect(body).toMatchObject({
@@ -97,6 +114,7 @@ describe('BreakBot tests', () => {
       })
       .reply(200);
 
+    // Nocking default Maracas response
     nock('http://maracas-server.org')
       .post('/github/pr/break-bot/spoon/4')
       .query({ callback: 'http://webhook-server.org/breakbot/pr/break-bot/spoon/4' })
@@ -131,6 +149,11 @@ describe('BreakBot tests', () => {
   });
 
   test('If Maracas fails to parse the request, an error is reported', async () => {
+    // Nocking the files changed request
+    nock('https://api.github.com')
+      .get('/repos/break-bot/spoon/pulls/4/files')
+      .reply(200, changedFilesJavaPayload);
+
     nock('https://api.github.com')
       .post('/repos/break-bot/spoon/check-runs')
       .reply(201, { id: 1 });
@@ -143,6 +166,7 @@ describe('BreakBot tests', () => {
             summary: 'unlucky',
           },
           status: 'completed',
+          conclusion: 'cancelled',
         });
         return true;
       })
@@ -157,6 +181,11 @@ describe('BreakBot tests', () => {
   });
 
   test('If the pull_request payload contains no installationId, update the check with the error', async () => {
+    // Nocking the files changed request
+    nock('https://api.github.com')
+      .get('/repos/break-bot/spoon/pulls/4/files')
+      .reply(200, changedFilesJavaPayload);
+
     nock('https://api.github.com')
       .post('/repos/break-bot/spoon/check-runs')
       .reply(201, { id: 1 });
@@ -169,6 +198,7 @@ describe('BreakBot tests', () => {
             summary: 'No installationId in payload; aborting',
           },
           status: 'completed',
+          conclusion: 'cancelled',
         });
         return true;
       })
@@ -190,6 +220,7 @@ describe('BreakBot tests', () => {
             summary: 'No installationId in payload; aborting',
           },
           status: 'completed',
+          conclusion: 'cancelled',
         });
         return true;
       })
@@ -211,11 +242,50 @@ describe('BreakBot tests', () => {
             summary: 'Couldn\'t find a PR for check #4342888321 [sha=erroneous]',
           },
           status: 'completed',
+          conclusion: 'cancelled',
         });
         return true;
       })
       .reply(200);
 
     await probot.receive({ id: 'opened', name: 'check_run', payload: checkRunWithWrongSha });
+  });
+
+  test('Attempting to check a PR that doesn\'t affect Java code ends in a skipped check', async () => {
+    // Nocking the files changed request
+    nock('https://api.github.com')
+      .get('/repos/break-bot/spoon/pulls/4/files')
+      .reply(200, changedFilesNoJavaPayload);
+
+    // Nocking the check run queueing
+    nock('https://api.github.com')
+      .post('/repos/break-bot/spoon/check-runs', (body) => {
+        expect(body).toMatchObject({
+          head_sha: '148174db3a9eb9cbcdf444f8b0359c54f6c0a877',
+          name: 'BreakBot Report',
+          output: {
+            title: 'Sending analysis request to Maracas...',
+          },
+          status: 'queued',
+        });
+        return true;
+      })
+      .reply(201, { id: 1 });
+
+    // Nocking the skipped check run update
+    nock('https://api.github.com')
+      .patch('/repos/break-bot/spoon/check-runs/1', (body) => {
+        expect(body).toMatchObject({
+          output: {
+            title: 'Check skipped',
+          },
+          status: 'completed',
+          conclusion: 'skipped',
+        });
+        return true;
+      })
+      .reply(201, { id: 1 });
+
+    await probot.receive({ id: 'opened', name: 'pull_request', payload: prOpenedPayload });
   });
 });
