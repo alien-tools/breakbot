@@ -46,12 +46,13 @@ Similar to other GitHub Apps, BreakBot configuration must be hosted in a file `.
 
 ### Build
 To conduct the analyses, BreakBot needs to be able to build the library and produce a JAR file for both the `base` and `head` branches of the pull requests. Currently, only Maven is supported, and BreakBot will attempt to run a `mvn package` from the repository's root, looking for a resulting JAR in the `target/` directory.
-It is however possible to configure a different `pom.xml` file, goal, and properties:
+It is however possible to configure a different `pom.xml` file, source directory, goals, and properties:
 
 ```yaml
 build:
   # Only build a submodule
   pom: module/pom.xml
+  sources: module/src/main/java
   # Custom goals
   goals: [clean jar-goal]
   # Skipping dependency clean and assembly to speed up the analyses
