@@ -1,0 +1,76 @@
+{
+  "message": "ok",
+  "report": {
+    "delta": {
+      "jarV1": "file:///./data/clones/430120521/85233847d3a79fd5cbe8a16248bca4d038f44489/target/spoon-core-10.0.1-SNAPSHOT.jar",
+      "jarV2": "file:///./data/clones/430120521/272982e2c950814b6976dc144356b10cd5c8bed1/target/spoon-core-10.0.1-SNAPSHOT.jar",
+      "breakingChanges": []
+    },
+    "clientReports": [
+      {
+        "url": "SpoonLabs/spooet",
+        "brokenUses": [],
+        "error": null
+      },
+      {
+        "url": "SpoonLabs/flacoco",
+        "brokenUses": [],
+        "error": null
+      },
+      {
+        "url": "Spirals-Team/casper",
+        "brokenUses": [],
+        "error": null
+      },
+      {
+        "url": "KTH/spork",
+        "brokenUses": [],
+        "error": null
+      },
+      {
+        "url": "Spirals-Team/jPerturb",
+        "brokenUses": [],
+        "error": null
+      },
+      {
+        "url": "SpoonLabs/CoCoSpoon",
+        "brokenUses": [],
+        "error": null
+      },
+      {
+        "url": "SpoonLabs/npefix",
+        "brokenUses": [],
+        "error": null
+      },
+      {
+        "url": "SpoonLabs/npefix",
+        "brokenUses": [],
+        "error": null
+      },
+      {
+        "url": "SpoonLabs/metamutator",
+        "brokenUses": [],
+        "error": null
+      },
+      {
+        "url": "STAMP-project/dspot",
+        "brokenUses": [],
+        "error": null
+      },
+      {
+        "url": "STAMP-project/AssertFixer",
+        "brokenUses": [],
+        "error": null
+      },
+      {
+        "url": "SpoonLabs/gumtree-spoon-ast-diff",
+        "brokenUses": [],
+        "error": null
+      },
+      {
+        "url": "SpoonLabs/coming",
+        "brokenUses": []
+      }
+    ]
+  }
+}

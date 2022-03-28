@@ -84,12 +84,16 @@ export async function completeCheck(
     text,
   ] = writeReport(report, config.maxBCs, config.maxClients, config.maxBrokenUses);
 
+  const conclusion = report.report.delta.breakingChanges.length > 0
+    ? 'neutral'
+    : 'success';
+
   await restEndpointMethods(octokit).rest.checks.update({
     owner,
     repo,
     check_run_id: checkId,
     status: 'completed',
-    conclusion: 'neutral',
+    conclusion,
     output: {
       title,
       summary,
