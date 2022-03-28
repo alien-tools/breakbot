@@ -55,8 +55,8 @@ build:
   sources: module/src/main/java
   # Custom goals
   goals: [clean jar-goal]
-  # Skipping dependency clean and assembly to speed up the analyses
-  properties: [skipTests, skipDepClean, assembly.skipAssembly]
+  # Skipping tests and assemblies to speed un the build
+  properties: [maven.test.skip, assembly.skipAssembly]
 ```
 
 ### Clients
