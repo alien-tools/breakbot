@@ -45,18 +45,21 @@ Once installed on a repository, it will publish a report as a check on each new 
 Similar to other GitHub Apps, BreakBot configuration must be hosted in a file `.github/breakbot.yml` directly within the repository.
 
 ### Build
-To conduct the analyses, BreakBot needs to be able to build the library and produce a JAR file for both the `base` and `head` branches of the pull requests. Currently, only Maven is supported, and BreakBot will attempt to run a `mvn package` from the repository's root, looking for a resulting JAR in the `target/` directory.
-It is however possible to configure a different `pom.xml` file, source directory, goals, and properties:
+To conduct the analyses, BreakBot needs to be able to build the library and produce a JAR file for both the `base` and `head` branches of the pull requests. Currently, only Maven and Gradle are supported. By default, BreakBot autodetects a build file (`pom.xml` for Maven and `gradlew` for Gradle) in repository's root and runs a `mvn package` or `./gradlew` accordingly.
+It is however possible to configure specific sub-directory, source directories, goals, and properties:
 
 ```yaml
 build:
-  # Only build a submodule
-  pom: module/pom.xml
-  sources: module/src/main/java
+  # Only build a sub-directory
+  module: core/
+  # Sources directory, if non-standard
+  sources: src/main/customjava
   # Custom goals
   goals: [clean jar-goal]
   # Skipping tests and assemblies to speed un the build
-  properties: [maven.test.skip, assembly.skipAssembly]
+  properties:
+    maven.test.skip: true
+    assembly.skipAssembly: true
 ```
 
 ### Clients
@@ -112,4 +115,3 @@ For more information, check out the [Contributing guide](CONTRIBUTING.md).
 
   - Automatically discover the clients to analyze, e.g. using Maven's dependency graph or GitHub's dependents list.
   - Build the list of breaking changes between two versions of a library from source code only, avoiding the need for building JARs and using japicmp.
-
