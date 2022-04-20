@@ -83,8 +83,7 @@ clients:
 ```
 
 ### Exclude some APIs from the analysis
-Some parts of your APIs may be exempt from compatibility guarantees: types annotated with a `@Beta` annotation, everything within a `*.internal.*` package, etc. This can also be configured in the `breakbot.yml` file. All the elements matching the given patterns will be excluded from the analysis: no breaking changes will be reported.
-[TODO: annotations and package naming conventions are the only mechanisms to exclude code? If so, it would be nice to specify it here, and be more concrete on how you refer to one or the other.]
+Some parts of your APIs may be exempt from compatibility guarantees: types annotated with a `@Beta` annotation, everything within a `*.internal.*` package, etc. This can also be configured in the `breakbot.yml` file. All the elements matching the given patterns will be excluded from the analysis: no breaking change will be reported. The patterns are given in the `excludes` section: patterns starting with `@` denote annotations (every element tagged with this annotation is excluded from the analysis), while other regex-like patterns specify that any element whose name matches the regex should be excluded from the analysis.
 
 ```yaml
 excludes:
