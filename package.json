@@ -1,15 +1,20 @@
 {
-  "name": "breakbot-0",
-  "version": "1.0.1",
+  "name": "breakbot",
+  "version": "0.1.0",
   "private": true,
-  "description": "A bot that detect breaking changes in a pull request and displays them",
-  "author": "RIZZO Leonard <leonard.rizzo@gmx.com>",
+  "description": "BreakBot tracks the introduction of breaking changes in Java libraries on GitHub and their impact on client projects",
+  "contributors": [
+    "Léonard Rizzo <leonard.rizzo@gmx.com>",
+    "Thomas Degueule <thomas.degueule@labri.fr>"
+  ],
   "license": "ISC",
-  "homepage": "https://github.com/Metamaus/breakbot",
+  "homepage": "https://github.com/alien-tools/breakbot",
   "keywords": [
     "probot",
     "github",
-    "probot-app"
+    "probot-app",
+    "breaking-changes",
+    "java"
   ],
   "scripts": {
     "build": "tsc",
