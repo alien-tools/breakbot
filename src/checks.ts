@@ -86,7 +86,7 @@ export async function completeCheck(
 
   let conclusion = 'neutral';
   if (report.report?.delta == null) conclusion = 'failure';
-  else if (report.report.delta.breakingChanges.length == 0) conclusion = 'success';
+  else if (report.report.delta.breakingChanges.length === 0) conclusion = 'success';
 
   await restEndpointMethods(octokit).rest.checks.update({
     owner,

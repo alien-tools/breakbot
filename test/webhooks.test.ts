@@ -288,4 +288,48 @@ describe('BreakBot tests', () => {
 
     await probot.receive({ id: 'opened', name: 'pull_request', payload: prOpenedPayload });
   });
+
+  test('If Maracas server is down, report the error', async () => {
+    // Nocking the files changed request
+    nock('https://api.github.com')
+      .get('/repos/break-bot/spoon/pulls/4/files')
+      .reply(200, changedFilesJavaPayload);
+
+    // Nocking the check run queueing
+    nock('https://api.github.com')
+      .post('/repos/break-bot/spoon/check-runs', (body) => {
+        expect(body).toMatchObject({
+          head_sha: '148174db3a9eb9cbcdf444f8b0359c54f6c0a877',
+          name: 'BreakBot Report',
+          output: {
+            title: 'Sending analysis request to Maracas...',
+          },
+          status: 'queued',
+        });
+        return true;
+      })
+      .reply(201, { id: 1 });
+
+    // Nocking the check run initial update
+    nock('https://api.github.com')
+      .patch('/repos/break-bot/spoon/check-runs/1', (body) => {
+        expect(body).toMatchObject({
+          output: {
+            title: 'Maracas returned an error',
+            summary: 'request to http://maracas-server.org/github/pr/break-bot/spoon/4?callback=http://webhook-server.org/breakbot/pr/break-bot/spoon/4 failed, reason: Server down',
+          },
+          status: 'completed',
+          conclusion: 'cancelled',
+        });
+        return true;
+      })
+      .reply(200);
+
+    nock('http://maracas-server.org')
+      .post('/github/pr/break-bot/spoon/4')
+      .query({ callback: 'http://webhook-server.org/breakbot/pr/break-bot/spoon/4' })
+      .replyWithError('Server down');
+
+    await probot.receive({ id: 'opened', name: 'pull_request', payload: prOpenedPayload });
+  });
 });
