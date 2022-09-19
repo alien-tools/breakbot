@@ -104,5 +104,11 @@ export default function writeReport(
     }
   });
 
+  if (message.length > 65_000) {
+    message = message.substring(0, 65_000);
+    message += '\n\n';
+    message += '*The report exceeds the maximum length of 65,000 characters and has been truncated.*';
+  }
+
   return ([title, summary, message]);
 }

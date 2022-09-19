@@ -6,6 +6,7 @@ import maracasOneClient from './fixtures/maracas/maracas.one-client.json';
 import maracasTwoClients from './fixtures/maracas/maracas.two-clients.json';
 import maracasNoClient from './fixtures/maracas/maracas.no-client.json';
 import maracasTooMany from './fixtures/maracas/maracas.too-many.json';
+import maracasTooBig from './fixtures/maracas/maracas.too-big.json';
 
 import writeReport from '../src/report';
 
@@ -86,5 +87,15 @@ describe('Checks whether Markdown reports are correctly generated', () => {
 
     expect(report)
       .toStrictEqual(fixtureReport);
+  });
+
+  test('A report that\'s > 65k characters gets truncated', async () => {
+    const [
+      title,
+      summary,
+      message,
+    ] = writeReport(maracasTooBig, 100, 100, 100);
+
+    expect(JSON.stringify({ title, summary, message }).length).toBeLessThan(65535);
   });
 });
