@@ -34,7 +34,7 @@ export default function writeReport(
 
   const { report } = myJson;
 
-  const bcs = report.reports.flatMap((pkg : any) => pkg.delta.breakingChanges);
+  const bcs = report.reports.flatMap((pkg : any) => pkg.delta ? pkg.delta.breakingChanges : []);
   const allClientUrls = Array.from(new Set(
     report.reports.flatMap((pkg: any) => pkg.clientReports).flatMap((c: any) => c.url),
   ));
