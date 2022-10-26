@@ -85,8 +85,8 @@ export async function completeCheck(
   ] = writeReport(report, config.maxBCs, config.maxClients, config.maxBrokenUses);
 
   let conclusion = 'neutral';
-  if (report.report?.delta == null) conclusion = 'failure';
-  else if (report.report.delta.breakingChanges.length === 0) conclusion = 'success';
+  if (report.message !== 'ok') conclusion = 'failure';
+  else if (report.report.reports.every((pkg: any) => pkg.delta.breakingChanges.length === 0)) conclusion = 'success';
 
   await restEndpointMethods(octokit).rest.checks.update({
     owner,

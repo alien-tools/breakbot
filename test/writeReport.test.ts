@@ -97,5 +97,6 @@ describe('Checks whether Markdown reports are correctly generated', () => {
     ] = writeReport(maracasTooBig, 100, 100, 100);
 
     expect(JSON.stringify({ title, summary, message }).length).toBeLessThan(65535);
+    expect(message).toContain('The report exceeds the maximum length of 65,000 characters and has been truncated');
   });
 });

@@ -5,6 +5,21 @@ function bcDocumentationUrl(bc: string) {
   return BreakBotConstants.MARACAS_BCS_DOCUMENTATION + bc.replace('_', '-').toLowerCase();
 }
 
+function getClientReport(report: any, clientUrl: string) {
+  return {
+    url: clientUrl,
+    error:
+        Array.from(new Set(
+          report.reports.flatMap((pkg: any) => pkg.clientReports)
+            .filter((c: any) => c.url === clientUrl)
+            .flatMap((c: any) => c.error),
+        )).join(', '),
+    brokenUses: report.reports.flatMap((pkg: any) => pkg.clientReports)
+      .filter((c: any) => c.url === clientUrl)
+      .flatMap((c: any) => c.brokenUses),
+  };
+}
+
 export default function writeReport(
   myJson: any,
   maxBCs: number,
@@ -18,10 +33,14 @@ export default function writeReport(
   }
 
   const { report } = myJson;
-  const bcs = report.delta.breakingChanges;
-  const allClients = report.clientReports;
-  const clients = allClients.filter((c: any) => c.error == null);
-  const clientsError = allClients.filter((c: any) => c.error != null);
+
+  const bcs = report.reports.flatMap((pkg : any) => pkg.delta.breakingChanges);
+  const allClientUrls = Array.from(new Set(
+    report.reports.flatMap((pkg: any) => pkg.clientReports).flatMap((c: any) => c.url),
+  ));
+  const allClients = allClientUrls.map((url: any) => getClientReport(report, url));
+  const clients = allClients.filter((c: any) => !c.error);
+  const clientsError = allClients.filter((c: any) => c.error);
   const brokenClients = clients.filter((c: any) => c.brokenUses.length > 0);
   const brokenUses = brokenClients.flatMap((c: any) => c.brokenUses);
   const percentBroken = clients.length > 0
@@ -30,12 +49,12 @@ export default function writeReport(
 
   const summary = stripIndent`
         This pull request introduces **${bcs.length} breaking changes**, causing **${brokenUses.length} broken uses** in client code.
-        **${brokenClients.length} of ${clients.length} clients are impacted** by the changes (${percentBroken}%).
-        ${clientsError.length > 0 ? `Maracas encountered an error when attempting to process the following clients: ${clientsError.map((c: any) => `[${c.url}](https://github.com/${c.url}) (*${c.error}*)`)
+        **${brokenClients.length} of ${clients.length} analyzed clients are impacted** by the changes (${percentBroken}%).
+        ${clientsError.length > 0 ? `Maracas encountered an error when attempting to process the following clients: ${allClients.map((c: any) => `[${c.url}](https://github.com/${c.url}) (*${c.error}*)`)
     .join(', ')}.` : ''}
     `;
 
-  let message = stripIndent`
+  let reportMessage = stripIndent`
         ### Breaking changes
         Declaration | Kind | Status | Impacted clients | Broken Uses
         ----------- | ---- | ------ | ---------------- | -----------
@@ -53,17 +72,17 @@ export default function writeReport(
         .join(', ')})` : 'None';
       const bcBrokenUsesText = bcBrokenUses.length > 0 ? bcBrokenUses.length : 'None';
 
-      message += '\n';
-      message += `[\`${bc.declaration}\`](${bc.fileUrl}) ([diff](${bc.diffUrl})) | [\`${bc.change}\`](${bcDocumentationUrl(bc.change)}) | ${impactedClients.length > 0 ? ':x:' : ':heavy_check_mark:'} | ${impactedClientsText} | ${bcBrokenUsesText}`;
+      reportMessage += '\n';
+      reportMessage += `[\`${bc.declaration}\`](${bc.fileUrl}) ([diff](${bc.diffUrl})) | [\`${bc.change}\`](${bcDocumentationUrl(bc.change)}) | ${impactedClients.length > 0 ? ':x:' : ':heavy_check_mark:'} | ${impactedClientsText} | ${bcBrokenUsesText}`;
     });
 
   if (bcs.length > maxBCs) {
-    message += '\n';
-    message += `*${bcs.length - maxBCs} additional breaking changes not shown.*`;
+    reportMessage += '\n';
+    reportMessage += `*${bcs.length - maxBCs} additional breaking changes not shown.*`;
   }
 
-  message += '\n\n';
-  message += stripIndent`
+  reportMessage += '\n\n';
+  reportMessage += stripIndent`
         ### Impact on clients
         Client | Status | Broken Uses
         ------ | ------ | -----------
@@ -71,21 +90,21 @@ export default function writeReport(
 
   clients.slice(0, maxClients)
     .forEach((c: any) => {
-      message += '\n';
-      message += `[${c.url}](https://github.com/${c.url}) | ${c.brokenUses.length > 0 ? ':x:' : ':heavy_check_mark:'} | ${c.brokenUses.length}`;
+      reportMessage += '\n';
+      reportMessage += `[${c.url}](https://github.com/${c.url}) | ${c.brokenUses.length > 0 ? ':x:' : ':heavy_check_mark:'} | ${c.brokenUses.length}`;
     });
 
-  message += '\n';
-  message += `— | ${brokenUses.length > 0 ? ':x:' : ':heavy_check_mark:'} | ${brokenUses.length}`;
+  reportMessage += '\n';
+  reportMessage += `— | ${brokenUses.length > 0 ? ':x:' : ':heavy_check_mark:'} | ${brokenUses.length}`;
 
   if (clients.length > maxClients) {
-    message += '\n';
-    message += `*${clients.length - maxClients} additional clients not shown.*`;
+    reportMessage += '\n';
+    reportMessage += `*${clients.length - maxClients} additional clients not shown.*`;
   }
 
   brokenClients.forEach((c: any) => {
-    message += '\n\n';
-    message += stripIndent`
+    reportMessage += '\n\n';
+    reportMessage += stripIndent`
             #### [${c.url}](https://github.com/${c.url})
             Location | Breaking declaration | Kind | Use Type
             -------- | -------------------- | ---- | --------
@@ -94,21 +113,21 @@ export default function writeReport(
     c.brokenUses.slice(0, maxBrokenUses)
       .forEach((d: any) => {
         const kind = bcs.find((bc: any) => bc.declaration === d.src).change;
-        message += '\n';
-        message += `[\`${d.elem}\`](${d.url}) | \`${d.src}\` | [\`${kind}\`](${bcDocumentationUrl(kind)}) | \`${d.apiUse}\``;
+        reportMessage += '\n';
+        reportMessage += `[\`${d.elem}\`](${d.url}) | \`${d.src}\` | [\`${kind}\`](${bcDocumentationUrl(kind)}) | \`${d.apiUse}\``;
       });
 
     if (c.brokenUses.length > maxBrokenUses) {
-      message += '\n';
-      message += `*${c.brokenUses.length - maxBrokenUses} additional broken uses not shown.*`;
+      reportMessage += '\n';
+      reportMessage += `*${c.brokenUses.length - maxBrokenUses} additional broken uses not shown.*`;
     }
   });
 
-  if (message.length > 65_000) {
-    message = message.substring(0, 65_000);
-    message += '\n\n';
-    message += '*The report exceeds the maximum length of 65,000 characters and has been truncated.*';
+  if (reportMessage.length > 65_000) {
+    reportMessage = reportMessage.substring(0, 65_000);
+    reportMessage += '\n\n';
+    reportMessage += '*The report exceeds the maximum length of 65,000 characters and has been truncated.*';
   }
 
-  return ([title, summary, message]);
+  return ([title, summary, reportMessage]);
 }

@@ -1,23 +1,22 @@
 ### Breaking changes
 Declaration | Kind | Status | Impacted clients | Broken Uses
 ----------- | ---- | ------ | ---------------- | -----------
-[`spoon.reflect.code.CtBodyHolder.getBody()`](https://github.com/spoon/spoon/blob/main//src/main/CtCatch.java) ([diff](https://github.com/spoon/spoon/blob/main//src/main/CtCatch.java)) | [`METHOD_REMOVED`](https://alien-tools.github.io/maracas/bcs/method-removed) | :heavy_check_mark: | None | None
-[`spoon.reflect.code.CtCatch.getBody()`](https://github.com/spoon/spoon/blob/main//src/main/CtCatch.java) ([diff](https://github.com/spoon/spoon/blob/main//src/main/CtCatch.java)) | [`METHOD_REMOVED`](https://alien-tools.github.io/maracas/bcs/method-removed) | :x: | 2 ([ImMeta/testRepo](https://github.com/ImMeta/testRepo), [ImUser/OtherRepo](https://github.com/ImUser/OtherRepo)) | 3
+[`nestedb.NestedB.nestedB()`](https://github.com/alien-tools/repository-fixture/blob/main/module-c/nested-b/src/main/java/nestedb/NestedB.java#L4-L6) ([diff](https://github.com/alien-tools/repository-fixture/pull/1/files#diff-fb67a83f3cdd140afada868502de4908e1c98fd6fefc03c05f66139278dda700L4)) | [`METHOD_REMOVED`](https://alien-tools.github.io/maracas/bcs/method-removed) | :x: | 1 ([alien-tools/client-fixture-b](https://github.com/alien-tools/client-fixture-b)) | 1
+[`modulea.A.a()`](https://github.com/alien-tools/repository-fixture/blob/main/module-a/src/main/java/modulea/A.java#L4-L6) ([diff](https://github.com/alien-tools/repository-fixture/pull/1/files#diff-fbb607db0239487679342dbde80c69e4105cd269a5fa594c3d90d3baf91a8e6eL4)) | [`METHOD_REMOVED`](https://alien-tools.github.io/maracas/bcs/method-removed) | :x: | 1 ([alien-tools/client-fixture-a](https://github.com/alien-tools/client-fixture-a)) | 1
 
 ### Impact on clients
 Client | Status | Broken Uses
 ------ | ------ | -----------
-[ImMeta/testRepo](https://github.com/ImMeta/testRepo) | :x: | 2
-[ImUser/OtherRepo](https://github.com/ImUser/OtherRepo) | :x: | 1
-— | :x: | 3
+[alien-tools/client-fixture-b](https://github.com/alien-tools/client-fixture-b) | :x: | 1
+[alien-tools/client-fixture-a](https://github.com/alien-tools/client-fixture-a) | :x: | 1
+— | :x: | 2
 
-#### [ImMeta/testRepo](https://github.com/ImMeta/testRepo)
+#### [alien-tools/client-fixture-b](https://github.com/alien-tools/client-fixture-b)
 Location | Breaking declaration | Kind | Use Type
 -------- | -------------------- | ---- | --------
-[`trystatement.getBody()`](https://github.com/ImMeta/testRepo/src/main.java) | `spoon.reflect.code.CtCatch.getBody()` | [`METHOD_REMOVED`](https://alien-tools.github.io/maracas/bcs/method-removed) | `METHOD_INVOCATION`
-[`statement.getBody()`](https://github.com/ImMeta/testRepo/src/index.java) | `spoon.reflect.code.CtCatch.getBody()` | [`METHOD_REMOVED`](https://alien-tools.github.io/maracas/bcs/method-removed) | `METHOD_INVOCATION`
+[`nestedB.nestedB()`](https://github.com/alien-tools/client-fixture-b/blob/main/src/main/java/clientb/ClientB.java#L14-L14) | `nestedb.NestedB.nestedB()` | [`METHOD_REMOVED`](https://alien-tools.github.io/maracas/bcs/method-removed) | `METHOD_INVOCATION`
 
-#### [ImUser/OtherRepo](https://github.com/ImUser/OtherRepo)
+#### [alien-tools/client-fixture-a](https://github.com/alien-tools/client-fixture-a)
 Location | Breaking declaration | Kind | Use Type
 -------- | -------------------- | ---- | --------
-[`catchstatement.getBody()`](https://github.com/ImUser/OtherRepo/src/index.java) | `spoon.reflect.code.CtCatch.getBody()` | [`METHOD_REMOVED`](https://alien-tools.github.io/maracas/bcs/method-removed) | `METHOD_INVOCATION`
+[`a.a()`](https://github.com/alien-tools/client-fixture-a/blob/main/src/main/java/clienta/ClientA.java#L9-L9) | `modulea.A.a()` | [`METHOD_REMOVED`](https://alien-tools.github.io/maracas/bcs/method-removed) | `METHOD_INVOCATION`
