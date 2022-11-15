@@ -107,15 +107,16 @@ export default function writeReport(
     reportMessage += '\n\n';
     reportMessage += stripIndent`
             #### [${c.url}](https://github.com/${c.url})
-            Location | Breaking declaration | Kind | Use Type
-            -------- | -------------------- | ---- | --------
+            File | Element | Breaking declaration | Kind | Use Type
+            ---- | ------- | -------------------- | ---- | --------
         `;
 
     c.brokenUses.slice(0, maxBrokenUses)
       .forEach((d: any) => {
         const kind = bcs.find((bc: any) => bc.declaration === d.src).change;
+        const filename = d.path.substring(d.path.lastIndexOf('/')+1);
         reportMessage += '\n';
-        reportMessage += `[\`${d.elem}\`](${d.url}) | \`${d.src}\` | [\`${kind}\`](${bcDocumentationUrl(kind)}) | \`${d.apiUse}\``;
+        reportMessage += `[\`${filename}\`](${d.url}) | \`${d.elem}\` | \`${d.src}\` | [\`${kind}\`](${bcDocumentationUrl(kind)}) | \`${d.apiUse}\``;
       });
 
     if (c.brokenUses.length > maxBrokenUses) {
