@@ -16,6 +16,10 @@ function bcDocumentationUrl(bc: string | undefined): string {
   return '';
 }
 
+function githubShaUrl(owner: string, name: string, sha: string): string {
+  return `https://github.com/${owner}/${name}/commit/${sha}`;
+}
+
 function getClientReport(report: MaracasReport, clientUrl: string): ClientReport {
   return {
     url: clientUrl,
@@ -33,16 +37,16 @@ function getClientReport(report: MaracasReport, clientUrl: string): ClientReport
 }
 
 export default function writeReport(
-  pr: PullRequestResponse,
+  response: PullRequestResponse,
   maxBCs: number,
   maxClients: number,
   maxBrokenUses: number,
 ): string[] {
-  const { report } = pr;
+  const { pr, message, report } = response;
   const title = BreakBotConstants.REPORT_TITLE;
 
-  if (report == null) {
-    return ([title, `An error occurred: ${pr.message}\n`, '']);
+  if (report == null || pr == null) {
+    return ([title, `An error occurred: ${message}\n`, '']);
   }
 
   const bcs = report.reports.flatMap((pkg) => (pkg.delta ? pkg.delta.breakingChanges : []));
@@ -61,6 +65,7 @@ export default function writeReport(
     : 0;
 
   const summary = stripIndent`
+        BreakBot checked \`${pr.headBranch}\` (commit [\`${pr.headSha.substring(0, 7)}\`](${githubShaUrl(pr.owner, pr.name, pr.headSha)})) against \`${pr.baseBranch}\` (commit [\`${pr.baseSha.substring(0, 7)}\`](${githubShaUrl(pr.owner, pr.name, pr.baseSha)})).
         This pull request introduces **${bcs.length} breaking changes**, causing **${brokenUses.length} broken uses** in client code.
         **${brokenClients.length} of ${clients.length} analyzed clients are impacted** by the changes (${percentBroken}%).
     `;
@@ -141,8 +146,8 @@ export default function writeReport(
     }
   });
 
-  if (reportMessage.length > 65_000) {
-    reportMessage = reportMessage.substring(0, 65_000);
+  if (reportMessage.length > 64_700) {
+    reportMessage = reportMessage.substring(0, 64_700);
     reportMessage += '\n\n';
     reportMessage += '*The report exceeds the maximum length of 65,000 characters and has been truncated.*';
   }
