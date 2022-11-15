@@ -6,11 +6,11 @@ Declaration | Kind | Status | Impacted clients | Broken Uses
 ### Impact on clients
 Client | Status | Broken Uses
 ------ | ------ | -----------
-[alien-tools/client-fixture-b](https://github.com/alien-tools/client-fixture-b) | :heavy_check_mark: | 0
 [alien-tools/client-fixture-a](https://github.com/alien-tools/client-fixture-a) | :x: | 1
+[alien-tools/client-fixture-b](https://github.com/alien-tools/client-fixture-b) | :heavy_check_mark: | 0
 — | :x: | 1
 
 #### [alien-tools/client-fixture-a](https://github.com/alien-tools/client-fixture-a)
-Location | Breaking declaration | Kind | Use Type
--------- | -------------------- | ---- | --------
-[`a.a()`](https://github.com/alien-tools/client-fixture-a/blob/main/src/main/java/clienta/ClientA.java#L9-L9) | `modulea.A.a()` | [`METHOD_REMOVED`](https://alien-tools.github.io/maracas/bcs/method-removed) | `METHOD_INVOCATION`
+File | Element | Breaking declaration | Kind | Use Type
+---- | ------- | -------------------- | ---- | --------
+[`ClientA.java`](https://github.com/alien-tools/client-fixture-a/blob/main/src/main/java/clienta/ClientA.java#L9-L9) | `a.a()` | `modulea.A.a()` | [`METHOD_REMOVED`](https://alien-tools.github.io/maracas/bcs/method-removed) | `METHOD_INVOCATION`

@@ -7,17 +7,17 @@ Declaration | Kind | Status | Impacted clients | Broken Uses
 ### Impact on clients
 Client | Status | Broken Uses
 ------ | ------ | -----------
-[alien-tools/client-fixture-b](https://github.com/alien-tools/client-fixture-b) | :x: | 1
+[alien-tools/client-fixture-a](https://github.com/alien-tools/client-fixture-a) | :x: | 2
 — | :x: | 3
 *1 additional clients not shown.*
 
 #### [alien-tools/client-fixture-b](https://github.com/alien-tools/client-fixture-b)
-Location | Breaking declaration | Kind | Use Type
--------- | -------------------- | ---- | --------
-[`nestedB.nestedB()`](https://github.com/alien-tools/client-fixture-b/blob/main/src/main/java/clientb/ClientB.java#L14-L14) | `nestedb.NestedB.nestedB()` | [`METHOD_REMOVED`](https://alien-tools.github.io/maracas/bcs/method-removed) | `METHOD_INVOCATION`
+File | Element | Breaking declaration | Kind | Use Type
+---- | ------- | -------------------- | ---- | --------
+[`ClientB.java`](https://github.com/alien-tools/client-fixture-b/blob/main/src/main/java/clientb/ClientB.java#L14-L14) | `nestedB.nestedB()` | `nestedb.NestedB.nestedB()` | [`METHOD_REMOVED`](https://alien-tools.github.io/maracas/bcs/method-removed) | `METHOD_INVOCATION`
 
 #### [alien-tools/client-fixture-a](https://github.com/alien-tools/client-fixture-a)
-Location | Breaking declaration | Kind | Use Type
--------- | -------------------- | ---- | --------
-[`a.a()`](https://github.com/alien-tools/client-fixture-a/blob/main/src/main/java/clienta/ClientA.java#L9-L9) | `modulea.A.a()` | [`METHOD_REMOVED`](https://alien-tools.github.io/maracas/bcs/method-removed) | `METHOD_INVOCATION`
+File | Element | Breaking declaration | Kind | Use Type
+---- | ------- | -------------------- | ---- | --------
+[`ClientA.java`](https://github.com/alien-tools/client-fixture-a/blob/main/src/main/java/clienta/ClientA.java#L9-L9) | `a.a()` | `modulea.A.a()` | [`METHOD_REMOVED`](https://alien-tools.github.io/maracas/bcs/method-removed) | `METHOD_INVOCATION`
 *1 additional broken uses not shown.*
