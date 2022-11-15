@@ -1,48 +1,61 @@
 import { stripIndent } from 'common-tags';
 import BreakBotConstants from './settings';
+import { components } from './maracas-schema';
 
-function bcDocumentationUrl(bc: string) {
-  return BreakBotConstants.MARACAS_BCS_DOCUMENTATION + bc.replaceAll('_', '-').toLowerCase();
+type PullRequestResponse = components['schemas']['PullRequestResponse'];
+type MaracasReport = components['schemas']['MaracasReport'];
+type ClientReport = components['schemas']['ClientReport'];
+
+function bcDocumentationUrl(bc: string | undefined): string {
+  if (bc != null) {
+    return BreakBotConstants.MARACAS_BCS_DOCUMENTATION
+      + bc.replaceAll('_', '-')
+        .toLowerCase();
+  }
+
+  return '';
 }
 
-function getClientReport(report: any, clientUrl: string) {
+function getClientReport(report: MaracasReport, clientUrl: string): ClientReport {
   return {
     url: clientUrl,
     error:
-        Array.from(new Set(
-          report.reports.flatMap((pkg: any) => pkg.clientReports)
-            .filter((c: any) => c.url === clientUrl)
-            .flatMap((c: any) => c.error),
-        )).join(', '),
-    brokenUses: report.reports.flatMap((pkg: any) => pkg.clientReports)
-      .filter((c: any) => c.url === clientUrl)
-      .flatMap((c: any) => c.brokenUses),
+      Array.from(new Set(
+        report.reports.flatMap((pkg) => pkg.clientReports)
+          .filter((c) => c.url === clientUrl)
+          .flatMap((c) => c.error),
+      ))
+        .join(', '),
+    brokenUses: report.reports.flatMap((pkg) => pkg.clientReports)
+      .filter((c) => c.url === clientUrl)
+      .flatMap((c) => c.brokenUses),
   };
 }
 
 export default function writeReport(
-  myJson: any,
+  pr: PullRequestResponse,
   maxBCs: number,
   maxClients: number,
   maxBrokenUses: number,
-) {
+): string[] {
+  const { report } = pr;
   const title = BreakBotConstants.REPORT_TITLE;
 
-  if (myJson.report == null) {
-    return ([title, `An error occurred: ${myJson.message}\n`, '']);
+  if (report == null) {
+    return ([title, `An error occurred: ${pr.message}\n`, '']);
   }
 
-  const { report } = myJson;
-
-  const bcs = report.reports.flatMap((pkg : any) => (pkg.delta ? pkg.delta.breakingChanges : []));
+  const bcs = report.reports.flatMap((pkg) => (pkg.delta ? pkg.delta.breakingChanges : []));
   const allClientUrls = Array.from(new Set(
-    report.reports.flatMap((pkg: any) => pkg.clientReports).flatMap((c: any) => c.url),
+    report.reports
+      .flatMap((pkg) => pkg.clientReports)
+      .flatMap((c) => c.url),
   ));
-  const allClients = allClientUrls.map((url: any) => getClientReport(report, url));
-  const clients = allClients.filter((c: any) => !c.error);
-  // const clientsError = allClients.filter((c: any) => c.error);
-  const brokenClients = clients.filter((c: any) => c.brokenUses.length > 0);
-  const brokenUses = brokenClients.flatMap((c: any) => c.brokenUses);
+  const allClients = allClientUrls.map((url) => getClientReport(report, url!));
+  const clients = allClients.filter((c) => !c.error);
+  // const clientsError = allClients.filter((c) => c.error);
+  const brokenClients = clients.filter((c) => c.brokenUses.length > 0);
+  const brokenUses = brokenClients.flatMap((c) => c.brokenUses);
   const percentBroken = clients.length > 0
     ? Math.floor((brokenClients.length / clients.length) * 100)
     : 0;
@@ -52,7 +65,7 @@ export default function writeReport(
         **${brokenClients.length} of ${clients.length} analyzed clients are impacted** by the changes (${percentBroken}%).
     `;
 
-  // ${clientsError.length > 0 ? `Maracas encountered an error when attempting to process the following clients: ${allClients.map((c: any) => `[${c.url}](https://github.com/${c.url}) (*${c.error}*)`)
+  // ${clientsError.length > 0 ? `Maracas encountered an error when attempting to process the following clients: ${allClients.map((c) => `[${c.url}](https://github.com/${c.url}) (*${c.error}*)`)
   // .join(', ')}.` : ''}
 
   let reportMessage = stripIndent`
@@ -62,16 +75,16 @@ export default function writeReport(
     `;
 
   bcs.slice(0, maxBCs)
-    .forEach((bc: any) => {
-      const impactedClients = clients.filter(
-        (c: any) => c.brokenUses.some((d: any) => d.src === bc.declaration),
-      );
-      const bcBrokenUses = clients.flatMap(
-        (c: any) => c.brokenUses.filter((d: any) => d.src === bc.declaration),
-      );
-      const impactedClientsText = impactedClients.length > 0 ? `${impactedClients.length} (${impactedClients.map((c: any) => `[${c.url}](https://github.com/${c.url})`)
-        .join(', ')})` : 'None';
-      const bcBrokenUsesText = bcBrokenUses.length > 0 ? bcBrokenUses.length : 'None';
+    .forEach((bc) => {
+      const impactedClients = clients.filter((c) => c.brokenUses.some((d) => d.src === bc.declaration));
+      const bcBrokenUses = impactedClients.flatMap((c) => c.brokenUses.filter((d) => d.src === bc.declaration));
+      const impactedClientsText = impactedClients.length > 0
+        ? `${impactedClients.length} (${impactedClients.map((c) => `[${c.url}](https://github.com/${c.url})`)
+          .join(', ')})`
+        : 'None';
+      const bcBrokenUsesText = bcBrokenUses.length > 0
+        ? bcBrokenUses.length
+        : 'None';
 
       reportMessage += '\n';
       reportMessage += `[\`${bc.declaration}\`](${bc.fileUrl}) ([diff](${bc.diffUrl})) | [\`${bc.change}\`](${bcDocumentationUrl(bc.change)}) | ${impactedClients.length > 0 ? ':x:' : ':heavy_check_mark:'} | ${impactedClientsText} | ${bcBrokenUsesText}`;
@@ -92,7 +105,7 @@ export default function writeReport(
   clients
     .sort((c1, c2) => c2.brokenUses.length - c1.brokenUses.length)
     .slice(0, maxClients)
-    .forEach((c: any) => {
+    .forEach((c) => {
       reportMessage += '\n';
       reportMessage += `[${c.url}](https://github.com/${c.url}) | ${c.brokenUses.length > 0 ? ':x:' : ':heavy_check_mark:'} | ${c.brokenUses.length}`;
     });
@@ -105,7 +118,7 @@ export default function writeReport(
     reportMessage += `*${clients.length - maxClients} additional clients not shown.*`;
   }
 
-  brokenClients.forEach((c: any) => {
+  brokenClients.forEach((c) => {
     reportMessage += '\n\n';
     reportMessage += stripIndent`
             #### [${c.url}](https://github.com/${c.url})
@@ -114,11 +127,12 @@ export default function writeReport(
         `;
 
     c.brokenUses.slice(0, maxBrokenUses)
-      .forEach((d: any) => {
-        const kind = bcs.find((bc: any) => bc.declaration === d.src).change;
-        const filename = d.path.substring(d.path.lastIndexOf('/')+1);
+      .filter((bu) => bu.path != null)
+      .forEach((bu) => {
+        const kind = bcs.find((bc) => bc.declaration === bu.src)?.change;
+        const filename = bu.path!.substring(bu.path!.lastIndexOf('/') + 1);
         reportMessage += '\n';
-        reportMessage += `[\`${filename}\`](${d.url}) | \`${d.elem}\` | \`${d.src}\` | [\`${kind}\`](${bcDocumentationUrl(kind)}) | \`${d.apiUse}\``;
+        reportMessage += `[\`${filename}\`](${bu.url}) | \`${bu.elem}\` | \`${bu.src}\` | [\`${kind}\`](${bcDocumentationUrl(kind)}) | \`${bu.apiUse}\``;
       });
 
     if (c.brokenUses.length > maxBrokenUses) {

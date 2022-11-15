@@ -77,6 +77,7 @@ describe('BreakBot tests', () => {
       .query({ callback: 'http://webhook-server.org/breakbot/pr/break-bot/spoon/1' })
       .reply(202, { message: 'processing' });
 
+    // @ts-ignore
     await probot.receive({ id: 'synchronized', name: 'pull_request', payload: prSyncPayload });
   });
 
@@ -120,6 +121,7 @@ describe('BreakBot tests', () => {
       .query({ callback: 'http://webhook-server.org/breakbot/pr/break-bot/spoon/4' })
       .reply(202, { message: 'processing' });
 
+    // @ts-ignore
     await probot.receive({ id: 'opened', name: 'pull_request', payload: prOpenedPayload });
   });
 
@@ -177,6 +179,7 @@ describe('BreakBot tests', () => {
       .query({ callback: 'http://webhook-server.org/breakbot/pr/break-bot/spoon/4' })
       .reply(400, { message: 'unlucky' });
 
+    // @ts-ignore
     await probot.receive({ id: 'opened', name: 'pull_request', payload: prOpenedPayload });
   });
 
@@ -204,6 +207,7 @@ describe('BreakBot tests', () => {
       })
       .reply(200);
 
+    // @ts-ignore
     await probot.receive({ id: 'opened', name: 'pull_request', payload: prOpenedWithoutInstallationIdPayload });
   });
 
@@ -286,6 +290,7 @@ describe('BreakBot tests', () => {
       })
       .reply(201, { id: 1 });
 
+    // @ts-ignore
     await probot.receive({ id: 'opened', name: 'pull_request', payload: prOpenedPayload });
   });
 
@@ -330,6 +335,7 @@ describe('BreakBot tests', () => {
       .query({ callback: 'http://webhook-server.org/breakbot/pr/break-bot/spoon/4' })
       .replyWithError('Server down');
 
+    // @ts-ignore
     await probot.receive({ id: 'opened', name: 'pull_request', payload: prOpenedPayload });
   });
 });

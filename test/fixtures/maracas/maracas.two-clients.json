@@ -1,48 +1,15 @@
 {
-    "pr": {
-        "repository": {
-            "owner": "alien-tools",
-            "name": "repository-fixture",
-            "remoteUrl": "https://github.com/alien-tools/repository-fixture.git",
-            "branch": "main"
-        },
-        "number": 1,
-        "base": {
-            "repository": {
-                "owner": "alien-tools",
-                "name": "repository-fixture",
-                "remoteUrl": "https://github.com/alien-tools/repository-fixture.git",
-                "branch": "main"
-            },
-            "sha": "fec2de87113764cdfeee36c16c84ca3af0d323b9"
-        },
-        "head": {
-            "repository": {
-                "owner": "alien-tools",
-                "name": "repository-fixture",
-                "remoteUrl": "https://github.com/alien-tools/repository-fixture.git",
-                "branch": "main"
-            },
-            "sha": "b2208730510e973e42bd3a176db5c5169b17a7bf"
-        },
-        "mergeBase": {
-            "repository": {
-                "owner": "alien-tools",
-                "name": "repository-fixture",
-                "remoteUrl": "https://github.com/alien-tools/repository-fixture.git",
-                "branch": "main"
-            },
-            "sha": "fec2de87113764cdfeee36c16c84ca3af0d323b9"
-        },
-        "baseBranch": "main",
-        "headBranch": "pr-on-modules",
-        "changedFiles": [
-            "file:///home/dig/repositories/maracas/rest/module-a/src/main/java/modulea/A.java",
-            "file:///home/dig/repositories/maracas/rest/module-c/nested-b/src/main/java/nestedb/NestedB.java"
-        ]
-    },
     "message": "ok",
     "date": "2022-10-26T11:07:19.430105126",
+    "pr": {
+        "owner": "alien-tools",
+        "name": "repository-fixture",
+        "number": 1,
+        "baseBranch": "main",
+        "headBranch": "pr-on-modules",
+        "baseSha": "fec2de87113764cdfeee36c16c84ca3af0d323b9",
+        "headSha": "b2208730510e973e42bd3a176db5c5169b17a7bf"
+    },
     "report": {
         "reports": [
             {

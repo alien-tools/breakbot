@@ -5,6 +5,9 @@ import { restEndpointMethods } from '@octokit/plugin-rest-endpoint-methods';
 import writeReport from './report';
 import BreakbotConfig from './config';
 import BreakBotConstants from './settings';
+import { components } from './maracas-schema';
+
+type PullRequestResponse = components['schemas']['PullRequestResponse'];
 
 export async function createCheck(
   octokit: InstanceType<typeof ProbotOctokit>,
@@ -76,17 +79,17 @@ export async function completeCheck(
   repo: string,
   checkId: number,
   config: BreakbotConfig,
-  report: any,
+  pr: PullRequestResponse,
 ): Promise<void> {
   const [
     title,
     summary,
     text,
-  ] = writeReport(report, config.maxBCs, config.maxClients, config.maxBrokenUses);
+  ] = writeReport(pr, config.maxBCs, config.maxClients, config.maxBrokenUses);
 
   let conclusion = 'neutral';
-  if (report.message !== 'ok') conclusion = 'failure';
-  else if (report.report.reports.every((pkg: any) => pkg.delta === null || pkg.delta.breakingChanges.length === 0)) conclusion = 'success';
+  if (pr.message !== 'ok') conclusion = 'failure';
+  else if (pr.report?.reports.every((pkg) => pkg.delta === null || pkg.delta?.breakingChanges.length === 0)) conclusion = 'success';
 
   await restEndpointMethods(octokit).rest.checks.update({
     owner,
