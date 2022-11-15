@@ -1,6 +1,6 @@
 {
   "name": "breakbot",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "BreakBot tracks the introduction of breaking changes in Java libraries on GitHub and their impact on client projects",
   "contributors": [
