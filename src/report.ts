@@ -2,7 +2,7 @@ import { stripIndent } from 'common-tags';
 import BreakBotConstants from './settings';
 
 function bcDocumentationUrl(bc: string) {
-  return BreakBotConstants.MARACAS_BCS_DOCUMENTATION + bc.replace('_', '-').toLowerCase();
+  return BreakBotConstants.MARACAS_BCS_DOCUMENTATION + bc.replaceAll('_', '-').toLowerCase();
 }
 
 function getClientReport(report: any, clientUrl: string) {
