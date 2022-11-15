@@ -89,7 +89,9 @@ export default function writeReport(
         ------ | ------ | -----------
     `;
 
-  clients.slice(0, maxClients)
+  clients
+    .sort((c1, c2) => c2.brokenUses.length - c1.brokenUses.length)
+    .slice(0, maxClients)
     .forEach((c: any) => {
       reportMessage += '\n';
       reportMessage += `[${c.url}](https://github.com/${c.url}) | ${c.brokenUses.length > 0 ? ':x:' : ':heavy_check_mark:'} | ${c.brokenUses.length}`;
